@@ -1,8 +1,6 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_ERROR, AUTH_CHECK } from 'react-admin';
 
-// Change this to be your own login check route.
-const apiWebsite = 'http://kinders.arnapou.local';
-const login_uri = apiWebsite + '/login_check';
+const login_uri = window.env.API_LOGIN_CHECK;
 
 export default (type, params) => {
     switch (type) {
