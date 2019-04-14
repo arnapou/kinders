@@ -7,7 +7,7 @@ nelmio_cors:
         expose_headers: ['Link']
         max_age: 3600
     paths:
-        '^/api':
+        '^/(api|login_check)':
             origin_regex: true
             allow_origin: ['^https?://.*kinders\.arnapou\.(net|local)']
             allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
