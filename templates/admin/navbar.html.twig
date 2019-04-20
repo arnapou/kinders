@@ -1,0 +1,51 @@
+{% set menuItems = [
+    ['series', 'fas fa-bars', 'Séries'],
+    ['kinders', 'fas fa-egg', 'Kinders'],
+    ['bpzs', 'fas fa-square', 'BPZs'],
+    ['zbas', 'far fa-square', 'ZBAs'],
+    ['items', 'fas fa-tree', 'Items'],
+    ['pieces', 'fas fa-puzzle-piece', 'Pieces'],
+    ['attributes', 'fas fa-tag', 'Attributs'],
+    ['images', 'fas fa-images', 'Images'],
+    ['countries', 'fas fa-flag', 'Pays'],
+] %}
+
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('admin') }}">
+            <i class="fas fa-home"></i>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% for menuItem in menuItems %}
+                    {% set active = 'admin_'~menuItem.0 in app.request.attributes.get('_route') %}
+                    <li class="nav-item{{ active ? ' active' : '' }}">
+                        <a class="nav-link" href="{{ path('admin_'~menuItem.0) }}"><i class="{{ menuItem.1 }}"></i> {{ menuItem.2 }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if searchfilter.visible %}
+                <form class="form-inline my-2 my-lg-0" action="{{ path(searchfilter.routeName) }}" method="get" id="searchFilterForm">
+                    <input class="form-control mr-sm-2"
+                           type="search" name="search" id="searchFilter"
+                           placeholder="... search ..." aria-label="Search"
+                           style="max-width: 10em"
+                           value="{{ searchfilter.value }}">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="submit" class="btn btn-outline-info">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="searchFilterReset()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</nav>

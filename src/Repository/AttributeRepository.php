@@ -12,6 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Attribute;
+use App\Service\SearchFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,13 +20,18 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Attribute|null find($id, $lockMode = null, $lockVersion = null)
  * @method Attribute|null findOneBy(array $criteria, array $orderBy = null)
  * @method Attribute[]    findAll()
- * @method Attribute[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AttributeRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    /**
+     * @var SearchFilter
+     */
+    private $searchFilter;
+
+    public function __construct(RegistryInterface $registry, SearchFilter $searchFilter)
     {
         parent::__construct($registry, Attribute::class);
+        $this->searchFilter = $searchFilter;
     }
 
     public function findByType(string $type): array
@@ -36,6 +42,36 @@ class AttributeRepository extends ServiceEntityRepository
             ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function searchAll()
+    {
+        if (!($values = $this->searchFilter->values())) {
+            return $this->findAll();
+        }
+        $qb = $this->createQueryBuilder('a');
+        foreach ($values as $value) {
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('a.type', $qb->expr()->literal("%$value%")),
+                $qb->expr()->like('a.name', $qb->expr()->literal("%$value%"))
+            ));
+        }
+        return $qb->addOrderBy('a.type', 'ASC')
+            ->addOrderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param null       $limit
+     * @param null       $offset
+     * @return Attribute[]
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return parent::findBy($criteria, $orderBy ?: ['type' => 'ASC', 'name' => 'ASC'], $limit, $offset);
     }
 
     // /**

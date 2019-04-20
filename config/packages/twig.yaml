@@ -4,3 +4,7 @@ twig:
     strict_variables: '%kernel.debug%'
     paths:
         '%kernel.project_dir%/templates/admin': admin
+    globals:
+        breadcrumb: '@App\Service\Breadcrumb'
+        searchfilter: '@App\Service\SearchFilter'
+    form_themes: ['bootstrap_4_layout.html.twig']

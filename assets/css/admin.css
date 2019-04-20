@@ -1,0 +1,25 @@
+body {
+    background-color: lightgray;
+}
+
+.btn-group-xs > .btn,.btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+}
+
+table.table th:first-child,
+table.table td:first-child {
+    white-space: nowrap;
+    width: 1px;
+}
+
+table.table th:first-child .btn-sm,
+table.table td:first-child .btn-sm {
+    display: inline-block;
+    min-width: 2.2em !important;
+    padding-bottom: 0.05rem;
+    padding-top: 0.05rem;
+    text-align: center;
+}

@@ -64,9 +64,9 @@ abstract class BaseEntity
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function setUpdatedAt(?DateTime $date)
+    public function onPrePersist()
     {
-        $this->updatedAt = $date ?: new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getCreatedAt(): DateTime
@@ -101,9 +101,6 @@ abstract class BaseEntity
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getComment(): string
     {
         return $this->comment;

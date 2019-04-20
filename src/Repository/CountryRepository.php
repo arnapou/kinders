@@ -19,13 +19,24 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Country|null find($id, $lockMode = null, $lockVersion = null)
  * @method Country|null findOneBy(array $criteria, array $orderBy = null)
  * @method Country[]    findAll()
- * @method Country[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CountryRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Country::class);
+    }
+
+    /**
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param null       $limit
+     * @param null       $offset
+     * @return Country[]
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return parent::findBy($criteria, $orderBy ?: ['name' => 'ASC'], $limit, $offset);
     }
 
     // /**

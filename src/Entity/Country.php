@@ -28,7 +28,7 @@ class Country extends BaseEntity
      * @var string
      * @ORM\Column(type="string", length=10)
      */
-    private $abbr;
+    private $abbr = '';
 
     /**
      * @return string

@@ -3,64 +3,23 @@
 <head>
     <meta charset="utf-8">
 
-    <title>{{ title ?? 'Arnapou Kinders Admin' }}</title>
+    <title>{{ breadcrumb|length ? 'Admin / '~breadcrumb : 'Kinders Admin' }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" />
 
     {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
+        {{ encore_entry_link_tags('admin') }}
     {% endblock %}
 </head>
 <body>
+{% embed "@admin/navbar.html.twig" %}
+{% endembed %}
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ path('admin_home') }}">
-            <i class="fas fa-home"></i>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-bars"></i> Séries</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-egg"></i> Kinders</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-square"></i> BPZ</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="far fa-square"></i> ZBA</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-tree"></i> Item</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-puzzle-piece"></i> Piece</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-tag"></i> Attributs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-images"></i> Images</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-flag"></i> Pays</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-        </div>
-    </nav>
+    {% block body %}
+    {% endblock %}
 </div>
 
 {% block javascripts %}
-{{ encore_entry_script_tags('app') }}
+{{ encore_entry_script_tags('admin') }}
 </body>
 {% endblock %}
 </html>

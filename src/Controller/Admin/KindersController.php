@@ -11,17 +11,19 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AdminController extends AbstractController
+class KindersController extends AbstractController
 {
     /**
-     * @Route("/", name="admin")
+     * @Route("/kinders/", name="admin_kinders")
      */
-    public function index()
+    public function index(Breadcrumb $breadcrumb)
     {
+        $breadcrumb->add('Kinders', $this->generateUrl('admin_kinders'));
         $context = [];
-        return $this->render('@admin/index.html.twig', $context);
+        return $this->render('@admin/kinders/index.html.twig', $context);
     }
 }
