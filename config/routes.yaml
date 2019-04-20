@@ -1,6 +1,3 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-
-jwt_login_check:
-  path: /login_check
