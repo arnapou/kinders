@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -74,6 +75,15 @@ class Book
      */
     public $reviews;
 
+    /**
+     * @var MediaObject|null
+     *
+     * @ORM\ManyToOne(targetEntity=MediaObject::class)
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/image")
+     */
+    public $image;
+
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
@@ -82,5 +92,10 @@ class Book
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return '#' . $this->id . ' ' . $this->title;
     }
 }
