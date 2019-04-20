@@ -1,0 +1,8 @@
+admin:
+    resource: ../../src/Controller/Admin
+    type: annotation
+    prefix: admin
+
+front:
+    resource: ../../src/Controller/Front
+    type: annotation

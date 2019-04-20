@@ -27,6 +27,7 @@ return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2'                                 => true,
+        '@DoctrineAnnotation'                   => true,
         'array_syntax'                          => ['syntax' => 'short'],
         'blank_line_after_opening_tag'          => true,
         'combine_consecutive_issets'            => true,

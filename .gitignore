@@ -1,4 +1,7 @@
 
+.idea
+old*
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -8,5 +11,6 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-.idea
-old*
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
