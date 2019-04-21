@@ -19,13 +19,24 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method ZBA|null find($id, $lockMode = null, $lockVersion = null)
  * @method ZBA|null findOneBy(array $criteria, array $orderBy = null)
  * @method ZBA[]    findAll()
- * @method ZBA[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ZBARepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ZBA::class);
+    }
+
+    /**
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param null       $limit
+     * @param null       $offset
+     * @return ZBA[]
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return parent::findBy($criteria, $orderBy ?: ['name' => 'ASC'], $limit, $offset);
     }
 
     // /**

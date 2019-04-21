@@ -27,7 +27,7 @@
                     </a>
                 </td>
                 <td>{{ item.type }}</td>
-                <td>{{ item.name }}</td>
+                <td>{{ macro.image(item) }} {{ item.name }}</td>
                 <td>{{ item.comment }}</td>
             </tr>
         {% endfor %}

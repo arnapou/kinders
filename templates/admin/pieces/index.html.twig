@@ -13,7 +13,7 @@
                     <i class="fas fa-plus"></i>
                 </a>
             </th>
-            <th>Nome</th>
+            <th>Nom</th>
             <th>Réf.</th>
             <th>Année</th>
             <th>Collec</th>
@@ -29,7 +29,7 @@
                         <i class="fas fa-pen"></i>
                     </a>
                 </td>
-                <td>{{ item.name }}</td>
+                <td>{{ macro.image(item.image) }} {{ item.name }}</td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ item.quantityOwned ?: ''}}</td>

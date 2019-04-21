@@ -9,29 +9,29 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
-use App\Entity\Attribute;
+use App\Entity\Country;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AttributeType extends AbstractType
+class CountryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', TextType::class)
             ->add('name', TextType::class)
+            ->add('abbr', TextType::class)
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Attribute::class,
+            'data_class' => Country::class,
         ]);
     }
 }

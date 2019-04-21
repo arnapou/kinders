@@ -12,9 +12,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Country;
+use App\Form\FormFactory;
 use App\Repository\CountryRepository;
 use App\Service\Breadcrumb;
-use App\Service\FormFactory;
+use App\Service\SearchFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,12 +24,12 @@ class CountriesController extends AbstractController
     /**
      * @Route("/countries/", name="admin_countries")
      */
-    public function index(CountryRepository $repository, Breadcrumb $breadcrumb)
+    public function index(CountryRepository $repository, Breadcrumb $breadcrumb, SearchFilter $searchFilter)
     {
         $breadcrumb->add('Config', '');
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         return $this->render('@admin/countries/index.html.twig', [
-            'items' => $repository->findAll(),
+            'items' => $searchFilter->search($repository),
         ]);
     }
 

@@ -12,7 +12,6 @@
 namespace App\Repository;
 
 use App\Entity\Attribute;
-use App\Service\SearchFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -23,44 +22,9 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class AttributeRepository extends ServiceEntityRepository
 {
-    /**
-     * @var SearchFilter
-     */
-    private $searchFilter;
-
-    public function __construct(RegistryInterface $registry, SearchFilter $searchFilter)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Attribute::class);
-        $this->searchFilter = $searchFilter;
-    }
-
-    public function findByType(string $type): array
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.type = :val')
-            ->setParameter('val', $type)
-            ->orderBy('a.name', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function searchAll()
-    {
-        if (!($values = $this->searchFilter->values())) {
-            return $this->findAll();
-        }
-        $qb = $this->createQueryBuilder('a');
-        foreach ($values as $value) {
-            $qb->andWhere($qb->expr()->orX(
-                $qb->expr()->like('a.type', $qb->expr()->literal("%$value%")),
-                $qb->expr()->like('a.name', $qb->expr()->literal("%$value%"))
-            ));
-        }
-        return $qb
-            ->addOrderBy('a.type', 'ASC')
-            ->addOrderBy('a.name', 'ASC')
-            ->getQuery()
-            ->getResult();
     }
 
     /**
@@ -75,18 +39,6 @@ class AttributeRepository extends ServiceEntityRepository
         return parent::findBy($criteria, $orderBy ?: ['type' => 'ASC', 'name' => 'ASC'], $limit, $offset);
     }
 
-    public function getTypes(): array
-    {
-        return array_column(
-            $this->createQueryBuilder('a')
-                ->select('a.type')
-                ->orderBy('a.type', 'ASC')
-                ->groupBy('a.type')
-                ->getQuery()
-                ->getResult(),
-            'type'
-        );
-    }
 
     // /**
     //  * @return Attribute[] Returns an array of Attribute objects

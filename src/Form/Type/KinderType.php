@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
-use App\Entity\Piece;
+use App\Entity\Kinder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PieceType extends AbstractType
+class KinderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,15 +31,15 @@ class PieceType extends AbstractType
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
 //            ->add('serie')
-//            ->add('images')
             ->add('attributes', AttributesListType::class)
+            ->add('images', ImageListType::class, ['remote_route' => 'admin_kinders_autocomplete'])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Piece::class,
+            'data_class' => Kinder::class,
         ]);
     }
 }

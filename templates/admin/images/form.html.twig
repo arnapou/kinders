@@ -9,7 +9,11 @@
 
     <div class="row">
         <div class="col">{{ form_row(form.name) }}</div>
-        <div class="col">{{ form_row(form.type) }}</div>
+        {% if form.vars.value.id == 0 and form.vars.value.type %}
+            <div class="col">{{ form_row(form.type, { 'attr':{'disabled':'disabled'} }) }}</div>
+        {% else %}
+            <div class="col">{{ form_row(form.type) }}</div>
+        {% endif %}
     </div>
 
     {{ form_widget(form) }}

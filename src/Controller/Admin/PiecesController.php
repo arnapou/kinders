@@ -12,11 +12,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Piece;
+use App\Form\AutocompleteImages;
+use App\Form\FormFactory;
+use App\Form\Type\PieceType;
 use App\Repository\PieceRepository;
 use App\Service\Breadcrumb;
-use App\Service\FormFactory;
 use App\Service\SearchFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PiecesController extends AbstractController
@@ -29,7 +33,7 @@ class PiecesController extends AbstractController
         $breadcrumb->add('Pièces', $this->generateUrl('admin_pieces'));
         $searchFilter->setRouteName('admin_pieces');
         return $this->render('@admin/pieces/index.html.twig', [
-            'items' => $repository->searchAll(),
+            'items' => $searchFilter->search($repository),
         ]);
     }
 
@@ -55,5 +59,14 @@ class PiecesController extends AbstractController
 
         return $formFactory->render('@admin/pieces/form.html.twig', $repository->find($id), 'Modifier')
             ?: $this->redirectToRoute('admin_pieces');
+    }
+
+    /**
+     * @Route("/pieces/autocomplete", name="admin_pieces_autocomplete")
+     */
+    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    {
+        $result = $autocomplete->getResult($request, PieceType::class);
+        return new JsonResponse($result);
     }
 }

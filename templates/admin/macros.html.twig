@@ -11,3 +11,16 @@
         </ol>
     </nav>
 {% endmacro %}
+
+{% macro image(item) -%}
+    {%- spaceless %}
+        {% if item and item.file is defined and item.file %}
+            <a href="{{ vich_uploader_asset(item, 'diskFile') }}" target="_blank">
+                <img src="{{ vich_uploader_asset(item, 'diskFile') }}" class="admin-image">
+            </a>
+        {% else %}
+            <img src="{{ blank_img }}" class="admin-image-blank">
+        {% endif %}
+    {% endspaceless -%}
+{%- endmacro %}
+

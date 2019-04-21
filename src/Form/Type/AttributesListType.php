@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
 use App\Entity\Attribute;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -21,16 +21,15 @@ class AttributesListType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class'    => Attribute::class,
-            'multiple' => true,
-            'expanded' => true,
-            'attr'     => ['class' => 'attributeslist'],
-
-            'choice_attr' => function (Attribute $choice, $key, $value) {
-                return [
-                    'class' => 'attrtype.' . strtolower($choice->getType()),
-                ];
-            },
+            'class'       => Attribute::class,
+            'multiple'    => true,
+            'expanded'    => true,
+            'attr'        => ['class' => 'attributeslist'],
+//            'choice_attr' => function (Attribute $choice, $key, $value) {
+//                return [
+//                    'class' => 'attrtype.' . strtolower($choice->getType()),
+//                ];
+//            },
             'group_by'    => function (Attribute $choice, $key, $value) {
                 return $choice->getType();
             },

@@ -9,29 +9,37 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
-use App\Entity\Country;
+use App\Entity\BPZ;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CountryType extends AbstractType
+class BPZType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class)
-            ->add('abbr', TextType::class)
+            ->add('quantityOwned', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('quantityDouble', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
+            ->add('lookingFor', BooleanType::class)
+            ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
+//            ->add('kinder')
+            ->add('attributes', AttributesListType::class)
+            ->add('images', ImageListType::class, ['remote_route' => 'admin_bpzs_autocomplete'])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Country::class,
+            'data_class' => BPZ::class,
         ]);
     }
 }

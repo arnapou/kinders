@@ -20,7 +20,8 @@
         "symfony/web-server-bundle": "4.2.*",
         "symfony/webpack-encore-bundle": "^1.5",
         "symfony/yaml": "4.2.*",
-        "tetranz/select2entity-bundle": "^2.9"
+        "tetranz/select2entity-bundle": "^2.9",
+        "vich/uploader-bundle": "^1.9"
     },
     "config": {
         "preferred-install": {

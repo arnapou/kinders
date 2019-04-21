@@ -11,9 +11,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Attribute;
 use App\Entity\Piece;
-use App\Service\SearchFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -24,42 +22,16 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class PieceRepository extends ServiceEntityRepository
 {
-    /**
-     * @var SearchFilter
-     */
-    private $searchFilter;
-
-    public function __construct(RegistryInterface $registry, SearchFilter $searchFilter)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Piece::class);
-        $this->searchFilter = $searchFilter;
     }
-
-    public function searchAll()
-    {
-        if (!($values = $this->searchFilter->values())) {
-            return $this->findAll();
-        }
-        $qb = $this->createQueryBuilder('p');
-        foreach ($values as $value) {
-            $qb->andWhere($qb->expr()->orX(
-                $qb->expr()->like('p.reference', $qb->expr()->literal("%$value%")),
-                $qb->expr()->like('p.name', $qb->expr()->literal("%$value%")),
-                $qb->expr()->like('p.year', $qb->expr()->literal("%$value%"))
-            ));
-        }
-        return $qb
-            ->addOrderBy('p.name', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
     /**
      * @param array      $criteria
      * @param array|null $orderBy
      * @param null       $limit
      * @param null       $offset
-     * @return Attribute[]
+     * @return Piece[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {

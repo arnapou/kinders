@@ -12,9 +12,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Image;
+use App\Form\FormFactory;
 use App\Repository\ImageRepository;
 use App\Service\Breadcrumb;
-use App\Service\FormFactory;
 use App\Service\SearchFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,19 +29,25 @@ class ImagesController extends AbstractController
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $searchFilter->setRouteName('admin_images');
         return $this->render('@admin/images/index.html.twig', [
-            'items' => $repository->searchAll(),
+            'items' => $searchFilter->search($repository),
         ]);
     }
 
     /**
      * @Route("/images/add", name="admin_images_add")
+     * @Route("/images/add-{type}", name="admin_images_add_type")
      */
-    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory, ?string $type = null, ImageRepository $repository)
     {
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_images_add'));
 
-        return $formFactory->render('@admin/images/form.html.twig', new Image(), 'Créer')
+        $image = new Image();
+        if ($type && \in_array($type, $repository->getTypes())) {
+            $image->setType($type);
+        }
+
+        return $formFactory->render('@admin/images/form.html.twig', $image, 'Créer')
             ?: $this->redirectToRoute('admin_images');
     }
 

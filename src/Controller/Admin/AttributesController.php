@@ -12,9 +12,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Attribute;
+use App\Form\FormFactory;
 use App\Repository\AttributeRepository;
 use App\Service\Breadcrumb;
-use App\Service\FormFactory;
 use App\Service\SearchFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +30,7 @@ class AttributesController extends AbstractController
         $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $searchFilter->setRouteName('admin_attributes');
         return $this->render('@admin/attributes/index.html.twig', [
-            'items' => $repository->searchAll(),
+            'items' => $searchFilter->search($repository),
         ]);
     }
 

@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Service;
+namespace App\Form;
 
 use App\Entity\BaseEntity;
+use App\Repository\ImageRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +26,12 @@ class FormFactory
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container        = $container;
+        $this->container = $container;
     }
 
     public function create(BaseEntity $entity, ?string $type = null): ?FormInterface
     {
-        $type = $type ?: 'App\\Form\\' . ImageTypeGuesser::guess($entity) . 'Type';
+        $type = $type ?: __NAMESPACE__ . '\\Type\\' . ImageRepository::getTypeFrom($entity) . 'Type';
 
         $form = $this->container->get('form.factory')->create($type, $entity);
 

@@ -9,41 +9,37 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
-use App\Entity\Image;
-use App\Service\ImageTypeGuesser;
+use App\Entity\Serie;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ImageType extends AbstractType
+class SerieType extends AbstractType
 {
-    /**
-     * @var ImageTypeGuesser
-     */
-    private $imageTypeGuesser;
-
-    public function __construct(ImageTypeGuesser $imageTypeGuesser)
-    {
-        $this->imageTypeGuesser = $imageTypeGuesser;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class)
-            ->add('type', ChoiceType::class, ['choices' => $this->imageTypeGuesser->getTypes()])
+            ->add('quantityOwned', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('quantityDouble', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
+            ->add('lookingFor', BooleanType::class)
+            ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('country')
+            ->add('attributes', AttributesListType::class)
+            ->add('images', ImageListType::class, [                'remote_route' => 'admin_series_autocomplete'            ])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Image::class,
+            'data_class' => Serie::class,
         ]);
     }
 }

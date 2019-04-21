@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\DataTransformer;
 
 use App\Entity\Image;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;

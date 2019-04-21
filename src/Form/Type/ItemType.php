@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
-use App\Entity\Serie;
+use App\Entity\Item;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SerieType extends AbstractType
+class ItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -30,19 +30,16 @@ class SerieType extends AbstractType
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
-            ->add('country')
+//            ->add('serie')
             ->add('attributes', AttributesListType::class)
-            ->add('images', ImageListType::class, [
-                'remote_route' => 'admin_series_autocomplete',
-                'source_class' => Serie::class,
-            ])
+            ->add('images', ImageListType::class, ['remote_route' => 'admin_items_autocomplete'])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Serie::class,
+            'data_class' => Item::class,
         ]);
     }
 }

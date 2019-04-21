@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form;
+namespace App\Form\Type;
 
 use App\Entity\Image;
+use App\Form\DataTransformer\ImagesDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
@@ -33,7 +34,6 @@ class ImageListType extends AbstractType
             'cache_timeout'        => 60000,
             'language'             => 'fr',
             'placeholder'          => '... images ...',
-            'source_class'         => null,
             'auto_start'           => false,
             'transformer'          => ImagesDataTransformer::class,
         ]);

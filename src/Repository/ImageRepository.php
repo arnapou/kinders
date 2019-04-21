@@ -11,11 +11,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Attribute;
+use App\Entity\BaseItem;
 use App\Entity\Image;
-use App\Service\SearchFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -25,50 +23,9 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ImageRepository extends ServiceEntityRepository
 {
-    /**
-     * @var SearchFilter
-     */
-    private $searchFilter;
-
-    public function __construct(RegistryInterface $registry, SearchFilter $searchFilter)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Image::class);
-        $this->searchFilter = $searchFilter;
-    }
-
-    public function findByType(string $type): array
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.type = :val')
-            ->setParameter('val', $type)
-            ->orderBy('i.name', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function searchQB(array $values): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('i');
-        foreach ($values as $value) {
-            $qb->andWhere($qb->expr()->orX(
-                $qb->expr()->like('i.type', $qb->expr()->literal("%$value%")),
-                $qb->expr()->like('i.name', $qb->expr()->literal("%$value%")),
-                $qb->expr()->like('i.file', $qb->expr()->literal("%$value%"))
-            ));
-        }
-        return $qb
-            ->addOrderBy('i.type', 'ASC')
-            ->addOrderBy('i.name', 'ASC');
-    }
-
-    public function searchAll()
-    {
-        if (!($values = $this->searchFilter->values())) {
-            return $this->findAll();
-        }
-        return $this->searchQB($values)
-            ->getQuery()
-            ->getResult();
     }
 
     /**
@@ -76,7 +33,7 @@ class ImageRepository extends ServiceEntityRepository
      * @param array|null $orderBy
      * @param null       $limit
      * @param null       $offset
-     * @return Attribute[]
+     * @return Image[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
@@ -85,15 +42,22 @@ class ImageRepository extends ServiceEntityRepository
 
     public function getTypes(): array
     {
-        return array_column(
-            $this->createQueryBuilder('a')
-                ->select('a.type')
-                ->orderBy('a.type', 'ASC')
-                ->groupBy('a.type')
-                ->getQuery()
-                ->getResult(),
-            'type'
-        );
+        $types = [];
+        $em    = $this->getEntityManager();
+        $meta  = $em->getMetadataFactory()->getAllMetadata();
+        foreach ($meta as $m) {
+            $reflectionClass = new \ReflectionClass($m->getName());
+            if ($reflectionClass->isInstantiable() && $reflectionClass->isSubclassOf(BaseItem::class)) {
+                $types[] = $reflectionClass->getShortName();
+            }
+        }
+        return array_combine($types, $types);
+    }
+
+    public static function getTypeFrom($class): string
+    {
+        $reflectionClass = new \ReflectionClass($class);
+        return $reflectionClass->getShortName();
     }
 
     // /**

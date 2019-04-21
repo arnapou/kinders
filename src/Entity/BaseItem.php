@@ -11,9 +11,10 @@
 
 namespace App\Entity;
 
-use App\Service\ImageTypeGuesser;
+use App\Repository\ImageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -130,14 +131,15 @@ abstract class BaseItem extends BaseEntity
      */
     public function getImages(): Collection
     {
-        return $this->images;
+        $criteria = Criteria::create()->orderBy(['id' => 'ASC']);
+        return $this->images->matching($criteria);
     }
 
     public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {
             if (!$image->getType()) {
-                $image->setType(ImageTypeGuesser::guess($this));
+                $image->setType(ImageRepository::getTypeFrom($this));
             }
             $this->images[] = $image;
         }
@@ -152,12 +154,21 @@ abstract class BaseItem extends BaseEntity
         return $this;
     }
 
+    public function getImage(): ?Image
+    {
+        foreach ($this->getImages() as $image) {
+            return $image;
+        }
+        return null;
+    }
+
     /**
      * @return Collection|Attribute[]
      */
     public function getAttributes(): Collection
     {
-        return $this->attributes;
+        $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
+        return $this->attributes->matching($criteria);
     }
 
     public function addAttribute(Attribute $attribute): self

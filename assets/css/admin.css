@@ -29,8 +29,25 @@ table.table td:first-child .btn-sm {
     margin-right: 1.5em;
 }
 
+td img.admin-image,
+td img.admin-image-blank {
+    height: 1.5em;
+    width: 1.5em;
+    margin-right: 0.2em;
+}
+td img.admin-image-blank {
+    background: rgba(0,0,0,0.1);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
 .select2-selection li img,
 .select2-container li img {
     max-height: 1.5em;
     max-width: 1.5em;
+}
+
+.vich-image img {
+    max-height: 10em;
+    max-width: 10em;
 }

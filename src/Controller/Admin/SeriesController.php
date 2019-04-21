@@ -12,11 +12,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Serie;
-use App\Form\SerieType;
+use App\Form\AutocompleteImages;
+use App\Form\FormFactory;
+use App\Form\Type\SerieType;
 use App\Repository\SerieRepository;
-use App\Service\AutocompleteImages;
 use App\Service\Breadcrumb;
-use App\Service\FormFactory;
 use App\Service\SearchFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +33,7 @@ class SeriesController extends AbstractController
         $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
         $searchFilter->setRouteName('admin_series');
         return $this->render('@admin/series/index.html.twig', [
-            'items' => $repository->searchAll(),
+            'items' => $searchFilter->search($repository),
         ]);
     }
 
@@ -67,7 +67,6 @@ class SeriesController extends AbstractController
     public function autocomplete(AutocompleteImages $autocomplete, Request $request)
     {
         $result = $autocomplete->getResult($request, SerieType::class);
-
         return new JsonResponse($result);
     }
 }
