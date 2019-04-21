@@ -11,7 +11,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Attribute;
 use App\Entity\Piece;
+use App\Service\SearchFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,13 +21,49 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Piece|null find($id, $lockMode = null, $lockVersion = null)
  * @method Piece|null findOneBy(array $criteria, array $orderBy = null)
  * @method Piece[]    findAll()
- * @method Piece[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PieceRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    /**
+     * @var SearchFilter
+     */
+    private $searchFilter;
+
+    public function __construct(RegistryInterface $registry, SearchFilter $searchFilter)
     {
         parent::__construct($registry, Piece::class);
+        $this->searchFilter = $searchFilter;
+    }
+
+    public function searchAll()
+    {
+        if (!($values = $this->searchFilter->values())) {
+            return $this->findAll();
+        }
+        $qb = $this->createQueryBuilder('p');
+        foreach ($values as $value) {
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('p.reference', $qb->expr()->literal("%$value%")),
+                $qb->expr()->like('p.name', $qb->expr()->literal("%$value%")),
+                $qb->expr()->like('p.year', $qb->expr()->literal("%$value%"))
+            ));
+        }
+        return $qb
+            ->addOrderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param null       $limit
+     * @param null       $offset
+     * @return Attribute[]
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return parent::findBy($criteria, $orderBy ?: ['name' => 'ASC'], $limit, $offset);
     }
 
     // /**

@@ -34,42 +34,24 @@ class CountriesController extends AbstractController
     /**
      * @Route("/countries/add", name="admin_countries_add")
      */
-    public function add(FormFactory $formFactory, Breadcrumb $breadcrumb)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
     {
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_countries_add'));
 
-        $country = new Country();
-
-        if (!($form = $formFactory->create($country))) {
-            return $this->redirectToRoute('admin_countries');
-        }
-
-        return $this->render('@admin/countries/add.html.twig', [
-            'item' => $country,
-            'form' => $form->createView(),
-        ]);
+        return $formFactory->render('@admin/countries/form.html.twig', new Country(), 'Créer')
+            ?: $this->redirectToRoute('admin_countries');
     }
 
     /**
      * @Route("/countries/edit-{id}", name="admin_countries_edit", requirements={"id": "\d+"})
      */
-    public function edit(FormFactory $formFactory, CountryRepository $repository, Breadcrumb $breadcrumb, int $id)
+    public function edit(Breadcrumb $breadcrumb, FormFactory $formFactory, CountryRepository $repository, int $id)
     {
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_countries_edit', ['id' => $id]));
 
-        if (!($country = $repository->find($id))) {
-            return $this->redirectToRoute('admin_countries');
-        }
-
-        if (!($form = $formFactory->create($country))) {
-            return $this->redirectToRoute('admin_countries');
-        }
-
-        return $this->render('@admin/countries/add.html.twig', [
-            'item' => $country,
-            'form' => $form->createView(),
-        ]);
+        return $formFactory->render('@admin/countries/form.html.twig', $repository->find($id), 'Modifier')
+            ?: $this->redirectToRoute('admin_countries');
     }
 }

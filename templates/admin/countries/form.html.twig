@@ -6,10 +6,16 @@
     {{ macro.breadcrumb() }}
 
     {{ form_start(form) }}
+
+    <div class="row">
+        <div class="col">{{ form_row(form.name) }}</div>
+        <div class="col">{{ form_row(form.abbr) }}</div>
+    </div>
+
     {{ form_widget(form) }}
 
     <div class="form-group">
-        <button type="submit" class="btn-primary btn">Modifier</button>
+        <button type="submit" class="btn-primary btn">{{ action }}</button>
         <a href="{{ breadcrumb[0].url }}" class="btn-light btn">Annuler</a>
     </div>
 

@@ -36,19 +36,19 @@ abstract class BaseItem extends BaseEntity
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    protected $reference;
+    protected $reference = '';
 
     /**
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    protected $lookingFor;
+    protected $lookingFor = false;
 
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    protected $year;
+    protected $year = 0;
 
     /**
      * @var ArrayCollection

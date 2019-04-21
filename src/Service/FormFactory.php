@@ -14,6 +14,7 @@ namespace App\Service;
 use App\Entity\BaseEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class FormFactory
 {
@@ -48,5 +49,31 @@ class FormFactory
         }
 
         return $form;
+    }
+
+    public function render(string $view, ?BaseEntity $entity, string $action): ?Response
+    {
+        if (null === $entity) {
+            return null;
+        }
+
+        if ($form = $this->create($entity)) {
+            $context = [
+                'item'   => $entity,
+                'form'   => $form->createView(),
+                'action' => $action,
+            ];
+
+            if ($this->container->has('templating')) {
+                $content = $this->container->get('templating')->render($view, $context);
+            } elseif ($this->container->has('twig')) {
+                $content = $this->container->get('twig')->render($view, $context);
+            } else {
+                throw new \LogicException('Cannot render Form from FormFactory');
+            }
+
+            return new Response($content);
+        }
+        return null;
     }
 }

@@ -24,7 +24,7 @@ class AttributesController extends AbstractController
     /**
      * @Route("/attributes/", name="admin_attributes")
      */
-    public function index(AttributeRepository $repository, Breadcrumb $breadcrumb, SearchFilter $searchFilter)
+    public function index(Breadcrumb $breadcrumb, AttributeRepository $repository, SearchFilter $searchFilter)
     {
         $breadcrumb->add('Pays', $this->generateUrl('admin_attributes'));
         $searchFilter->setRouteName('admin_attributes');
@@ -36,42 +36,24 @@ class AttributesController extends AbstractController
     /**
      * @Route("/attributes/add", name="admin_attributes_add")
      */
-    public function add(FormFactory $formFactory, Breadcrumb $breadcrumb)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
     {
         $breadcrumb->add('Pays', $this->generateUrl('admin_attributes'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_attributes_add'));
 
-        $country = new Attribute();
-
-        if (!($form = $formFactory->create($country))) {
-            return $this->redirectToRoute('admin_attributes');
-        }
-
-        return $this->render('@admin/attributes/add.html.twig', [
-            'item' => $country,
-            'form' => $form->createView(),
-        ]);
+        return $formFactory->render('@admin/attributes/form.html.twig', new Attribute(), 'Créer')
+            ?: $this->redirectToRoute('admin_attributes');
     }
 
     /**
      * @Route("/attributes/edit-{id}", name="admin_attributes_edit", requirements={"id": "\d+"})
      */
-    public function edit(FormFactory $formFactory, AttributeRepository $repository, Breadcrumb $breadcrumb, int $id)
+    public function edit(Breadcrumb $breadcrumb, FormFactory $formFactory, AttributeRepository $repository, int $id)
     {
         $breadcrumb->add('Pays', $this->generateUrl('admin_attributes'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_attributes_edit', ['id' => $id]));
 
-        if (!($country = $repository->find($id))) {
-            return $this->redirectToRoute('admin_attributes');
-        }
-
-        if (!($form = $formFactory->create($country))) {
-            return $this->redirectToRoute('admin_attributes');
-        }
-
-        return $this->render('@admin/attributes/add.html.twig', [
-            'item' => $country,
-            'form' => $form->createView(),
-        ]);
+        return $formFactory->render('@admin/attributes/form.html.twig', $repository->find($id), 'Modifier')
+            ?: $this->redirectToRoute('admin_attributes');
     }
 }

@@ -56,7 +56,8 @@ class AttributeRepository extends ServiceEntityRepository
                 $qb->expr()->like('a.name', $qb->expr()->literal("%$value%"))
             ));
         }
-        return $qb->addOrderBy('a.type', 'ASC')
+        return $qb
+            ->addOrderBy('a.type', 'ASC')
             ->addOrderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult();
