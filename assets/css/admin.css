@@ -24,7 +24,7 @@ table.table td:first-child .btn-sm {
     text-align: center;
 }
 
-.form-check {
+.yesno .form-check {
     display: inline-block !important;
     margin-right: 1.5em;
 }

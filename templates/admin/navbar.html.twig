@@ -5,8 +5,10 @@
     ['zbas', 'far fa-square', 'ZBAs'],
     ['items', 'fas fa-tree', 'Items'],
     ['pieces', 'fas fa-puzzle-piece', 'Pieces'],
-    ['attributes', 'fas fa-tag', 'Attributs'],
     ['images', 'fas fa-images', 'Images'],
+] %}
+{% set menuGear = [
+    ['attributes', 'fas fa-tag', 'Attributs'],
     ['countries', 'fas fa-flag', 'Pays'],
 ] %}
 
@@ -27,6 +29,16 @@
                         <a class="nav-link" href="{{ path('admin_'~menuItem.0) }}"><i class="{{ menuItem.1 }}"></i> {{ menuItem.2 }}</a>
                     </li>
                 {% endfor %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for menuItem in menuGear %}
+                            <a class="dropdown-item" href="{{ path('admin_'~menuItem.0) }}"><i class="{{ menuItem.1 }}"></i> {{ menuItem.2 }}</a></a>
+                        {% endfor %}
+                    </div>
+                </li>
             </ul>
             {% if searchfilter.visible %}
                 <form class="form-inline my-2 my-lg-0" action="{{ path(searchfilter.routeName) }}" method="get" id="searchFilterForm">
@@ -39,8 +51,7 @@
                         <button type="submit" class="btn btn-outline-info">
                             <i class="fas fa-search"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary"
-                                onclick="searchFilterReset()">
+                        <button type="button" class="btn btn-outline-secondary" onclick="searchFilterReset()">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>

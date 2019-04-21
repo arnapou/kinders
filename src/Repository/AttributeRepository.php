@@ -75,6 +75,19 @@ class AttributeRepository extends ServiceEntityRepository
         return parent::findBy($criteria, $orderBy ?: ['type' => 'ASC', 'name' => 'ASC'], $limit, $offset);
     }
 
+    public function getTypes(): array
+    {
+        return array_column(
+            $this->createQueryBuilder('a')
+                ->select('a.type')
+                ->orderBy('a.type', 'ASC')
+                ->groupBy('a.type')
+                ->getQuery()
+                ->getResult(),
+            'type'
+        );
+    }
+
     // /**
     //  * @return Attribute[] Returns an array of Attribute objects
     //  */

@@ -25,6 +25,7 @@ class CountriesController extends AbstractController
      */
     public function index(CountryRepository $repository, Breadcrumb $breadcrumb)
     {
+        $breadcrumb->add('Config', '');
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         return $this->render('@admin/countries/index.html.twig', [
             'items' => $repository->findAll(),
@@ -36,6 +37,7 @@ class CountriesController extends AbstractController
      */
     public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
     {
+        $breadcrumb->add('Config', '');
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_countries_add'));
 
@@ -48,6 +50,7 @@ class CountriesController extends AbstractController
      */
     public function edit(Breadcrumb $breadcrumb, FormFactory $formFactory, CountryRepository $repository, int $id)
     {
+        $breadcrumb->add('Config', '');
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_countries_edit', ['id' => $id]));
 

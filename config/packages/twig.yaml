@@ -7,4 +7,6 @@ twig:
     globals:
         breadcrumb: '@App\Service\Breadcrumb'
         searchfilter: '@App\Service\SearchFilter'
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes: ['@admin/form_theme.html.twig']
+#    form_themes: ['bootstrap_4_layout.html.twig']
+#    form_themes: ['bootstrap_4_horizontal_layout.html.twig']

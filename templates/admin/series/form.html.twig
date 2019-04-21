@@ -1,0 +1,33 @@
+{% extends "@admin/index.html.twig" %}
+
+{% import "@admin/macros.html.twig" as macro %}
+
+{% block body %}
+    {{ macro.breadcrumb() }}
+
+    {{ form_start(form) }}
+
+    <div class="row">
+        <div class="col-9">{{ form_row(form.name) }}</div>
+        <div class="col">{{ form_row(form.reference) }}</div>
+    </div>
+    <div class="row">
+        <div class="col">{{ form_row(form.quantityOwned) }}</div>
+        <div class="col">{{ form_row(form.quantityDouble) }}</div>
+        <div class="col">{{ form_row(form.lookingFor) }}</div>
+        <div class="col">{{ form_row(form.year) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-3">{{ form_row(form.country) }}</div>
+    </div>
+
+    {{ form_widget(form) }}
+
+    <div class="form-group">
+        <button type="submit" class="btn-primary btn">{{ action }}</button>
+        <a href="{{ breadcrumb[0].url }}" class="btn-light btn">Annuler</a>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

@@ -16,9 +16,9 @@
             <th>Nome</th>
             <th>Réf.</th>
             <th>Année</th>
-            <th>Qte</th>
-            <th>Qte double</th>
-            <th>Rech.</th>
+            <th>Collec</th>
+            <th>Double</th>
+            <th>Recherché ?</th>
         </tr>
         </thead>
         <tbody>
@@ -34,7 +34,11 @@
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ item.quantityOwned ?: ''}}</td>
                 <td>{{ item.quantityDouble ?: '' }}</td>
-                <td>{{ item.lookingFor ? 'X' : '' }}</td>
+                <td>
+                    {% if item.lookingFor %}
+                        <i class="fas fa-check"></i>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

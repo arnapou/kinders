@@ -13,7 +13,6 @@ namespace App\Form;
 
 use App\Entity\Piece;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,11 +28,11 @@ class PieceType extends AbstractType
             ->add('quantityOwned', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('quantityDouble', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
-            ->add('lookingFor', ChoiceType::class, ['choices' => ['Oui' => true, 'Non' => false], 'expanded' => true])
+            ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
 //            ->add('serie')
 //            ->add('images')
-//            ->add('attributes')
+            ->add('attributes', AttributesListType::class)
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 

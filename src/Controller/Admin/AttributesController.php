@@ -26,7 +26,8 @@ class AttributesController extends AbstractController
      */
     public function index(Breadcrumb $breadcrumb, AttributeRepository $repository, SearchFilter $searchFilter)
     {
-        $breadcrumb->add('Pays', $this->generateUrl('admin_attributes'));
+        $breadcrumb->add('Config', '');
+        $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $searchFilter->setRouteName('admin_attributes');
         return $this->render('@admin/attributes/index.html.twig', [
             'items' => $repository->searchAll(),
@@ -38,7 +39,8 @@ class AttributesController extends AbstractController
      */
     public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
     {
-        $breadcrumb->add('Pays', $this->generateUrl('admin_attributes'));
+        $breadcrumb->add('Config', '');
+        $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_attributes_add'));
 
         return $formFactory->render('@admin/attributes/form.html.twig', new Attribute(), 'Créer')
@@ -50,7 +52,8 @@ class AttributesController extends AbstractController
      */
     public function edit(Breadcrumb $breadcrumb, FormFactory $formFactory, AttributeRepository $repository, int $id)
     {
-        $breadcrumb->add('Pays', $this->generateUrl('admin_attributes'));
+        $breadcrumb->add('Config', '');
+        $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_attributes_edit', ['id' => $id]));
 
         return $formFactory->render('@admin/attributes/form.html.twig', $repository->find($id), 'Modifier')

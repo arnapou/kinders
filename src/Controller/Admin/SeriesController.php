@@ -11,7 +11,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Serie;
+use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
+use App\Service\FormFactory;
+use App\Service\SearchFilter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,10 +24,36 @@ class SeriesController extends AbstractController
     /**
      * @Route("/series/", name="admin_series")
      */
-    public function index(Breadcrumb $breadcrumb)
+    public function index(SerieRepository $repository, Breadcrumb $breadcrumb, SearchFilter $searchFilter)
     {
         $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
-        $context = [];
-        return $this->render('@admin/series/index.html.twig', $context);
+        $searchFilter->setRouteName('admin_series');
+        return $this->render('@admin/series/index.html.twig', [
+            'items' => $repository->searchAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/series/add", name="admin_series_add")
+     */
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
+    {
+        $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
+        $breadcrumb->add('Ajouter', $this->generateUrl('admin_series_add'));
+
+        return $formFactory->render('@admin/series/form.html.twig', new Serie(), 'Créer')
+            ?: $this->redirectToRoute('admin_series');
+    }
+
+    /**
+     * @Route("/series/edit-{id}", name="admin_series_edit", requirements={"id": "\d+"})
+     */
+    public function edit(Breadcrumb $breadcrumb, FormFactory $formFactory, SerieRepository $repository, int $id)
+    {
+        $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
+        $breadcrumb->add('Modifier', $this->generateUrl('admin_series_edit', ['id' => $id]));
+
+        return $formFactory->render('@admin/series/form.html.twig', $repository->find($id), 'Modifier')
+            ?: $this->redirectToRoute('admin_series');
     }
 }
