@@ -9,12 +9,16 @@ body {
     border-radius: .2rem;
 }
 
+table.table th:last-child,
+table.table td:last-child,
 table.table th:first-child,
 table.table td:first-child {
     white-space: nowrap;
     width: 1px;
 }
 
+table.table th:last-child .btn-sm,
+table.table td:last-child .btn-sm,
 table.table th:first-child .btn-sm,
 table.table td:first-child .btn-sm {
     display: inline-block;
@@ -41,8 +45,8 @@ td img.admin-image-blank {
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-.select2-selection li img,
-.select2-container li img {
+.select2-selection img,
+.select2-container img {
     max-height: 1.5em;
     max-width: 1.5em;
 }

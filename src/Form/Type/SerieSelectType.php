@@ -11,19 +11,19 @@
 
 namespace App\Form\Type;
 
-use App\Entity\Image;
-use App\Form\DataTransformer\EntitiesDataTransformer;
+use App\Entity\Serie;
+use App\Form\DataTransformer\EntityDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
-class ImageListType extends AbstractType
+class SerieSelectType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'multiple'             => true,
-            'class'                => Image::class,
+            'multiple'             => false,
+            'class'                => Serie::class,
             'primary_key'          => 'id',
             'text_property'        => 'name',
             'minimum_input_length' => 1,
@@ -33,9 +33,9 @@ class ImageListType extends AbstractType
             'cache'                => true,
             'cache_timeout'        => 60000,
             'language'             => 'fr',
-            'placeholder'          => 'images ...',
+            'placeholder'          => 'série ...',
             'auto_start'           => false,
-            'transformer'          => EntitiesDataTransformer::class,
+            'transformer'          => EntityDataTransformer::class,
         ]);
     }
 

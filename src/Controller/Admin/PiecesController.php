@@ -12,12 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Piece;
-use App\Form\AutocompleteImages;
+use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\PieceType;
 use App\Repository\PieceRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,11 +63,27 @@ class PiecesController extends AbstractController
     }
 
     /**
+     * @Route("/pieces/delete-{id}", name="admin_pieces_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, PieceRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_pieces');
+    }
+
+    /**
      * @Route("/pieces/autocomplete", name="admin_pieces_autocomplete")
      */
-    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->getResult($request, PieceType::class);
+        if ('images' === $request->get('field_name')) {
+            $result = $autocomplete->images($request, PieceType::class);
+        } else {
+            $result = $autocomplete->entities($request, PieceType::class);
+        }
         return new JsonResponse($result);
     }
 }

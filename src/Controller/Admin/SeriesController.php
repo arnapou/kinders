@@ -12,12 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Serie;
-use App\Form\AutocompleteImages;
+use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\SerieType;
 use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,11 +63,23 @@ class SeriesController extends AbstractController
     }
 
     /**
+     * @Route("/series/delete-{id}", name="admin_series_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, SerieRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_series');
+    }
+
+    /**
      * @Route("/series/autocomplete", name="admin_series_autocomplete")
      */
-    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->getResult($request, SerieType::class);
+        $result = $autocomplete->images($request, SerieType::class);
         return new JsonResponse($result);
     }
 }

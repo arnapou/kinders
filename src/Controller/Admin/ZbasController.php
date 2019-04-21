@@ -12,12 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\ZBA;
-use App\Form\AutocompleteImages;
+use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\ZBAType;
 use App\Repository\ZBARepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,11 +63,27 @@ class ZbasController extends AbstractController
     }
 
     /**
+     * @Route("/zbas/delete-{id}", name="admin_zbas_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, ZBARepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_zbas');
+    }
+
+    /**
      * @Route("/zbas/autocomplete", name="admin_zbas_autocomplete")
      */
-    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->getResult($request, ZBAType::class);
+        if ('images' === $request->get('field_name')) {
+            $result = $autocomplete->images($request, ZBAType::class);
+        } else {
+            $result = $autocomplete->entities($request, ZBAType::class);
+        }
         return new JsonResponse($result);
     }
 }

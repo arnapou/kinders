@@ -16,6 +16,7 @@ use App\Form\FormFactory;
 use App\Repository\ImageRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -49,6 +50,18 @@ class ImagesController extends AbstractController
 
         return $formFactory->render('@admin/images/form.html.twig', $image, 'Créer')
             ?: $this->redirectToRoute('admin_images');
+    }
+
+    /**
+     * @Route("/images/delete-{id}", name="admin_images_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, ImageRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_images');
     }
 
     /**

@@ -16,6 +16,7 @@ use App\Form\FormFactory;
 use App\Repository\AttributeRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -58,5 +59,17 @@ class AttributesController extends AbstractController
 
         return $formFactory->render('@admin/attributes/form.html.twig', $repository->find($id), 'Modifier')
             ?: $this->redirectToRoute('admin_attributes');
+    }
+
+    /**
+     * @Route("/attributes/delete-{id}", name="admin_attributes_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, AttributeRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_attributes');
     }
 }

@@ -12,12 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Kinder;
-use App\Form\AutocompleteImages;
+use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\KinderType;
 use App\Repository\KinderRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,11 +63,27 @@ class KindersController extends AbstractController
     }
 
     /**
+     * @Route("/kinders/delete-{id}", name="admin_kinders_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, KinderRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_kinders');
+    }
+
+    /**
      * @Route("/kinders/autocomplete", name="admin_kinders_autocomplete")
      */
-    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->getResult($request, KinderType::class);
+        if ('images' === $request->get('field_name')) {
+            $result = $autocomplete->images($request, KinderType::class);
+        } else {
+            $result = $autocomplete->entities($request, KinderType::class);
+        }
         return new JsonResponse($result);
     }
 }

@@ -12,12 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Item;
-use App\Form\AutocompleteImages;
+use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\ItemType;
 use App\Repository\ItemRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,11 +63,27 @@ class ItemsController extends AbstractController
     }
 
     /**
+     * @Route("/items/delete-{id}", name="admin_items_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, ItemRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_items');
+    }
+
+    /**
      * @Route("/items/autocomplete", name="admin_items_autocomplete")
      */
-    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->getResult($request, ItemType::class);
+        if ('images' === $request->get('field_name')) {
+            $result = $autocomplete->images($request, ItemType::class);
+        } else {
+            $result = $autocomplete->entities($request, ItemType::class);
+        }
         return new JsonResponse($result);
     }
 }

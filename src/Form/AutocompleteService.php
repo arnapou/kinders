@@ -11,6 +11,7 @@
 
 namespace App\Form;
 
+use App\Entity\BaseItem;
 use App\Entity\Image;
 use App\Repository\ImageRepository;
 use App\Service\SearchFilter;
@@ -19,7 +20,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-class AutocompleteImages
+class AutocompleteService
 {
     /**
      * @var FormFactoryInterface
@@ -51,7 +52,7 @@ class AutocompleteImages
         $this->searchFilter   = $searchFilter;
     }
 
-    public function getResult(Request $request, $type)
+    public function images(Request $request, $type)
     {
         $form         = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
@@ -75,8 +76,49 @@ class AutocompleteImages
         $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbResult
             ->andWhere('e.type = :type')->setParameter('type', $imageType)
-            ->setMaxResults($maxResults)
-            ->setFirstResult($offset);
+            ->setMaxResults($maxResults)->setFirstResult($offset);
+
+        $count             = $qbCount->getQuery()->getSingleScalarResult();
+        $paginationResults = $qbResult->getQuery()->getResult();
+
+        return [
+            'results' => $this->mapImageToArray($paginationResults),
+            'more'    => $count > ($offset + $maxResults),
+        ];
+    }
+
+    private function mapImageToArray($paginationResults): array
+    {
+        return array_map(
+            function (Image $image) {
+                return [
+                        'id'   => $image->getId(),
+                        'text' => \strval($image),
+                    ] +
+                    ($image->getFile() ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
+            },
+            $paginationResults
+        );
+    }
+
+    public function entities(Request $request, $type)
+    {
+        $form         = $this->formFactory->create($type);
+        $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
+
+        /** @var ImageRepository $repo */
+        $repo = $this->doctrine->getRepository($fieldOptions['class']);
+
+        $term = $request->get('q');
+
+        $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
+        $qbCount->select($qbCount->expr()->count('e'));
+
+        $maxResults = $fieldOptions['page_limit'];
+        $offset     = ($request->get('page', 1) - 1) * $maxResults;
+
+        $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);
+        $qbResult->setMaxResults($maxResults)->setFirstResult($offset);
 
         $count             = $qbCount->getQuery()->getSingleScalarResult();
         $paginationResults = $qbResult->getQuery()->getResult();
@@ -90,19 +132,15 @@ class AutocompleteImages
     private function mapToArray($paginationResults): array
     {
         return array_map(
-            function (Image $item) {
+            function (BaseItem $entity) {
+                $image = $entity->getImage();
                 return [
-                        'id'   => $item->getId(),
-                        'text' => \strval($item),
+                        'id'   => $entity->getId(),
+                        'text' => \strval($entity),
                     ] +
-                    ($item->getFile() ? ['file' => $this->file($item)] : []);
+                    (($image && $image->getFile()) ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
             },
             $paginationResults
         );
-    }
-
-    private function file(Image $image)
-    {
-        return $this->uploaderHelper->asset($image, 'diskFile');
     }
 }

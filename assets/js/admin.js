@@ -14,12 +14,15 @@ require('select2/dist/js/select2.full.js');
 require('select2/dist/css/select2.css');
 require('select2-bootstrap-theme/dist/select2-bootstrap.css');
 require('../../public/bundles/tetranzselect2entity/js/select2entity.js');
+// require('bootbox/dist/bootbox.all.min.js');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 const $ = require('jquery');
 
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
+
+const bootbox = require('bootbox');
 
 // window.$ = $;
 // window.jQuery = $;
@@ -29,10 +32,10 @@ window.searchFilterReset = function () {
     $('#searchFilterForm').submit();
 };
 
-$.fn.select2.defaults.set( "theme", "bootstrap" );
+$.fn.select2.defaults.set("theme", "bootstrap");
 
 
-$.fn.select2entityAjax = function(action) {
+$.fn.select2entityAjax = function (action) {
     var action = action || {};
     var template = function (item) {
         var img = item.file || null;
@@ -56,8 +59,21 @@ $.fn.select2entityAjax = function(action) {
 
 
 $(document).ready(function () {
-    $( "select.autocomplete" ).select2();
+    $("select.autocomplete").select2();
     $('.select2entity').select2entityAjax();
+
+    $('td .action-delete').click(function (e) {
+        var url = $(this).data('href');
+        bootbox.confirm("Do you really want to delete this objet?", function (result) {
+            if (result) {
+                $.post(url, function () {
+                    window.location.reload();
+                });
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
 });
 
 

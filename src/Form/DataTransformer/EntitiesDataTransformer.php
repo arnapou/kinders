@@ -14,7 +14,7 @@ namespace App\Form\DataTransformer;
 use App\Entity\Image;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
 
-class ImagesDataTransformer extends EntitiesToPropertyTransformer
+class EntitiesDataTransformer extends EntitiesToPropertyTransformer
 {
     /**
      * @param Image[] $entities

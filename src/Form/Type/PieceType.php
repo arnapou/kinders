@@ -30,7 +30,7 @@ class PieceType extends AbstractType
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
-//            ->add('serie')
+            ->add('serie', SerieSelectType::class, ['remote_route' => 'admin_pieces_autocomplete'])
             ->add('attributes', AttributesListType::class)
             ->add('images', ImageListType::class, ['remote_route' => 'admin_pieces_autocomplete'])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);

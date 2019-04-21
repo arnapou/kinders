@@ -12,12 +12,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\BPZ;
-use App\Form\AutocompleteImages;
+use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\BPZType;
 use App\Repository\BPZRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,11 +63,27 @@ class BpzsController extends AbstractController
     }
 
     /**
+     * @Route("/bpzs/delete-{id}", name="admin_bpzs_delete", requirements={"id": "\d+"}, methods={"POST"})
+     */
+    public function delete(EntityManagerInterface $entityManager, BPZRepository $repository, int $id)
+    {
+        if ($item = $repository->find($id)) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('admin_bpzs');
+    }
+
+    /**
      * @Route("/bpzs/autocomplete", name="admin_bpzs_autocomplete")
      */
-    public function autocomplete(AutocompleteImages $autocomplete, Request $request)
+    public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->getResult($request, BPZType::class);
+        if ('images' === $request->get('field_name')) {
+            $result = $autocomplete->images($request, BPZType::class);
+        } else {
+            $result = $autocomplete->entities($request, BPZType::class);
+        }
         return new JsonResponse($result);
     }
 }
