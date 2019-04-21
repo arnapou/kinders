@@ -112,12 +112,6 @@ abstract class BaseEntity
         return $this;
     }
 
-    public function getEntityType(): string
-    {
-        $refl = new \ReflectionClass($this);
-        return $refl->getShortName();
-    }
-
     public function __toString(): string
     {
         return $this->name;

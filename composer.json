@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "symfony/asset": "4.2.*",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
@@ -18,7 +19,8 @@
         "symfony/twig-bundle": "4.2.*",
         "symfony/web-server-bundle": "4.2.*",
         "symfony/webpack-encore-bundle": "^1.5",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "tetranz/select2entity-bundle": "^2.9"
     },
     "config": {
         "preferred-install": {

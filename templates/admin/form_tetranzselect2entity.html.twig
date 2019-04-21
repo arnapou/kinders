@@ -1,0 +1,9 @@
+{% extends '@TetranzSelect2Entity/Form/fields.html.twig' %}
+
+{% block tetranz_select2entity_widget_select_option %}
+    <option value="{{ id }}" selected="selected"
+            {% if label.file is defined %} data-file="{{ asset(label.file) }}"{% endif %}
+    >
+        {{ label }}
+    </option>
+{% endblock %}

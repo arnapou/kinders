@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use App\Service\ImageTypeGuesser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -136,7 +137,7 @@ abstract class BaseItem extends BaseEntity
     {
         if (!$this->images->contains($image)) {
             if (!$image->getType()) {
-                $image->setType($this->getEntityType());
+                $image->setType(ImageTypeGuesser::guess($this));
             }
             $this->images[] = $image;
         }

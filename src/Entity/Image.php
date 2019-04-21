@@ -35,7 +35,7 @@ class Image extends BaseEntity
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $file;
+    private $file = '';
 
     /**
      * @return string

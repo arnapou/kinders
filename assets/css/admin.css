@@ -28,3 +28,9 @@ table.table td:first-child .btn-sm {
     display: inline-block !important;
     margin-right: 1.5em;
 }
+
+.select2-selection li img,
+.select2-container li img {
+    max-height: 1.5em;
+    max-width: 1.5em;
+}

@@ -31,8 +31,11 @@ class SerieType extends AbstractType
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('country')
-//            ->add('images')
             ->add('attributes', AttributesListType::class)
+            ->add('images', ImageListType::class, [
+                'remote_route' => 'admin_series_autocomplete',
+                'source_class' => Serie::class,
+            ])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 

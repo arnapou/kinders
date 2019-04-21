@@ -25,12 +25,12 @@ class FormFactory
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->container        = $container;
     }
 
     public function create(BaseEntity $entity, ?string $type = null): ?FormInterface
     {
-        $type = $type ?: 'App\\Form\\' . $entity->getEntityType() . 'Type';
+        $type = $type ?: 'App\\Form\\' . ImageTypeGuesser::guess($entity) . 'Type';
 
         $form = $this->container->get('form.factory')->create($type, $entity);
 

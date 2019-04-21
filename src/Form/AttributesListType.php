@@ -28,13 +28,18 @@ class AttributesListType extends AbstractType
 
             'choice_attr' => function (Attribute $choice, $key, $value) {
                 return [
-                    'class'     => 'attrtype.' . strtolower($choice->getType()),
+                    'class' => 'attrtype.' . strtolower($choice->getType()),
                 ];
             },
             'group_by'    => function (Attribute $choice, $key, $value) {
                 return $choice->getType();
             },
         ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'attributes_list';
     }
 
     public function getParent()
