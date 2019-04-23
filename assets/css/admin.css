@@ -55,3 +55,8 @@ td img.admin-image-blank {
     max-height: 10em;
     max-width: 10em;
 }
+
+.footer-pagination{
+    display: inline-block;
+    margin-left: 1em;
+}

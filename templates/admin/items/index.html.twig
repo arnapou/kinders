@@ -31,11 +31,16 @@
                         <i class="fas fa-pen"></i>
                     </a>
                 </td>
-                <td>{% if item.serie %}{{ macro.image(item.serie.image) }} {{ item.serie }}{% endif %}</td>
+                <td>
+                    {% if item.serie %}
+                        {{ macro.image(item.serie.image) }}
+                        <a href="{{ path('admin_series_edit', {id: item.serie.id}) }}">{{ item.serie }}</a>
+                    {% endif %}
+                </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
-                <td>{{ item.quantityOwned ?: ''}}</td>
+                <td>{{ item.quantityOwned ?: '' }}</td>
                 <td>{{ item.quantityDouble ?: '' }}</td>
                 <td>
                     {% if item.lookingFor %}
@@ -53,6 +58,6 @@
     </table>
 
     <div class="text-right">
-        <span class="badge badge-light">{{ items|length }} items</span>
+        {{ macro.pagination('items') }}
     </div>
 {% endblock %}

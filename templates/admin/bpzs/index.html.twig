@@ -32,8 +32,14 @@
                         <i class="fas fa-pen"></i>
                     </a>
                 </td>
-                <td>{{ macro.image(item.kinder.serie.image) }} {{ item.kinder.serie }}</td>
-                <td>{{ macro.image(item.kinder.image) }} {{ item.kinder }}</td>
+                <td>
+                    {{ macro.image(item.kinder.serie.image) }}
+                    <a href="{{ path('admin_series_edit', {id: item.kinder.serie.id}) }}">{{ item.kinder.serie }}</a>
+                </td>
+                <td>
+                    {{ macro.image(item.kinder.image) }}
+                    <a href="{{ path('admin_kinders_edit', {id: item.kinder.id}) }}">{{ item.kinder }}</a>
+                </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
@@ -55,6 +61,6 @@
     </table>
 
     <div class="text-right">
-        <span class="badge badge-light">{{ items|length }} bpzs</span>
+        {{ macro.pagination('bpzs') }}
     </div>
 {% endblock %}

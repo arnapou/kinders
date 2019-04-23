@@ -11,12 +11,27 @@
 
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * @var array
      */
     private $items = [];
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * Breadcrumb constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     public function add(string $label, string $url): void
     {
@@ -61,5 +76,14 @@ class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
     public function offsetUnset($offset)
     {
         // not implemented
+    }
+
+    public function previous()
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        if ($previous = $request->getSession()->get('last_route')) {
+            return $this->container->get('router')->generate($previous['name'], $previous['params']);
+        }
+        return ($this[0] ?: $this[1] ?: ['url' => './'])['url'];
     }
 }

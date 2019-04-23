@@ -24,3 +24,45 @@
     {% endspaceless -%}
 {%- endmacro %}
 
+{% macro pagination(text) %}
+    <span class="badge badge-light">{{ pagination.itemCount }} {{ text }}</span>
+    {% if pagination.pageCount > 1 %}
+        <nav class="footer-pagination">
+            <ul class="pagination pagination-sm">
+                {% if pagination.pageNum > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pagination.pageNum - 1 }}" tabindex="-1">&laquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+                    </li>
+                {% endif %}
+                {% for i in pagination %}
+                    {% if i == 0 %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">&#8230;</a>
+                        </li>
+                    {% elseif pagination.pageNum == i %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if pagination.pageNum < pagination.pageCount %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pagination.pageNum + 1 }}" tabindex="-1">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endmacro %}

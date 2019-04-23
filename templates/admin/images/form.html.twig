@@ -20,7 +20,7 @@
 
     <div class="form-group">
         <button type="submit" class="btn-primary btn">{{ action }}</button>
-        <a href="{{ breadcrumb[0].url }}" class="btn-light btn">Annuler</a>
+        <a href="{{ breadcrumb.previous }}" class="btn-light btn">Annuler</a>
     </div>
 
     {{ form_end(form) }}

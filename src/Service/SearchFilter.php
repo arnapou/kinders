@@ -35,10 +35,15 @@ class SearchFilter
      * @var EntityManager
      */
     private $entityManager;
+    /**
+     * @var Pagination
+     */
+    private $pagination;
 
-    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager)
+    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, Pagination $pagination)
     {
         $this->container     = $container;
+        $this->pagination    = $pagination;
         $this->entityManager = $entityManager;
     }
 
@@ -67,8 +72,16 @@ class SearchFilter
 
     public function search(ServiceEntityRepository $repository): array
     {
+        $qb    = $this->searchQueryBuilder($repository, $this->values());
+        $count = $qb
+            ->select($qb->expr()->count('e'))
+            ->getQuery()->getSingleScalarResult();
+        $this->pagination->setItemCount($count);
+
         return $this
             ->searchQueryBuilder($repository, $this->values())
+            ->setMaxResults($this->pagination->getPageSize())
+            ->setFirstResult($this->pagination->offsetStart())
             ->getQuery()
             ->getResult();
     }
