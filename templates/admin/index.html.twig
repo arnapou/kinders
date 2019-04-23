@@ -15,19 +15,19 @@
 {% endembed %}
 <div class="container">
     {% block body %}
-        <div class="row" style="margin-top: 2em">
+        <div class="row mt-3">
             <div class="col-4">
-                <div class="border border-primary" >
-                <table class="table table-striped table-sm" style="margin: 0">
-                    <tbody>
-                    {% for name, nb in stats %}
-                        <tr>
-                            <td>{{ name }}</td>
-                            <td>{{ nb ?: '' }}</td>
-                        </tr>
-                    {% endfor%}
-                    </tbody>
-                </table>
+                <div class="border border-primary">
+                    <table class="table table-striped table-sm" style="margin: 0">
+                        <tbody>
+                        {% for name, nb in stats %}
+                            <tr>
+                                <td>{{ name }}</td>
+                                <td>{{ nb ?: '' }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {% set img='<svg class="bd-placeholder-img rounded" width="150" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="40%" y="50%" fill="#dee2e6" dy=".3em">{TEXT}</text></svg>' %}
