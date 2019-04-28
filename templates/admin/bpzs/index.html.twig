@@ -40,7 +40,11 @@
                     {{ macro.image(item.kinder.image) }}
                     <a href="{{ path('admin_kinders_edit', {id: item.kinder.id}) }}">{{ item.kinder }}</a>
                 </td>
-                <td>{{ macro.image(item.image) }} {{ item.name }}</td>
+                <td>
+                    {{ macro.image(item.getImage(0)) }}
+                    {{ macro.image(item.getImage(1)) }}
+                    {{ item.name }}
+                </td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ item.quantityOwned ?: ''}}</td>

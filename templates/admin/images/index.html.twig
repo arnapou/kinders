@@ -15,6 +15,7 @@
             </th>
             <th>Type</th>
             <th>Nom</th>
+            <th>Used ?</th>
             <th>Commentaire</th>
             <th></th>
         </tr>
@@ -29,6 +30,11 @@
                 </td>
                 <td>{{ item.type }}</td>
                 <td>{{ macro.image(item) }} {{ item.name }}</td>
+                <td>
+                    {% if item.linked %}
+                        <i class="fas fa-check"></i>
+                    {% endif %}
+                </td>
                 <td>{{ item.comment }}</td>
                 <td>
                     <span type="button" data-href="{{ path('admin_images_delete', {id: item.id}) }}" class="action-delete btn-sm btn-danger">

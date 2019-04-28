@@ -1,1 +1,2 @@
 parameters:
+    admin.pagination.page_size: 25

@@ -27,7 +27,7 @@ class Pagination implements \IteratorAggregate
     /**
      * @var int
      */
-    private $pageSize = 15;
+    private $pageSize;
     /**
      * @var int
      */
@@ -40,6 +40,7 @@ class Pagination implements \IteratorAggregate
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->pageSize = $container->getParameter('admin.pagination.page_size') ?: 15;
     }
 
     public function setItemCount(int $count)

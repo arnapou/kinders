@@ -12,8 +12,15 @@
 namespace App\Repository;
 
 use App\Entity\BaseItem;
+use App\Entity\BPZ;
 use App\Entity\Image;
+use App\Entity\Item;
+use App\Entity\Kinder;
+use App\Entity\Piece;
+use App\Entity\Serie;
+use App\Entity\ZBA;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -52,6 +59,94 @@ class ImageRepository extends ServiceEntityRepository
             }
         }
         return array_combine($types, $types);
+    }
+
+    public function linked(?Image $image): bool
+    {
+        if (null === $image) {
+            return false;
+        }
+        $classes = [
+            BPZ::class,
+            ZBA::class,
+            Kinder::class,
+            Piece::class,
+            Item::class,
+            Serie::class,
+        ];
+        foreach ($classes as $class) {
+            if ($objects = $this->linkedObjects($image, $class)) {
+                var_dump($objects);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function linkedObjects(Image $image, string $class): array
+    {
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->from($class, 'o')
+            ->select('o')
+            ->join('o.images', 'i', Join::WITH, 'i.id = :id')
+            ->setParameter('id', $image->getId())
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @param Image $image
+     * @return BPZ[]
+     */
+    public function linkedBPZ(Image $image)
+    {
+        return $this->linkedObjects($image, BPZ::class);
+    }
+
+    /**
+     * @param Image $image
+     * @return ZBA[]
+     */
+    public function linkedZBA(Image $image)
+    {
+        return $this->linkedObjects($image, ZBA::class);
+    }
+
+    /**
+     * @param Image $image
+     * @return Kinder[]
+     */
+    public function linkedKinder(Image $image)
+    {
+        return $this->linkedObjects($image, Kinder::class);
+    }
+
+    /**
+     * @param Image $image
+     * @return Piece[]
+     */
+    public function linkedPiece(Image $image)
+    {
+        return $this->linkedObjects($image, Piece::class);
+    }
+
+    /**
+     * @param Image $image
+     * @return Serie[]
+     */
+    public function linkedSerie(Image $image)
+    {
+        return $this->linkedObjects($image, Serie::class);
+    }
+
+    /**
+     * @param Image $image
+     * @return Item[]
+     */
+    public function linkedItem(Image $image)
+    {
+        return $this->linkedObjects($image, Item::class);
     }
 
     public static function getTypeFrom($class): string

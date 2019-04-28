@@ -57,6 +57,12 @@ class Image extends BaseEntity
     private $size;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $linked = false;
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -90,6 +96,16 @@ class Image extends BaseEntity
     {
         $this->size = $size;
         return $this;
+    }
+
+    public function isLinked(): bool
+    {
+        return $this->linked;
+    }
+
+    public function setLinked(bool $linked): void
+    {
+        $this->linked = $linked;
     }
 
     /**

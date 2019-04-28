@@ -142,6 +142,7 @@ abstract class BaseItem extends BaseEntity
                 $image->setType(ImageRepository::getTypeFrom($this));
             }
             $this->images[] = $image;
+            $this->updateTimestamps();
         }
         return $this;
     }
@@ -150,14 +151,19 @@ abstract class BaseItem extends BaseEntity
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
+            $this->updateTimestamps();
         }
         return $this;
     }
 
-    public function getImage(): ?Image
+    public function getImage(int $num = 0): ?Image
     {
+        $i = 0;
         foreach ($this->getImages() as $image) {
-            return $image;
+            if ($i === $num) {
+                return $image;
+            }
+            $i++;
         }
         return null;
     }

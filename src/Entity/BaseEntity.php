@@ -64,7 +64,7 @@ abstract class BaseEntity
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function onPrePersist()
+    public function updateTimestamps()
     {
         $this->updatedAt = new DateTime();
     }

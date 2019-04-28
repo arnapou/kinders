@@ -24,6 +24,6 @@ class EntityDataTransformer extends EntityToPropertyTransformer
      */
     public function transform($entity)
     {
-        return $entity && $entity->getId() ? [$entity->getId(), $entity] : [];
+        return $entity && $entity->getId() ? [$entity->getId() => $entity] : [];
     }
 }

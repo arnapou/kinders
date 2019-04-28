@@ -32,3 +32,8 @@ services:
 
     App\Form\VichNamers:
         public: true
+
+    App\EventListener\EntityListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
