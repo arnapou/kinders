@@ -76,7 +76,6 @@ class ImageRepository extends ServiceEntityRepository
         ];
         foreach ($classes as $class) {
             if ($objects = $this->linkedObjects($image, $class)) {
-                var_dump($objects);
                 return true;
             }
         }
