@@ -17,6 +17,7 @@
             <th>Nom</th>
             <th>Réf.</th>
             <th>Année</th>
+            <th>Attributes</th>
             <th>Collec</th>
             <th>Double</th>
             <th>Recherché ?</th>
@@ -40,6 +41,7 @@
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
+                <td>{{ macro.attributes(item) }}</td>
                 <td>{{ item.quantityOwned ?: '' }}</td>
                 <td>{{ item.quantityDouble ?: '' }}</td>
                 <td>

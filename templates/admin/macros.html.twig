@@ -24,6 +24,17 @@
     {% endspaceless -%}
 {%- endmacro %}
 
+{% macro attributes(item) -%}
+    {% for attr in item.attributes %}
+        {% spaceless %}
+            <span class="attribute attributes-{{ attr.type }}">
+                <em>{{ attr.type }}</em>
+                <span>{{ attr.name }}</span>
+            </span>
+        {% endspaceless %}
+    {% endfor %}
+{%- endmacro %}
+
 {% macro pagination(text) %}
     <span class="badge badge-light">{{ pagination.itemCount }} {{ text }}</span>
     {% if pagination.pageCount > 1 %}

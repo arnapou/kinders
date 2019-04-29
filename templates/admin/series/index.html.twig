@@ -15,11 +15,8 @@
             </th>
             <th>Nom</th>
             <th>Pays</th>
-            <th>Réf.</th>
             <th>Année</th>
-            <th>Collec</th>
-            <th>Double</th>
-            <th>Recherché ?</th>
+            <th>Attributes</th>
             <th></th>
         </tr>
         </thead>
@@ -33,15 +30,8 @@
                 </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
                 <td>{{ item.country }}</td>
-                <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
-                <td>{{ item.quantityOwned ?: ''}}</td>
-                <td>{{ item.quantityDouble ?: '' }}</td>
-                <td>
-                    {% if item.lookingFor %}
-                        <i class="fas fa-check"></i>
-                    {% endif %}
-                </td>
+                <td>{{ macro.attributes(item) }}</td>
                 <td>
                     <span type="button" data-href="{{ path('admin_series_delete', {id: item.id}) }}" class="action-delete btn-sm btn-danger">
                         <i class="fas fa-times"></i>

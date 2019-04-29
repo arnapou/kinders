@@ -60,3 +60,27 @@ td img.admin-image-blank {
     display: inline-block;
     margin-left: 1em;
 }
+
+span.attribute {
+    font-size: .8rem;
+    border-radius: 1rem;
+    background: rgba(0,0,0,0.07);
+    margin-right: .2rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+span.attribute em {
+    font-size: .8rem;
+    border-radius: 1rem;
+    background: rgba(255,255,255,.5);
+    color: rgba(0,0,0,.4);
+    padding: 0 .3rem;
+    margin: 0.1rem 0 0.1rem 0.1rem;
+    display: inline-block;
+    vertical-align: top;
+}
+span.attribute span {
+    padding: .1rem .4rem .1rem .3rem;
+    display: inline-block;
+    vertical-align: top;
+}
