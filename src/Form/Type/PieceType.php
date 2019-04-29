@@ -24,7 +24,7 @@ class PieceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('quantityOwned', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('quantityDouble', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])

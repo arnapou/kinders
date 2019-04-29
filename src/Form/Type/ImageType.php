@@ -36,7 +36,7 @@ class ImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('type', ChoiceType::class, ['choices' => $this->repository->getTypes()])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => ''])
             ->add('diskFile', VichImageType::class, [

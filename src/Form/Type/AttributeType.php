@@ -23,7 +23,7 @@ class AttributeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', TextType::class)
+            ->add('type', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('name', TextType::class)
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }

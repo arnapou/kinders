@@ -23,7 +23,7 @@ class CountryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('abbr', TextType::class)
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
