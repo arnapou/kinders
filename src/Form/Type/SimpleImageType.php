@@ -34,7 +34,7 @@ class SimpleImageType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('comment', TextType::class)
+            ->add('comment', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('diskFile', ImageUploadType::class);
     }
 
