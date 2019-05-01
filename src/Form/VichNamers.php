@@ -55,7 +55,7 @@ class VichNamers implements NamerInterface, DirectoryNamerInterface
         }
 
         if ($extension = $this->getExtension($file)) {
-            $name = sprintf('%s.%s', $name, $extension);
+            $name = sprintf('%s.%s', $name, strtolower($extension));
         }
 
         return $name;

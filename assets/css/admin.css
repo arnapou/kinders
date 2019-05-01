@@ -84,3 +84,7 @@ span.attribute span {
     display: inline-block;
     vertical-align: top;
 }
+
+.vich-image .custom-file-input ~ .custom-file-label::after {
+    content: "Image";
+}
