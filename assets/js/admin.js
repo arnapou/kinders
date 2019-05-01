@@ -77,9 +77,10 @@ $(document).ready(function () {
 
     $('.custom-file-input').on('change',function(){
         var filename = $(this).val();
-        var dirname = filename.replace(/([\/\\])[^\/\\]+$/, '$1');
+        // var dirname = filename.replace(/([\/\\])[^\/\\]+$/, '$1');
         var basename = filename.replace(/^.*[\/\\]([^\/\\]+)$/, '$1');
-        $(this).parent().find('label').html('<span style="color: #bbbbbb">'+dirname+'</span>' + basename);
+        $(this).parent().find('label').text(basename);
+        // $(this).parent().find('label').html('<span style="color: #bbbbbb">'+dirname+'</span>' + basename);
     })
 });
 

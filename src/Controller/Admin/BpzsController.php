@@ -14,7 +14,7 @@ namespace App\Controller\Admin;
 use App\Entity\BPZ;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
-use App\Form\Type\BPZType;
+use App\Form\Type\Entity\BPZType;
 use App\Repository\BPZRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;

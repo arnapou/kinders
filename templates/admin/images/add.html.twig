@@ -1,0 +1,48 @@
+{% extends "@admin/index.html.twig" %}
+
+{% import "@admin/macros.html.twig" as macro %}
+
+{% block body %}
+    {{ macro.breadcrumb() }}
+
+    {{ form_start(form) }}
+
+    <div class="row">
+        <div class="col-2 text-right">
+            <div class="mt-2">
+                {{ form_label(form.type) }}
+            </div>
+        </div>
+        <div class="col-3">
+            {{ form_widget(form.type) }}
+        </div>
+    </div>
+    {% for n in 1..nbimages %}
+        <div class="row mt-2">
+            <div class="col-2 text-right">
+                <div class="mt-2">
+                    Image
+                </div>
+            </div>
+            <div class="col-3">
+                {{ form_widget(form['image'~n].children.name, {'attr': {'placeholder': 'name '~n} }) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(form['image'~n].children.comment, {'attr': {'placeholder': 'comment '~n} }) }}
+            </div>
+            <div class="col-3">
+                {{ form_widget(form['image'~n].children.diskFile) }}
+            </div>
+        </div>
+    {% endfor %}
+
+    {{ form_widget(form) }}
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn-primary btn">Ajouter</button>
+        <a href="{{ breadcrumb.previous }}" class="btn-light btn">Annuler</a>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

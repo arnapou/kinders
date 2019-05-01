@@ -31,7 +31,7 @@ class FormFactory
 
     public function create(BaseEntity $entity, ?string $type = null): ?FormInterface
     {
-        $type = $type ?: __NAMESPACE__ . '\\Type\\' . ImageRepository::getTypeFrom($entity) . 'Type';
+        $type = $type ?: __NAMESPACE__ . '\\Type\\Entity\\' . ImageRepository::getTypeFrom($entity) . 'Type';
 
         $form = $this->container->get('form.factory')->create($type, $entity);
 

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form\Type;
+namespace App\Form\Type\Entity;
 
 use App\Entity\Country;
 use Symfony\Component\Form\AbstractType;

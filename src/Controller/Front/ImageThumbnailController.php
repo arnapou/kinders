@@ -55,7 +55,7 @@ class ImageThumbnailController extends AbstractController
     }
 
     /**
-     * @Route("/img/{path}_tn.{ext}", requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png"})
+     * @Route("/img/{path}_tn.{ext}", requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png"}, name="image_thumbnail")
      */
     public function thumbnailAction(string $path, string $ext)
     {

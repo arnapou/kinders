@@ -9,33 +9,33 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form\Type;
+namespace App\Form\Type\Multiple;
 
-use App\Entity\Kinder;
-use App\Form\DataTransformer\EntityDataTransformer;
+use App\Entity\Image;
+use App\Form\DataTransformer\EntitiesDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
-class KinderSelectType extends AbstractType
+class ImageListType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'multiple'             => false,
-            'class'                => Kinder::class,
+            'multiple'             => true,
+            'class'                => Image::class,
             'primary_key'          => 'id',
             'text_property'        => 'name',
-            'minimum_input_length' => 1,
+            'minimum_input_length' => 0,
             'page_limit'           => 10,
             'allow_clear'          => true,
             'delay'                => 250,
             'cache'                => true,
             'cache_timeout'        => 60000,
             'language'             => 'fr',
-            'placeholder'          => 'kinder ...',
+            'placeholder'          => 'images ...',
             'auto_start'           => false,
-            'transformer'          => EntityDataTransformer::class,
+            'transformer'          => EntitiesDataTransformer::class,
         ]);
     }
 

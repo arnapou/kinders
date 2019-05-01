@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form\Type;
+namespace App\Form\Type\Multiple;
 
 use App\Entity\Attribute;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

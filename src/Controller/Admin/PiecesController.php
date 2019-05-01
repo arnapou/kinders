@@ -14,7 +14,7 @@ namespace App\Controller\Admin;
 use App\Entity\Piece;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
-use App\Form\Type\PieceType;
+use App\Form\Type\Entity\PieceType;
 use App\Repository\PieceRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;

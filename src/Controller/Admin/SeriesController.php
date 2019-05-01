@@ -14,7 +14,7 @@ namespace App\Controller\Admin;
 use App\Entity\Serie;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
-use App\Form\Type\SerieType;
+use App\Form\Type\Entity\SerieType;
 use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;

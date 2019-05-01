@@ -14,7 +14,7 @@ namespace App\Controller\Admin;
 use App\Entity\Kinder;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
-use App\Form\Type\KinderType;
+use App\Form\Type\Entity\KinderType;
 use App\Repository\KinderRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;

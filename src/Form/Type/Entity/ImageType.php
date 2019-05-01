@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form\Type;
+namespace App\Form\Type\Entity;
 
 use App\Entity\Image;
+use App\Form\Type\ImageUploadType;
 use App\Repository\ImageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -19,32 +20,26 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ImageType extends AbstractType
 {
     /**
      * @var ImageRepository
      */
-    private $repository;
+    private $imageRepository;
 
-    public function __construct(ImageRepository $repository)
+    public function __construct(ImageRepository $imageRepository)
     {
-        $this->repository = $repository;
+        $this->imageRepository = $imageRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('type', ChoiceType::class, ['choices' => $this->repository->getTypes()])
+            ->add('type', ChoiceType::class, ['choices' => $this->imageRepository->getTypes()])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => ''])
-            ->add('diskFile', VichImageType::class, [
-                'label'         => 'Picture (.jpg or .png)',
-                'download_link' => false,
-                'required'      => false,
-                'delete_label'  => 'Supprimer ?',
-            ]);
+            ->add('diskFile', ImageUploadType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -2,6 +2,21 @@ body {
     background-color: lightgray;
 }
 
+/* placeholder */
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #cccccc !important;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #cccccc !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #cccccc !important;
+}
+
 /* button xs */
 
 .btn-group-xs > .btn,.btn-xs {

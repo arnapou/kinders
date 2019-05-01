@@ -13,11 +13,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\Image;
 use App\Form\FormFactory;
+use App\Form\Type\Multiple\ImagesUploadType;
 use App\Repository\ImageRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ImagesController extends AbstractController
@@ -38,18 +40,39 @@ class ImagesController extends AbstractController
      * @Route("/images/add", name="admin_images_add")
      * @Route("/images/add-{type}", name="admin_images_add_type")
      */
-    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory, ?string $type = null, ImageRepository $repository)
-    {
+    public function add(
+        Breadcrumb $breadcrumb,
+        Request $request,
+        ?string $type = null,
+        EntityManagerInterface $entityManager,
+        ImageRepository $imageRepository
+    ) {
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_images_add'));
 
-        $image = new Image();
-        if ($type && \in_array($type, $repository->getTypes())) {
-            $image->setType($type);
+        $form = $this->container->get('form.factory')->create(ImagesUploadType::class, null);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (!\in_array($data['type'], $imageRepository->getTypes())) {
+                throw new \InvalidArgumentException('Not allowed image type');
+            }
+            for ($n = 1; $n <= ImagesUploadType::NB_IMAGES; $n++) {
+                /** @var Image $image */
+                if ($image = $data["image$n"]) {
+                    $image->setType($data['type']);
+                    $entityManager->persist($image);
+                }
+            }
+            $entityManager->flush();
+            return $this->redirectToRoute('admin_images');
         }
 
-        return $formFactory->render('@admin/images/form.html.twig', $image, 'Créer')
-            ?: $this->redirectToRoute('admin_images');
+        return $this->render('@admin/images/add.html.twig', [
+            'form'     => $form->createView(),
+            'nbimages' => ImagesUploadType::NB_IMAGES,
+        ]);
     }
 
     /**
@@ -72,7 +95,7 @@ class ImagesController extends AbstractController
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_images_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/images/form.html.twig', $repository->find($id), 'Modifier')
+        return $formFactory->render('@admin/images/edit.html.twig', $repository->find($id), 'Modifier')
             ?: $this->redirectToRoute('admin_images');
     }
 }

@@ -14,7 +14,7 @@ namespace App\Controller\Admin;
 use App\Entity\ZBA;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
-use App\Form\Type\ZBAType;
+use App\Form\Type\Entity\ZBAType;
 use App\Repository\ZBARepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;

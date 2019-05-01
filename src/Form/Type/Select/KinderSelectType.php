@@ -9,21 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Form\Type;
+namespace App\Form\Type\Select;
 
-use App\Entity\Serie;
+use App\Entity\Kinder;
 use App\Form\DataTransformer\EntityDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
-class SerieSelectType extends AbstractType
+class KinderSelectType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'multiple'             => false,
-            'class'                => Serie::class,
+            'class'                => Kinder::class,
             'primary_key'          => 'id',
             'text_property'        => 'name',
             'minimum_input_length' => 1,
@@ -33,7 +33,7 @@ class SerieSelectType extends AbstractType
             'cache'                => true,
             'cache_timeout'        => 60000,
             'language'             => 'fr',
-            'placeholder'          => 'série ...',
+            'placeholder'          => 'kinder ...',
             'auto_start'           => false,
             'transformer'          => EntityDataTransformer::class,
         ]);
