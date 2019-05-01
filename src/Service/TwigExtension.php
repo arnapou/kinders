@@ -20,6 +20,7 @@ class TwigExtension extends AbstractExtension
     {
         return [
             new TwigFilter('tn', [$this, 'thumbnail']),
+            new TwigFilter('imagetype', [$this, 'imagetype']),
         ];
     }
 
@@ -27,5 +28,14 @@ class TwigExtension extends AbstractExtension
     {
         $infos = pathinfo($filename);
         return $infos['dirname'] . '/' . $infos['filename'] . '_tn.' . $infos['extension'];
+    }
+
+    public function imagetype($object)
+    {
+        if (\is_object($object)) {
+            $reflection = new \ReflectionClass($object);
+            return $reflection->getShortName();
+        }
+        return '';
     }
 }

@@ -33,7 +33,10 @@ class ImagesUploadType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('type', ChoiceType::class, ['choices' => $this->imageRepository->getTypes()]);
+        $builder->add('type', ChoiceType::class, [
+            'choices'    => $this->imageRepository->getTypes(),
+            'empty_data' => $options['image_type'] ?? '',
+        ]);
         for ($nb = 1; $nb <= self::NB_IMAGES; $nb++) {
             $builder->add("image$nb", SimpleImageType::class, ['required' => false]);
         }
@@ -43,6 +46,7 @@ class ImagesUploadType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => null,
+            'image_type' => '',
         ]);
     }
 }

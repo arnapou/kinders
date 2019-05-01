@@ -15,6 +15,7 @@ use App\Entity\ZBA;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\Entity\ZBAType;
+use App\Repository\KinderRepository;
 use App\Repository\ZBARepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
@@ -40,14 +41,17 @@ class ZbasController extends AbstractController
 
     /**
      * @Route("/zbas/add", name="admin_zbas_add")
+     * @Route("/zbas/add-{id}", name="admin_zbas_add_parent", requirements={"id": "\d+"})
      */
-    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory, ?int $id, KinderRepository $kinderRepository)
     {
         $breadcrumb->add('ZBAs', $this->generateUrl('admin_zbas'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_zbas_add'));
 
-        return $formFactory->render('@admin/zbas/form.html.twig', new ZBA(), 'Créer')
-            ?: $this->redirectToRoute('admin_zbas');
+        $entity = (new ZBA())->setKinder($kinderRepository->find(\intval($id)));
+
+        return $formFactory->renderAdd('@admin/zbas/form.html.twig', $entity)
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -58,8 +62,8 @@ class ZbasController extends AbstractController
         $breadcrumb->add('ZBAs', $this->generateUrl('admin_zbas'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_zbas_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/zbas/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_zbas');
+        return $formFactory->renderEdit('@admin/zbas/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

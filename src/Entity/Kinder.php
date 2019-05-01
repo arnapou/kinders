@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -61,7 +62,8 @@ class Kinder extends BaseItem
      */
     public function getBpzs(): Collection
     {
-        return $this->bpzs;
+        $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+        return $this->bpzs->matching($criteria);
     }
 
     public function addBpz(BPZ $bpz): self
@@ -90,7 +92,8 @@ class Kinder extends BaseItem
      */
     public function getZbas(): Collection
     {
-        return $this->zbas;
+        $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+        return $this->zbas->matching($criteria);
     }
 
     public function addZba(ZBA $zba): self

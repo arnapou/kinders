@@ -46,8 +46,8 @@ class SeriesController extends AbstractController
         $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_series_add'));
 
-        return $formFactory->render('@admin/series/form.html.twig', new Serie(), 'Créer')
-            ?: $this->redirectToRoute('admin_series');
+        return $formFactory->renderAdd('@admin/series/form.html.twig', new Serie())
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -58,8 +58,8 @@ class SeriesController extends AbstractController
         $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_series_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/series/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_series');
+        return $formFactory->renderEdit('@admin/series/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

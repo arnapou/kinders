@@ -13,8 +13,12 @@
                 {{ form_label(form.type) }}
             </div>
         </div>
-        <div class="col-3">
-            {{ form_widget(form.type) }}
+        <div class="col-4">
+            {% if form.vars.value.type %}
+                {{ form_widget(form.type, { 'attr':{'disabled':'disabled'} }) }}
+            {% else %}
+                {{ form_widget(form.type) }}
+            {% endif %}
         </div>
     </div>
     {% for n in 1..nbimages %}

@@ -16,6 +16,7 @@ use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\Entity\PieceType;
 use App\Repository\PieceRepository;
+use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,14 +41,17 @@ class PiecesController extends AbstractController
 
     /**
      * @Route("/pieces/add", name="admin_pieces_add")
+     * @Route("/pieces/add-{id}", name="admin_pieces_add_parent", requirements={"id": "\d+"})
      */
-    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory, ?int $id, SerieRepository $serieRepository)
     {
         $breadcrumb->add('Pièces', $this->generateUrl('admin_pieces'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_pieces_add'));
 
-        return $formFactory->render('@admin/pieces/form.html.twig', new Piece(), 'Créer')
-            ?: $this->redirectToRoute('admin_pieces');
+        $entity = (new Piece())->setSerie($serieRepository->find(\intval($id)));
+
+        return $formFactory->renderAdd('@admin/pieces/form.html.twig', $entity)
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -58,8 +62,8 @@ class PiecesController extends AbstractController
         $breadcrumb->add('Pièces', $this->generateUrl('admin_pieces'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_pieces_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/pieces/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_pieces');
+        return $formFactory->renderEdit('@admin/pieces/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

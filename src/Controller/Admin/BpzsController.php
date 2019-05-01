@@ -16,6 +16,7 @@ use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\Entity\BPZType;
 use App\Repository\BPZRepository;
+use App\Repository\KinderRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,14 +41,17 @@ class BpzsController extends AbstractController
 
     /**
      * @Route("/bpzs/add", name="admin_bpzs_add")
+     * @Route("/bpzs/add-{id}", name="admin_bpzs_add_parent", requirements={"id": "\d+"})
      */
-    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory, ?int $id, KinderRepository $kinderRepository)
     {
         $breadcrumb->add('BPZs', $this->generateUrl('admin_bpzs'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_bpzs_add'));
 
-        return $formFactory->render('@admin/bpzs/form.html.twig', new BPZ(), 'Créer')
-            ?: $this->redirectToRoute('admin_bpzs');
+        $entity = (new BPZ())->setKinder($kinderRepository->find(\intval($id)));
+
+        return $formFactory->renderAdd('@admin/bpzs/form.html.twig', $entity)
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -58,8 +62,8 @@ class BpzsController extends AbstractController
         $breadcrumb->add('BPZs', $this->generateUrl('admin_bpzs'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_bpzs_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/bpzs/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_bpzs');
+        return $formFactory->renderEdit('@admin/bpzs/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

@@ -37,7 +37,10 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('type', ChoiceType::class, ['choices' => $this->imageRepository->getTypes()])
+            ->add('type', ChoiceType::class, [
+                'choices' => $this->imageRepository->getTypes(),
+                'empty_data' => $options['image_type'] ?? '',
+            ])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => ''])
             ->add('diskFile', ImageUploadType::class);
     }
@@ -46,6 +49,7 @@ class ImageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Image::class,
+            'image_type' => '',
         ]);
     }
 }

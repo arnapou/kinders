@@ -16,6 +16,7 @@ use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\Entity\KinderType;
 use App\Repository\KinderRepository;
+use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,14 +41,17 @@ class KindersController extends AbstractController
 
     /**
      * @Route("/kinders/add", name="admin_kinders_add")
+     * @Route("/kinders/add-{id}", name="admin_kinders_add_parent", requirements={"id": "\d+"})
      */
-    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
+    public function add(Breadcrumb $breadcrumb, FormFactory $formFactory, ?int $id, SerieRepository $serieRepository)
     {
         $breadcrumb->add('Kinders', $this->generateUrl('admin_kinders'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_kinders_add'));
 
-        return $formFactory->render('@admin/kinders/form.html.twig', new Kinder(), 'Créer')
-            ?: $this->redirectToRoute('admin_kinders');
+        $entity = (new Kinder())->setSerie($serieRepository->find(\intval($id)));
+
+        return $formFactory->renderEdit('@admin/kinders/form.html.twig', $entity)
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -58,8 +62,8 @@ class KindersController extends AbstractController
         $breadcrumb->add('Kinders', $this->generateUrl('admin_kinders'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_kinders_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/kinders/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_kinders');
+        return $formFactory->renderEdit('@admin/kinders/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

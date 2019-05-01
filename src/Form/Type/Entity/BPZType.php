@@ -34,7 +34,7 @@ class BPZType extends AbstractType
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
-            ->add('kinder', KinderSelectType::class, ['remote_route' => 'admin_bpzs_autocomplete'])
+            ->add('kinder', KinderSelectType::class, ['remote_route' => 'admin_bpzs_autocomplete', 'empty_data' => $options['kinder'] ?? null])
             ->add('attributes', AttributesListType::class)
             ->add('images', ImageListType::class, ['remote_route' => 'admin_bpzs_autocomplete'])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
@@ -44,6 +44,7 @@ class BPZType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => BPZ::class,
+            'kinder'     => null,
         ]);
     }
 }

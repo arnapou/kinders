@@ -24,6 +24,10 @@
         </div>
     </div>
 
+    <a href="{{ path('admin_kinders_add_parent', {id: serie.id}) }}" class="btn btn-primary mt-5">
+        <i class="fas fa-pen"></i> Ajouter un kinder
+    </a>
+
     {% for kinder in serie.kinders %}
         <div class="card-group mt-5">
             <div class="card">
@@ -39,6 +43,9 @@
             </div>
             <div class="card">
                 <h5 class="card-header">
+                    <a href="{{ path('admin_bpzs_add_parent', {'id': kinder.id }) }}" class="float-right">
+                        <i class="fas fa-plus"></i>
+                    </a>
                     <span class="text-muted">BPZs</span>
                 </h5>
                 {% for item in kinder.bpzs %}
@@ -55,6 +62,9 @@
             </div>
             <div class="card">
                 <h5 class="card-header">
+                    <a href="{{ path('admin_zbas_add_parent', {'id': kinder.id }) }}" class="float-right">
+                        <i class="fas fa-plus"></i>
+                    </a>
                     <span class="text-muted">ZBAs</span>
                 </h5>
                 {% for item in kinder.zbas %}
@@ -76,6 +86,9 @@
         <div class="col">
             <div class="card">
                 <h5 class="card-header">
+                    <a href="{{ path('admin_pieces_add_parent', {'id': serie.id }) }}" class="float-right">
+                        <i class="fas fa-plus"></i>
+                    </a>
                     <span class="text-muted">Pieces</span>
                 </h5>
                 {% for item in serie.pieces %}
@@ -94,6 +107,9 @@
         <div class="col">
             <div class="card">
                 <h5 class="card-header">
+                    <a href="{{ path('admin_items_add_parent', {'id': serie.id }) }}" class="float-right">
+                        <i class="fas fa-plus"></i>
+                    </a>
                     <span class="text-muted">Items</span>
                 </h5>
                 {% for item in serie.items %}
@@ -110,6 +126,10 @@
             </div>
         </div>
     </div>
+
+    <a href="{{ path('admin_kinders_add_parent', {id: serie.id}) }}" class="btn btn-primary mt-5">
+        <i class="fas fa-pen"></i> Ajouter un kinder
+    </a>
 
     <div style="height: 10em"></div>
 
@@ -128,7 +148,7 @@
 
 {% macro lookingfor(item) -%}
     {%- if item.lookingFor -%}
-        <p class="card-text float-right text-info" title="Recherché !">
+        <p class="card-text float-right text-muted" title="Recherché !">
             <i class="fas fa-search"></i>
         </p>
     {%- endif -%}
@@ -183,7 +203,7 @@
 {%- endmacro %}
 
 {% macro images(item) -%}
-    {%- if item.images|length -%}
+    {% if item.images|length %}
         <p class="card-text mb-1">
             <span class="text-muted">Images : </span>
             {% for img in item.images %}
@@ -191,6 +211,9 @@
                    style="background-image: url('{{ vich_uploader_asset(img, 'diskFile')|tn }}');">
                 </a>
             {% endfor %}
+            {#        <a href="{{ path('admin_images_add_type', {'type': item|imagetype }) }}" class="btn-sm btn-light">#}
+            {#            <i class="fas fa-plus"></i>#}
+            {#        </a>#}
         </p>
-    {%- endif -%}
+    {% endif %}
 {%- endmacro %}

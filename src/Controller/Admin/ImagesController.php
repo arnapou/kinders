@@ -43,14 +43,18 @@ class ImagesController extends AbstractController
     public function add(
         Breadcrumb $breadcrumb,
         Request $request,
-        ?string $type = null,
         EntityManagerInterface $entityManager,
-        ImageRepository $imageRepository
+        ImageRepository $imageRepository,
+        ?string $type
     ) {
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_images_add'));
 
-        $form = $this->container->get('form.factory')->create(ImagesUploadType::class, null);
+        $data = ['type' => \in_array($type, $imageRepository->getTypes()) ? $type : ''];
+
+        $form = $this->container->get('form.factory')->create(ImagesUploadType::class, $data, [
+            'image_type' => $data['type'],
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -66,7 +70,7 @@ class ImagesController extends AbstractController
                 }
             }
             $entityManager->flush();
-            return $this->redirectToRoute('admin_images');
+            return $this->redirect($breadcrumb->previous());
         }
 
         return $this->render('@admin/images/add.html.twig', [
@@ -95,7 +99,7 @@ class ImagesController extends AbstractController
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_images_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/images/edit.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_images');
+        return $formFactory->renderEdit('@admin/images/edit.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 }

@@ -43,8 +43,8 @@ class CountriesController extends AbstractController
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_countries_add'));
 
-        return $formFactory->render('@admin/countries/form.html.twig', new Country(), 'Créer')
-            ?: $this->redirectToRoute('admin_countries');
+        return $formFactory->renderAdd('@admin/countries/form.html.twig', new Country())
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -56,8 +56,8 @@ class CountriesController extends AbstractController
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_countries_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/countries/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_countries');
+        return $formFactory->renderEdit('@admin/countries/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

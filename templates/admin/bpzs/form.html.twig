@@ -18,6 +18,8 @@
         <div class="col">{{ form_row(form.year) }}</div>
     </div>
 
+    {{ form_row(form.kinder, { 'attr':{'disabled': form.vars.value.kinder and not form.vars.value.id ? true : false } }) }}
+
     {{ form_widget(form) }}
 
     <div class="form-group">

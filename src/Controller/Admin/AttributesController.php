@@ -44,8 +44,8 @@ class AttributesController extends AbstractController
         $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_attributes_add'));
 
-        return $formFactory->render('@admin/attributes/form.html.twig', new Attribute(), 'Créer')
-            ?: $this->redirectToRoute('admin_attributes');
+        return $formFactory->renderAdd('@admin/attributes/form.html.twig', new Attribute())
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**
@@ -57,8 +57,8 @@ class AttributesController extends AbstractController
         $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_attributes_edit', ['id' => $id]));
 
-        return $formFactory->render('@admin/attributes/form.html.twig', $repository->find($id), 'Modifier')
-            ?: $this->redirectToRoute('admin_attributes');
+        return $formFactory->renderEdit('@admin/attributes/form.html.twig', $repository->find($id))
+            ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

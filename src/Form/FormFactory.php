@@ -12,6 +12,12 @@
 namespace App\Form;
 
 use App\Entity\BaseEntity;
+use App\Form\Type\Entity\BPZType;
+use App\Form\Type\Entity\ImageType;
+use App\Form\Type\Entity\ItemType;
+use App\Form\Type\Entity\KinderType;
+use App\Form\Type\Entity\PieceType;
+use App\Form\Type\Entity\ZBAType;
 use App\Repository\ImageRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -29,12 +35,30 @@ class FormFactory
         $this->container = $container;
     }
 
-    public function create(BaseEntity $entity, ?string $type = null): ?FormInterface
+    private function detectOptions($type, object $entity): array
+    {
+        switch ($type) {
+            case ImageType::class:
+                return ['image_type' => $entity->getType()];
+            case BPZType::class:
+            case ZBAType::class:
+                return ['kinder' => $entity->getKinder()];
+            case KinderType::class:
+            case ItemType::class:
+            case PieceType::class:
+                return ['serie' => $entity->getSerie()];
+            default:
+                return [];
+        }
+    }
+
+    public function create(BaseEntity $entity, ?string $type = null, array $options = []): ?FormInterface
     {
         $type = $type ?: __NAMESPACE__ . '\\Type\\Entity\\' . ImageRepository::getTypeFrom($entity) . 'Type';
 
-        $form = $this->container->get('form.factory')->create($type, $entity);
+        $options += $this->detectOptions($type, $entity);
 
+        $form    = $this->container->get('form.factory')->create($type, $entity, $options);
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $form->handleRequest($request);
@@ -52,18 +76,27 @@ class FormFactory
         return $form;
     }
 
-    public function render(string $view, ?BaseEntity $entity, string $action): ?Response
+    public function renderAdd(string $view, ?BaseEntity $entity, array $options = [], array $context = []): ?Response
+    {
+        return $this->render($view, $entity, $options, array_merge($context, ['action' => 'Créer']));
+    }
+
+    public function renderEdit(string $view, ?BaseEntity $entity, array $options = [], array $context = []): ?Response
+    {
+        return $this->render($view, $entity, $options, array_merge($context, ['action' => 'Modifier']));
+    }
+
+    public function render(string $view, ?BaseEntity $entity, array $options = [], array $context = []): ?Response
     {
         if (null === $entity) {
             return null;
         }
 
-        if ($form = $this->create($entity)) {
-            $context = [
-                'item'   => $entity,
-                'form'   => $form->createView(),
-                'action' => $action,
-            ];
+        if ($form = $this->create($entity, null, $options)) {
+            $context = array_merge($context, [
+                'item' => $entity,
+                'form' => $form->createView(),
+            ]);
 
             if ($this->container->has('templating')) {
                 $content = $this->container->get('templating')->render($view, $context);

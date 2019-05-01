@@ -19,13 +19,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class LastRouteListener implements EventSubscriberInterface
 {
     /**
-     * @var array
-     */
-    private $blacklistedRoutes = [
-        'image_thumbnail',
-    ];
-
-    /**
      * Returns an array of event names this subscriber wants to listen to.
      *
      * The array keys are event names and the value can be:
@@ -61,17 +54,25 @@ class LastRouteListener implements EventSubscriberInterface
 
         $routeName   = $request->get('_route');
         $routeParams = $request->get('_route_params');
-        if ($routeName[0] == '_' || \in_array($routeName, $this->blacklistedRoutes)) {
-            return;
-        }
-        $routeData = ['name' => $routeName, 'params' => $routeParams];
 
-        // Do not save same matched route twice
-        $thisRoute = $session->get('this_route', []);
-        if ($thisRoute == $routeData) {
-            return;
+        if (!$this->isBlacklisted($routeName)) {
+            $routeData = ['name' => $routeName, 'params' => $routeParams];
+
+            // Do not save same matched route twice
+            $thisRoute = $session->get('this_route', []);
+            if ($thisRoute == $routeData) {
+                return;
+            }
+            $session->set('last_route', $thisRoute);
+            $session->set('this_route', $routeData);
         }
-        $session->set('last_route', $thisRoute);
-        $session->set('this_route', $routeData);
+    }
+
+    private function isBlacklisted($routeName): bool
+    {
+        return $routeName[0] == '_'
+            || \in_array($routeName, ['image_thumbnail'])
+            || stripos($routeName, 'autocomplete') !== false
+            || stripos($routeName, 'admin_') === false;
     }
 }
