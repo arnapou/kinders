@@ -2,21 +2,37 @@
 
 {% block attributes_list_widget -%}
     <div class="row">
-        {%- for group, choices in form.vars.choices -%}
-            <div class="col">
-                <div class="text-secondary">&mdash; {{ group }}</div>
-                {%- for choice in choices -%}
-                    {%- for child in form -%}
-                        {%- if choice.value == child.vars.value -%}
-                            {{- form_widget(child, {
-                                parent_label_class: label_attr.class|default(''),
-                                translation_domain: choice_translation_domain,
-                                valid: valid,
-                            }) -}}
-                        {%- endif -%}
-                    {%- endfor -%}
-                {%- endfor -%}
-            </div>
+        {%- for items in form|attributechunks -%}
+        <div class="col">
+            {%- for item in items -%}
+                {% if item.title is defined %}
+                    <div class="text-secondary">&mdash; {{ item.title }}</div>
+                {%- else -%}
+                    {{- form_widget(item.choice, {
+                        parent_label_class: label_attr.class|default(''),
+                        translation_domain: choice_translation_domain,
+                        valid: valid,
+                    }) -}}
+                {%- endif -%}
+            {%- endfor -%}
+        </div>
         {%- endfor -%}
+{#        {{ form|attributechunks }}#}
+{#        {%- for group, choices in form.vars.choices -%}#}
+{#            <div class="col">#}
+{#                <div class="text-secondary">&mdash; {{ group }}</div>#}
+{#                {%- for choice in choices -%}#}
+{#                    {%- for child in form -%}#}
+{#                        {%- if choice.value == child.vars.value -%}#}
+{#                            {{- form_widget(child, {#}
+{#                                parent_label_class: label_attr.class|default(''),#}
+{#                                translation_domain: choice_translation_domain,#}
+{#                                valid: valid,#}
+{#                            }) -}}#}
+{#                        {%- endif -%}#}
+{#                    {%- endfor -%}#}
+{#                {%- endfor -%}#}
+{#            </div>#}
+{#        {%- endfor -%}#}
     </div>
 {%- endblock attributes_list_widget %}
