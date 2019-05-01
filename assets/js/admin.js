@@ -75,12 +75,14 @@ $(document).ready(function () {
         return false;
     });
 
-    $('.custom-file-input').on('change',function(){
+    $('.custom-file-input').on('change', function () {
         var filename = $(this).val();
-        // var dirname = filename.replace(/([\/\\])[^\/\\]+$/, '$1');
-        var basename = filename.replace(/^.*[\/\\]([^\/\\]+)$/, '$1');
-        $(this).parent().find('label').text(basename);
-        // $(this).parent().find('label').html('<span style="color: #bbbbbb">'+dirname+'</span>' + basename);
+        var m = filename.match(/^.*[\/\\]([^\/\\]+)(\.[^\.]+)$/);
+        if (m.length == 3) {
+            $(this).parent().find('label').html(m[1] + '<span style="color: #bbbbbb">' + m[2] + '</span>');
+        } else {
+            $(this).parent().find('label').text(filename);
+        }
     })
 });
 
