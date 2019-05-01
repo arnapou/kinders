@@ -11,6 +11,14 @@
 
 namespace App\Service;
 
+use App\Entity\Attribute;
+use App\Entity\BPZ;
+use App\Entity\Image;
+use App\Entity\Item;
+use App\Entity\Kinder;
+use App\Entity\Piece;
+use App\Entity\Serie;
+use App\Entity\ZBA;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,6 +61,8 @@ class SearchFilter
             ->select('e')
             ->from($repository->getClassName(), 'e');
 
+        $this->addJoins($repository->getClassName(), $qb);
+
         $fields = $this->getStringFieldNames($repository);
         foreach ($values as $value) {
             $ors = [];
@@ -62,10 +72,7 @@ class SearchFilter
             $qb->andWhere($qb->expr()->orX(...$ors));
         }
 
-        if (\in_array('type', $fields)) {
-            $qb->addOrderBy('e.type', 'ASC');
-        }
-        $qb->addOrderBy('e.name', 'ASC');
+        $this->addOrderBy($repository->getClassName(), $qb);
 
         return $qb;
     }
@@ -76,6 +83,7 @@ class SearchFilter
         $count = $qb
             ->select($qb->expr()->count('e'))
             ->getQuery()->getSingleScalarResult();
+
         $this->pagination->setItemCount($count);
 
         return $this
@@ -145,5 +153,43 @@ class SearchFilter
             }
         }
         return $fields;
+    }
+
+    private function addJoins(string $class, QueryBuilder $qb): QueryBuilder
+    {
+        switch ($class) {
+            case Kinder::class:
+            case Piece::class:
+            case Item::class:
+                return $qb->join('e.serie', 's');
+            case ZBA::class:
+            case BPZ::class:
+                return $qb->join('e.kinder', 'k')->join('k.serie', 's');
+            default:
+                return $qb;
+        }
+    }
+
+    private function addOrderBy(string $class, QueryBuilder $qb): QueryBuilder
+    {
+        switch ($class) {
+            case Attribute::class:
+                return $qb->addOrderBy('e.type')->addOrderBy('e.name');
+            case Image::class:
+                return $qb->addOrderBy('e.linked')->addOrderBy('e.type')->addOrderBy('e.name');
+            case Serie::class:
+                return $qb->addOrderBy('e.year')->addOrderBy('e.name');
+            case Kinder::class:
+                return $qb->addOrderBy('s.name')->addOrderBy('e.year')->addOrderBy('e.name');
+            case Piece::class:
+            case Item::class:
+                return $qb->addOrderBy('s.year')->addOrderBy('s.name')->addOrderBy('e.name');
+            case ZBA::class:
+            case BPZ::class:
+                return $qb->addOrderBy('s.name')->addOrderBy('k.year')->addOrderBy('e.name');
+            default:
+                return $qb->addOrderBy('e.name', 'ASC');
+
+        }
     }
 }

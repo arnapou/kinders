@@ -79,7 +79,7 @@ $(document).ready(function () {
         var filename = $(this).val();
         var m = filename.match(/^.*[\/\\]([^\/\\]+)(\.[^\.]+)$/);
         if (m.length == 3) {
-            $(this).parent().find('label').html(m[1] + '<span style="color: #bbbbbb">' + m[2] + '</span>');
+            $(this).parent().find('label').html(m[1] + '<span style="color: #cccccc">' + m[2] + '</span>');
         } else {
             $(this).parent().find('label').text(filename);
         }
