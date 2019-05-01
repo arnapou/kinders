@@ -15,11 +15,13 @@
 {% macro image(item) -%}
     {%- spaceless %}
         {% if item and item.file is defined and item.file %}
-            <a href="{{ vich_uploader_asset(item, 'diskFile') }}" target="_blank">
-                <img src="{{ vich_uploader_asset(item, 'diskFile')|tn }}" class="admin-image">
+            <a href="{{ vich_uploader_asset(item, 'diskFile') }}" target="_blank" class="admin-image">
+                <img src="{{ vich_uploader_asset(item, 'diskFile')|tn }}" class="tn">
             </a>
         {% else %}
-            <img src="{{ blank_img }}" class="admin-image-blank">
+            <span class="admin-image">
+                <img src="{{ blank_img }}" class="blank">
+            </span>
         {% endif %}
     {% endspaceless -%}
 {%- endmacro %}

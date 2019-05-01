@@ -33,13 +33,22 @@ table.table td:first-child .btn-sm {
     margin-right: 1.5em;
 }
 
-td img.admin-image,
-td img.admin-image-blank {
+.admin-image {
+    display: inline-block;
     height: 1.5em;
     width: 1.5em;
     margin-right: 0.2em;
+    position: relative;
 }
-td img.admin-image-blank {
+.admin-image img {
+    height: 1.5em;
+    width: 1.5em;
+    transition: transform .2s; /* Animation */
+}
+.admin-image:hover img.tn {
+    transform: scale(2.5);
+}
+.admin-image .blank {
     background: rgba(0,0,0,0.1);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
