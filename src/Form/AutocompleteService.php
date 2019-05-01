@@ -63,12 +63,15 @@ class AutocompleteService
         /** @var ImageRepository $repo */
         $repo = $this->doctrine->getRepository($fieldOptions['class']);
 
-        $term = $request->get('q');
+        $term = str_replace('*', '%', (string)$request->get('q'));
 
         $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbCount
             ->select($qbCount->expr()->count('e'))
             ->andWhere('e.type = :type')->setParameter('type', $imageType);
+        if ($term === '') {
+            $qbCount->andWhere('e.linked = :linked')->setParameter('linked', false);
+        }
 
         $maxResults = $fieldOptions['page_limit'];
         $offset     = ($request->get('page', 1) - 1) * $maxResults;
@@ -77,6 +80,9 @@ class AutocompleteService
         $qbResult
             ->andWhere('e.type = :type')->setParameter('type', $imageType)
             ->setMaxResults($maxResults)->setFirstResult($offset);
+        if ($term === '') {
+            $qbResult->andWhere('e.linked = :linked')->setParameter('linked', false);
+        }
 
         $count             = $qbCount->getQuery()->getSingleScalarResult();
         $paginationResults = $qbResult->getQuery()->getResult();
@@ -109,7 +115,7 @@ class AutocompleteService
         /** @var ImageRepository $repo */
         $repo = $this->doctrine->getRepository($fieldOptions['class']);
 
-        $term = $request->get('q');
+        $term = str_replace('*', '%', (string)$request->get('q'));
 
         $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbCount->select($qbCount->expr()->count('e'));

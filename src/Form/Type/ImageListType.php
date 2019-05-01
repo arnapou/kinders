@@ -26,7 +26,7 @@ class ImageListType extends AbstractType
             'class'                => Image::class,
             'primary_key'          => 'id',
             'text_property'        => 'name',
-            'minimum_input_length' => 1,
+            'minimum_input_length' => 0,
             'page_limit'           => 10,
             'allow_clear'          => true,
             'delay'                => 250,

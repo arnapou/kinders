@@ -74,6 +74,13 @@ $(document).ready(function () {
         e.preventDefault();
         return false;
     });
+
+    $('.custom-file-input').on('change',function(){
+        var filename = $(this).val();
+        var dirname = filename.replace(/([\/\\])[^\/\\]+$/, '$1');
+        var basename = filename.replace(/^.*[\/\\]([^\/\\]+)$/, '$1');
+        $(this).parent().find('label').html('<span style="color: #bbbbbb">'+dirname+'</span>' + basename);
+    })
 });
 
 
