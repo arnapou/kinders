@@ -35,7 +35,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for menuItem in menuGear %}
-                            <a class="dropdown-item" href="{{ path('admin_'~menuItem.0) }}"><i class="{{ menuItem.1 }}"></i> {{ menuItem.2 }}</a></a>
+                            <a class="dropdown-item" href="{{ path('admin_'~menuItem.0) }}"><i class="{{ menuItem.1 }}"></i> {{ menuItem.2 }}</a>
                         {% endfor %}
                     </div>
                 </li>
