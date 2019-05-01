@@ -2,12 +2,16 @@ body {
     background-color: lightgray;
 }
 
+/* button xs */
+
 .btn-group-xs > .btn,.btn-xs {
     padding: .25rem .4rem;
     font-size: .875rem;
     line-height: .5;
     border-radius: .2rem;
 }
+
+/* admin tables */
 
 table.table th:last-child,
 table.table td:last-child,
@@ -28,18 +32,15 @@ table.table td:first-child .btn-sm {
     text-align: center;
 }
 
+/* form boolean yes - no */
+
 .yesno .form-check {
     display: inline-block !important;
     margin-right: 1.5em;
 }
 
-.admin-image {
-    display: inline-block;
-    height: 1.5em;
-    width: 1.5em;
-    margin-right: 0.2em;
-    position: relative;
-}
+/* admin images */
+
 .admin-image img {
     height: 1.5em;
     width: 1.5em;
@@ -47,28 +48,35 @@ table.table td:first-child .btn-sm {
 }
 .admin-image:hover img.tn {
     transform: scale(2.5);
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+    padding: 1px;
+    background: white;
 }
-.admin-image .blank {
+.admin-image img.blank {
     background: rgba(0,0,0,0.1);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
+
+/* select2 */
+
 .select2-selection img,
 .select2-container img {
     max-height: 1.5em;
     max-width: 1.5em;
 }
 
-.vich-image img {
-    max-height: 10em;
-    max-width: 10em;
-}
+/* pagination */
 
 .footer-pagination{
     display: inline-block;
     margin-left: 1em;
 }
+
+/* attributes list */
 
 span.attribute {
     font-size: .8rem;
@@ -94,6 +102,12 @@ span.attribute span {
     vertical-align: top;
 }
 
+/* vich */
+
+.vich-image img {
+    max-height: 10em;
+    max-width: 10em;
+}
 .vich-image .custom-file-input ~ .custom-file-label::after {
     content: "Image";
 }
