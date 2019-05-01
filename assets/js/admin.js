@@ -83,7 +83,11 @@ $(document).ready(function () {
         } else {
             $(this).parent().find('label').text(filename);
         }
-    })
+    });
+
+    $('input[name*="year"]').click(function () {
+        $(this).select();
+    });
 });
 
 
