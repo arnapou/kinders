@@ -82,4 +82,19 @@ class SeriesController extends AbstractController
         $result = $autocomplete->images($request, SerieType::class);
         return new JsonResponse($result);
     }
+
+    /**
+     * @Route("/series/view-{id}", name="admin_series_view", requirements={"id": "\d+"})
+     */
+    public function view(Breadcrumb $breadcrumb, FormFactory $formFactory, SerieRepository $repository, int $id)
+    {
+        $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
+        $breadcrumb->add('Voir', $this->generateUrl('admin_series_view', ['id' => $id]));
+
+        $serie = $repository->find($id);
+
+        return $serie
+            ? $this->render('@admin/series/view.html.twig', ['serie' => $serie])
+            : $this->redirectToRoute('admin_series');
+    }
 }

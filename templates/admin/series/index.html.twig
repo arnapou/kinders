@@ -28,7 +28,10 @@
                         <i class="fas fa-pen"></i>
                     </a>
                 </td>
-                <td>{{ macro.image(item.image) }} {{ item.name }}</td>
+                <td>
+                    {{ macro.image(item.image) }}
+                    <a href="{{ path('admin_series_view', {id: item.id}) }}">{{ item.name }}</a>
+                </td>
                 <td>{{ item.country }}</td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ macro.attributes(item) }}</td>

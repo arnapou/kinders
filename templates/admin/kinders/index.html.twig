@@ -34,7 +34,7 @@
                 </td>
                 <td>
                     {{ macro.image(item.serie.image) }}
-                    <a href="{{ path('admin_series_edit', {id: item.serie.id}) }}">{{ item.serie }}</a>
+                    <a href="{{ path('admin_series_view', {id: item.serie.id}) }}">{{ item.serie }}</a>
                 </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
                 <td>{{ item.reference }}</td>

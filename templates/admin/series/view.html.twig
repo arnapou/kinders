@@ -1,0 +1,196 @@
+{% extends "@admin/index.html.twig" %}
+
+{% import "@admin/macros.html.twig" as macro %}
+{% import _self as self %}
+
+{% block body %}
+    {{ macro.breadcrumb() }}
+
+    <div class="card border-primary">
+        <h5 class="card-header">
+            <a href="{{ path('admin_series_edit', {id: serie.id}) }}" class="float-right">
+                <i class="fas fa-pen"></i>
+            </a>
+            <span class="text-muted">Série : </span> <b class="text-primary">{{ serie }}</b>
+        </h5>
+        <div class="card-body">
+            <p class="card-text mb-1">
+                <span class="text-muted">Country : </span> {{ serie.country }}
+            </p>
+            {{ self.year(serie) }}
+            {{ self.images(serie) }}
+            {{ self.comment(serie) }}
+            {{ self.attributes(serie) }}
+        </div>
+    </div>
+
+    {% for kinder in serie.kinders %}
+        <div class="card-group mt-5">
+            <div class="card">
+                <h5 class="card-header">
+                    <a href="{{ path('admin_kinders_edit', {id: kinder.id}) }}" class="float-right">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <span class="text-muted">Kinder : </span> {{ kinder }}
+                </h5>
+                <div class="card-body">
+                    {{ self.itembody(kinder) }}
+                </div>
+            </div>
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="text-muted">BPZs</span>
+                </h5>
+                {% for item in kinder.bpzs %}
+                    <div class="card-body {{ loop.first ? '' : 'border-top' }}">
+                        <p class="card-text mb-1">
+                            <a href="{{ path('admin_bpzs_edit', {id: item.id}) }}" class="float-right">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <span class="text-muted">Nom : </span> {{ item }}
+                        </p>
+                        {{ self.itembody(item) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="text-muted">ZBAs</span>
+                </h5>
+                {% for item in kinder.zbas %}
+                    <div class="card-body {{ loop.first ? '' : 'border-top' }}">
+                        <p class="card-text mb-1">
+                            <a href="{{ path('admin_zbas_edit', {id: item.id}) }}" class="float-right">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <span class="text-muted">Nom : </span> {{ item }}
+                        </p>
+                        {{ self.itembody(item) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="text-muted">Pieces</span>
+                </h5>
+                {% for item in serie.pieces %}
+                    <div class="card-body {{ loop.first ? '' : 'border-top' }}">
+                        <p class="card-text mb-1">
+                            <a href="{{ path('admin_pieces_edit', {id: item.id}) }}" class="float-right">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <span class="text-muted">Nom : </span> {{ item }}
+                        </p>
+                        {{ self.itembody(item) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="text-muted">Items</span>
+                </h5>
+                {% for item in serie.items %}
+                    <div class="card-body {{ loop.first ? '' : 'border-top' }}">
+                        <p class="card-text mb-1">
+                            <a href="{{ path('admin_items_edit', {id: item.id}) }}" class="float-right">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <span class="text-muted">Nom : </span> {{ item }}
+                        </p>
+                        {{ self.itembody(item) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 10em"></div>
+
+{% endblock %}
+
+{% macro itembody(item) -%}
+    {% import _self as self %}
+    {{ self.lookingfor(item) }}
+    {{ self.year(item) }}
+    {{ self.reference(item) }}
+    {{ self.quantity(item) }}
+    {{ self.images(item) }}
+    {{ self.comment(item) }}
+    {{ self.attributes(item) }}
+{%- endmacro %}
+
+{% macro lookingfor(item) -%}
+    {%- if item.lookingFor -%}
+        <p class="card-text float-right text-info" title="Recherché !">
+            <i class="fas fa-search"></i>
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro quantity(item) -%}
+    {%- if item.quantityOwned or item.quantityDouble -%}
+        <p class="card-text mb-1">
+            {% if item.quantityOwned %}
+                <span class="text-muted">Collec : </span> {{ item.quantityOwned }}
+                <span>&nbsp; &nbsp; &nbsp; &nbsp; </span>
+            {% endif %}
+            {% if item.quantityDouble %}
+                <span class="text-muted">Doubles : </span> {{ item.quantityDouble }}
+            {% endif %}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro attributes(item) -%}
+    {% import "@admin/macros.html.twig" as macro %}
+    {%- if item.attributes|length -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Attributes : </span>
+            {{ macro.attributes(item) }}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro reference(item) -%}
+    {%- if item.reference -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Référence : </span> {{ item.reference }}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro year(item) -%}
+    {%- if item.year -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Année : </span> {{ item.year }}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro comment(item) -%}
+    {%- if item.comment -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Comment : </span> {{ item.comment|nl2br }}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro images(item) -%}
+    {%- if item.images|length -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Images : </span>
+            {% for img in item.images %}
+                <a href="{{ vich_uploader_asset(img, 'diskFile') }}" target="_blank" class="admin-image"
+                   style="background-image: url('{{ vich_uploader_asset(img, 'diskFile')|tn }}');">
+                </a>
+            {% endfor %}
+        </p>
+    {%- endif -%}
+{%- endmacro %}

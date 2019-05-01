@@ -41,24 +41,38 @@ table.table td:first-child .btn-sm {
 
 /* admin images */
 
-.admin-image img {
+.admin-image {
+    display: inline-block;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+    outline: 0 !important;
+}
+
+td .admin-image {
     height: 1.5em;
     width: 1.5em;
-    transition: transform .2s; /* Animation */
+    transition: transform .2s;
 }
-.admin-image:hover img.tn {
+td .admin-image.tn:hover {
     transform: scale(2.5);
     -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
     -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
     box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
-    padding: 1px;
-    background: white;
+    background-color: white;
 }
-.admin-image img.blank {
-    background: rgba(0,0,0,0.1);
+td .admin-image.blank {
+    background-color: rgba(0,0,0,0.1);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+}
+
+.card .admin-image {
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
 }
 
 /* select2 */

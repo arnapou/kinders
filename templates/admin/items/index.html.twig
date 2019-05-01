@@ -35,7 +35,7 @@
                 <td>
                     {% if item.serie %}
                         {{ macro.image(item.serie.image) }}
-                        <a href="{{ path('admin_series_edit', {id: item.serie.id}) }}">{{ item.serie }}</a>
+                        <a href="{{ path('admin_series_view', {id: item.serie.id}) }}">{{ item.serie }}</a>
                     {% endif %}
                 </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>

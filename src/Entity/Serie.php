@@ -43,10 +43,24 @@ class Serie extends BaseItem
      */
     private $kinders;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Entity\Piece", mappedBy="serie", orphanRemoval=true)
+     */
+    private $pieces;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Entity\Item", mappedBy="serie", orphanRemoval=true)
+     */
+    private $items;
+
     public function __construct()
     {
         parent::__construct();
         $this->kinders = new ArrayCollection();
+        $this->items   = new ArrayCollection();
+        $this->pieces  = new ArrayCollection();
     }
 
     /**
@@ -90,6 +104,68 @@ class Serie extends BaseItem
             // set the owning side to null (unless already changed)
             if ($kinder->getSerie() === $this) {
                 $kinder->setSerie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Piece[]
+     */
+    public function getPieces(): Collection
+    {
+        return $this->pieces;
+    }
+
+    public function addPiece(Piece $piece): self
+    {
+        if (!$this->pieces->contains($piece)) {
+            $this->pieces[] = $piece;
+            $piece->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removePiece(Piece $piece): self
+    {
+        if ($this->pieces->contains($piece)) {
+            $this->pieces->removeElement($piece);
+            // set the owning side to null (unless already changed)
+            if ($piece->getSerie() === $this) {
+                $piece->setSerie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setSerie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->items->contains($item)) {
+            $this->items->removeElement($item);
+            // set the owning side to null (unless already changed)
+            if ($item->getSerie() === $this) {
+                $item->setSerie(null);
             }
         }
 
