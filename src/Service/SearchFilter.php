@@ -178,18 +178,17 @@ class SearchFilter
             case Image::class:
                 return $qb->addOrderBy('e.linked')->addOrderBy('e.type')->addOrderBy('e.name');
             case Serie::class:
-                return $qb->addOrderBy('e.year')->addOrderBy('e.name');
+                return $qb->addOrderBy('e.year', 'DESC')->addOrderBy('e.name');
             case Kinder::class:
-                return $qb->addOrderBy('s.name')->addOrderBy('e.year')->addOrderBy('e.name');
+                return $qb->addOrderBy('s.name')->addOrderBy('e.year', 'DESC')->addOrderBy('e.name');
             case Piece::class:
             case Item::class:
-                return $qb->addOrderBy('s.year')->addOrderBy('s.name')->addOrderBy('e.name');
+                return $qb->addOrderBy('s.year', 'DESC')->addOrderBy('s.name')->addOrderBy('e.name');
             case ZBA::class:
             case BPZ::class:
-                return $qb->addOrderBy('s.name')->addOrderBy('k.year')->addOrderBy('e.name');
+                return $qb->addOrderBy('s.name')->addOrderBy('k.year', 'DESC')->addOrderBy('e.name');
             default:
                 return $qb->addOrderBy('e.name', 'ASC');
-
         }
     }
 }
