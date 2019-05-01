@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 sudo gits -u
 sudo composer install
 sudo bin/console doctrine:schema:update --force --dump-sql
