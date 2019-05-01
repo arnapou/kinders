@@ -6,7 +6,7 @@
         <div class="col">
             {%- for item in items -%}
                 {% if item.title is defined %}
-                    <div class="text-secondary">&mdash; {{ item.title }}</div>
+                    <div class="text-secondary {{ loop.first ? '' : 'mt-3' }}">&mdash; {{ item.title }}</div>
                 {%- else -%}
                     {{- form_widget(item.choice, {
                         parent_label_class: label_attr.class|default(''),
