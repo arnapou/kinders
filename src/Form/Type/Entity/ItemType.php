@@ -32,6 +32,7 @@ class ItemType extends AbstractType
             ->add('quantityOwned', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('quantityDouble', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
+            ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('serie', SerieSelectType::class, ['remote_route' => 'admin_items_autocomplete', 'empty_data' => $options['serie'] ?? null])

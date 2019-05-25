@@ -39,6 +39,11 @@ abstract class BaseItem extends BaseEntity
      * @ORM\Column(type="string", length=100)
      */
     protected $reference = '';
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100)
+     */
+    protected $sorting = '';
 
     /**
      * @var bool
@@ -102,6 +107,17 @@ abstract class BaseItem extends BaseEntity
     {
         $reference       = str_replace(',', '.', $reference);
         $this->reference = $reference;
+        return $this;
+    }
+
+    public function getSorting(): string
+    {
+        return $this->sorting;
+    }
+
+    public function setSorting(string $sorting): self
+    {
+        $this->sorting = $sorting;
         return $this;
     }
 

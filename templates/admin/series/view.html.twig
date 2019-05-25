@@ -159,6 +159,7 @@
     {% import _self as self %}
     {{ self.lookingfor(item) }}
     {{ self.year(item) }}
+    {{ self.sorting(item) }}
     {{ self.reference(item) }}
     {{ self.quantity(item) }}
     {{ self.images(item) }}
@@ -202,6 +203,14 @@
     {%- if item.reference -%}
         <p class="card-text mb-1">
             <span class="text-muted">Référence : </span> {{ item.reference }}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro sorting(item) -%}
+    {%- if item.sorting -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Sorting : </span> {{ item.sorting }}
         </p>
     {%- endif -%}
 {%- endmacro %}

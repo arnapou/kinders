@@ -15,6 +15,7 @@
             </th>
             <th>Série</th>
             <th>Nom</th>
+            <th>Tri</th>
             <th>Réf.</th>
             <th>Année</th>
             <th>Attributes</th>
@@ -37,6 +38,7 @@
                     <a href="{{ path('admin_series_view', {id: item.serie.id}) }}">{{ item.serie }}</a>
                 </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
+                <td>{{ item.sorting }}</td>
                 <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ macro.attributes(item) }}</td>
