@@ -108,20 +108,20 @@ class AutocompleteService
         );
     }
 
-    public function entities(Request $request, $type)
+    public function entities(Request $request, $type, $class = null)
     {
         $form         = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
 
         /** @var ImageRepository $repo */
-        $repo = $this->doctrine->getRepository($fieldOptions['class']);
+        $repo = $this->doctrine->getRepository($class ?: $fieldOptions['class']);
 
         $term = str_replace('*', '%', (string)$request->get('q'));
 
         $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbCount->select($qbCount->expr()->count('e'));
 
-        $maxResults = $fieldOptions['page_limit'];
+        $maxResults = $fieldOptions['page_limit'] ?? 10;
         $offset     = ($request->get('page', 1) - 1) * $maxResults;
 
         $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);

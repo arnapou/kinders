@@ -24,23 +24,45 @@
         </div>
     </div>
 
-    <a href="{{ path('admin_kinders_add_parent', {id: serie.id}) }}" class="btn btn-primary mt-5">
-        <i class="fas fa-pen"></i> Ajouter un kinder
-    </a>
+    {% block links %}
+        <a href="{{ path('admin_kinders_add_parent', {id: serie.id}) }}" class="btn btn-primary mt-5">
+            <i class="fas fa-pen"></i> Ajouter un kinder
+        </a>
+        <a href="{{ path('admin_series_copy_virtual_to', {id: serie.id}) }}" class="btn btn-info mt-5 ml-2">
+            <i class="fas fa-arrow-alt-circle-down"></i> Importer en tant que virtuel
+        </a>
+    {% endblock %}
 
     {% for kinder in serie.kinders %}
         <div class="card-group mt-5">
-            <div class="card">
-                <h5 class="card-header">
-                    <a href="{{ path('admin_kinders_edit', {id: kinder.id}) }}" class="float-right">
-                        <i class="fas fa-pen"></i>
-                    </a>
-                    <span class="text-muted">Kinder : </span> {{ kinder }}
-                </h5>
-                <div class="card-body">
-                    {{ self.itembody(kinder) }}
+            {% if kinder.virtual %}
+                <div class="card border-info">
+                    <h5 class="card-header border-info text-info">
+                        <a href="{{ path('admin_kinders_edit', {id: kinder.original.id}) }}" class="float-right ml-2">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <a href="{{ path('admin_kinders_edit', {id: kinder.id}) }}" class="float-right text-info">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <span class="text-muted">Kinder : </span> {{ kinder }}
+                    </h5>
+                    <div class="card-body">
+                        {{ self.itembody(kinder) }}
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="card">
+                    <h5 class="card-header">
+                        <a href="{{ path('admin_kinders_edit', {id: kinder.id}) }}" class="float-right">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <span class="text-muted">Kinder : </span> {{ kinder }}
+                    </h5>
+                    <div class="card-body">
+                        {{ self.itembody(kinder) }}
+                    </div>
+                </div>
+            {% endif %}
             <div class="card">
                 <h5 class="card-header">
                     <a href="{{ path('admin_bpzs_add_parent', {'id': kinder.id }) }}" class="float-right">
@@ -127,9 +149,7 @@
         </div>
     </div>
 
-    <a href="{{ path('admin_kinders_add_parent', {id: serie.id}) }}" class="btn btn-primary mt-5">
-        <i class="fas fa-pen"></i> Ajouter un kinder
-    </a>
+    {{ block('links') }}
 
     <div style="height: 10em"></div>
 

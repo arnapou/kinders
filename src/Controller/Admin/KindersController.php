@@ -15,6 +15,7 @@ use App\Entity\Kinder;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\Entity\KinderType;
+use App\Form\Type\Entity\KinderVirtualType;
 use App\Repository\KinderRepository;
 use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
@@ -62,8 +63,12 @@ class KindersController extends AbstractController
         $breadcrumb->add('Kinders', $this->generateUrl('admin_kinders'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_kinders_edit', ['id' => $id]));
 
-        return $formFactory->renderEdit('@admin/kinders/form.html.twig', $repository->find($id))
-            ?: $this->redirect($breadcrumb->previous());
+        $kinder = $repository->find($id);
+
+        return ($kinder && $kinder->isVirtual()
+            ? $formFactory->renderEdit('@admin/kinders/form_virtual.html.twig', $kinder, [], [], KinderVirtualType::class)
+            : $formFactory->renderEdit('@admin/kinders/form.html.twig', $kinder)
+        ) ?: $this->redirect($breadcrumb->previous());
     }
 
     /**

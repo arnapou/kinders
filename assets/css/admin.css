@@ -90,6 +90,11 @@ td .admin-image.blank {
     height: 100px;
 }
 
+form p .admin-image {
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
 /* select2 */
 
 .select2-selection img,

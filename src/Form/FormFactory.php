@@ -76,23 +76,23 @@ class FormFactory
         return $form;
     }
 
-    public function renderAdd(string $view, ?BaseEntity $entity, array $options = [], array $context = []): ?Response
+    public function renderAdd(string $view, ?BaseEntity $entity, array $options = [], array $context = [], string $type = null): ?Response
     {
-        return $this->render($view, $entity, $options, array_merge($context, ['action' => 'Créer']));
+        return $this->render($view, $entity, $options, array_merge($context, ['action' => 'Créer']), $type);
     }
 
-    public function renderEdit(string $view, ?BaseEntity $entity, array $options = [], array $context = []): ?Response
+    public function renderEdit(string $view, ?BaseEntity $entity, array $options = [], array $context = [], string $type = null): ?Response
     {
-        return $this->render($view, $entity, $options, array_merge($context, ['action' => 'Modifier']));
+        return $this->render($view, $entity, $options, array_merge($context, ['action' => 'Modifier']), $type);
     }
 
-    public function render(string $view, ?BaseEntity $entity, array $options = [], array $context = []): ?Response
+    public function render(string $view, ?BaseEntity $entity, array $options = [], array $context = [], string $type = null): ?Response
     {
         if (null === $entity) {
             return null;
         }
 
-        if ($form = $this->create($entity, null, $options)) {
+        if ($form = $this->create($entity, $type, $options)) {
             $context = array_merge($context, [
                 'item' => $entity,
                 'form' => $form->createView(),

@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use App\Exception\KinderVirtualException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -50,11 +51,24 @@ class Kinder extends BaseItem
      */
     private $serie;
 
+    /**
+     * @var self
+     * @ORM\ManyToOne(targetEntity="App\Entity\Kinder", inversedBy="virtuals")
+     */
+    private $original;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Entity\Kinder", mappedBy="original")
+     */
+    private $virtuals;
+
     public function __construct()
     {
         parent::__construct();
-        $this->bpzs = new ArrayCollection();
-        $this->zbas = new ArrayCollection();
+        $this->bpzs     = new ArrayCollection();
+        $this->zbas     = new ArrayCollection();
+        $this->virtuals = new ArrayCollection();
     }
 
     /**
@@ -126,5 +140,84 @@ class Kinder extends BaseItem
     {
         $this->serie = $serie;
         return $this;
+    }
+
+    public function getOriginal(): ?self
+    {
+        return $this->original;
+    }
+
+    public function setOriginal(?self $original): self
+    {
+        if ($original) {
+            if ($original->getId() == $this->getId()) {
+                throw new KinderVirtualException('Le kinder ne peut pas être virtuel de lui-même.');
+            }
+            if ($original->isVirtual()) {
+                throw new KinderVirtualException("Le kinder ne peut pas être virtuel d'un autre virtuel.");
+            }
+            if ($this->hasVirtuals()) {
+                throw new KinderVirtualException('Le kinder ne peut pas être virtuel car il a déjà des virtuels de lui-même.');
+            }
+        }
+        $this->original = $original;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getVirtuals(): Collection
+    {
+        return $this->virtuals;
+    }
+
+    public function addVirtual(self $virtual): self
+    {
+        if (!$this->virtuals->contains($virtual)) {
+            $this->virtuals[] = $virtual;
+            $virtual->setOriginal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVirtual(self $virtual): self
+    {
+        if ($this->virtuals->contains($virtual)) {
+            $this->virtuals->removeElement($virtual);
+            // set the owning side to null (unless already changed)
+            if ($virtual->getOriginal() === $this) {
+                $virtual->setOriginal(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isVirtual(): bool
+    {
+        return $this->original ? true : false;
+    }
+
+    public function getAttributes(): Collection
+    {
+        return $this->original ? $this->original->getAttributes() : parent::getAttributes();
+    }
+
+    public function getImage(int $num = 0): ?Image
+    {
+        return $this->original ? $this->original->getImage($num) : parent::getImage($num);
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->original ? $this->original->getImages() : parent::getImages();
+    }
+
+    private function hasVirtuals()
+    {
+        return !$this->virtuals->isEmpty();
     }
 }

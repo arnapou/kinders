@@ -1,0 +1,33 @@
+{% extends "@admin/index.html.twig" %}
+
+{% import "@admin/macros.html.twig" as macro %}
+
+{% block body %}
+    {{ macro.breadcrumb() }}
+
+    {{ form_start(form) }}
+
+    <div class="row">
+    <div class="col-5">
+        {{ form_row(form.serie_from) }}
+
+    </div>
+    <div class="col-2 text-center">
+        <br/>
+        <i class="fas fa-long-arrow-alt-right text-info" style="font-size: 3rem"></i>
+    </div>
+    <div class="col-5">
+        {{ form_row(form.serie_to) }}
+    </div>
+    </div>
+
+    {{ form_widget(form) }}
+
+    <div class="form-group mt-5">
+        <button type="submit" class="btn-primary btn">Importer</button>
+        <a href="{{ breadcrumb.previous }}" class="btn-light btn">Annuler</a>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

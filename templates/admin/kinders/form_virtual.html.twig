@@ -7,6 +7,21 @@
 
     {{ form_start(form) }}
 
+    <div class="form-inline">
+        <p class="text-info">
+            Ce kinder est un virtuel de l'original
+            <span class="form-control ml-2 mr-2 border-info">
+                {{ macro.image(item.image) }}
+                <a href="{{ path('admin_kinders_edit', {id: item.original.id}) }}">{{ item.original }}<small><i class="fas fa-pen ml-1"></i></small></a>
+            </span>
+            de la série
+            <span class="form-control ml-2 mr-2 border-info">
+                {{ macro.image(item.original.serie.image) }}
+                <a href="{{ path('admin_series_view', {id: item.original.serie.id}) }}">{{ item.original.serie }}<small><i class="fas fa-eye ml-1"></i></small></a>
+            </span>
+        </p>
+    </div>
+
     <div class="row">
         <div class="col-9">{{ form_row(form.name) }}</div>
         <div class="col">{{ form_row(form.reference) }}</div>
@@ -24,7 +39,7 @@
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="kinder_original">Virtuel de</label>
+                {{ form_label(form.original, none, { 'label_attr': { 'class': 'text-info'} }) }}
                 {{ form_widget(form.original) }}
             </div>
         </div>

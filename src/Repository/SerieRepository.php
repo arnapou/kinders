@@ -11,7 +11,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Kinder;
 use App\Entity\Serie;
+use App\Exception\KinderVirtualException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -25,6 +27,34 @@ class SerieRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Serie::class);
+    }
+
+    public function copyVirtual(?Serie $from, ?Serie $to)
+    {
+        if (!$from || !$to) {
+            return;
+        }
+        $alreadyVirtuals = [];
+        foreach ($to->getKinders() as $kinder) {
+            if ($kinder->isVirtual()) {
+                $alreadyVirtuals[$kinder->getOriginal()->getId()] = true;
+            }
+        }
+        $em = $this->getEntityManager();
+        foreach ($from->getKinders() as $kinder) {
+            $kinder = $kinder->isVirtual() ? $kinder->getOriginal() : $kinder;
+            if (!isset($alreadyVirtuals[$kinder->getId()])) {
+                try {
+                    $newKinder = new Kinder();
+                    $newKinder->setName($kinder->getName());
+                    $newKinder->setSerie($to);
+                    $newKinder->setOriginal($kinder);
+                    $em->persist($newKinder);
+                } catch (KinderVirtualException $e) {
+                }
+            }
+        }
+        $em->flush();
     }
 
     /**

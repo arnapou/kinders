@@ -15,6 +15,7 @@ use App\Entity\Serie;
 use App\Form\AutocompleteService;
 use App\Form\FormFactory;
 use App\Form\Type\Entity\SerieType;
+use App\Form\Type\SerieCopyVirtualType;
 use App\Repository\SerieRepository;
 use App\Service\Breadcrumb;
 use App\Service\SearchFilter;
@@ -63,6 +64,36 @@ class SeriesController extends AbstractController
     }
 
     /**
+     * @Route("/series/copy-virtual-to-{id}", name="admin_series_copy_virtual_to", requirements={"id": "\d+"})
+     */
+    public function copyVirtualTo(Breadcrumb $breadcrumb, SerieRepository $repository, int $id, Request $request)
+    {
+        $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
+        $breadcrumb->add('Copie en tant que virtuel', $this->generateUrl('admin_series_copy_virtual_to', ['id' => $id]));
+
+        $data = [
+            'serie_from' => null ,
+            'serie_to' => $repository->find($id) ,
+
+        ];
+
+        $form = $this->container->get('form.factory')->create(SerieCopyVirtualType::class, $data, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $repository->copyVirtual($data['serie_from'], $data['serie_to']);
+
+            return $this->redirect($breadcrumb->previous());
+        }
+
+        return $this->render('@admin/series/form_copy_virtual.html.twig', [
+            'form'     => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/series/delete-{id}", name="admin_series_delete", requirements={"id": "\d+"}, methods={"POST"})
      */
     public function delete(EntityManagerInterface $entityManager, SerieRepository $repository, int $id)
@@ -79,12 +110,17 @@ class SeriesController extends AbstractController
      */
     public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        if ('collection' === $request->get('field_name')) {
-            $result = $autocomplete->entities($request, SerieType::class);
-        } else {
-            $result = $autocomplete->images($request, SerieType::class);
+        switch ($request->get('field_name', '')) {
+            case 'collection':
+                return new JsonResponse($autocomplete->entities($request, SerieType::class));
+            case 'serie_from':
+            case 'serie_to':
+                $request->request->set('field_name', 'name');
+                $request->query->set('field_name', 'name');
+                return new JsonResponse($autocomplete->entities($request, SerieType::class, Serie::class));
+            default:
+                return new JsonResponse($autocomplete->images($request, SerieType::class));
         }
-        return new JsonResponse($result);
     }
 
     /**

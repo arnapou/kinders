@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class KinderType extends AbstractType
+class KinderVirtualType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -36,8 +36,8 @@ class KinderType extends AbstractType
             ->add('lookingFor', BooleanType::class)
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('serie', SerieSelectType::class, ['remote_route' => 'admin_kinders_autocomplete', 'empty_data' => $options['serie'] ?? null])
-            ->add('attributes', AttributesListType::class)
-            ->add('images', ImageListType::class, ['remote_route' => 'admin_kinders_autocomplete'])
+//            ->add('attributes', AttributesListType::class)
+//            ->add('images', ImageListType::class, ['remote_route' => 'admin_kinders_autocomplete'])
             ->add('original', KinderSelectType::class, ['remote_route' => 'admin_kinders_autocomplete', 'empty_data' => $options['original'] ?? null])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
@@ -47,7 +47,6 @@ class KinderType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Kinder::class,
             'serie'      => null,
-            'original'   => null,
         ]);
     }
 }
