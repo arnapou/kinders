@@ -16,7 +16,6 @@
             <th>Série</th>
             <th>Kinder</th>
             <th>BPZ</th>
-            <th>Réf.</th>
             <th>Année</th>
             <th>Attributes</th>
             <th>Collec</th>
@@ -46,7 +45,6 @@
                     {{ macro.image(item.getImage(1)) }}
                     {{ item.name }}
                 </td>
-                <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ macro.attributes(item) }}</td>
                 <td>{{ item.quantityOwned ?: ''}}</td>

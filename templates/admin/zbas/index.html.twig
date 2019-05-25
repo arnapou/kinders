@@ -16,7 +16,6 @@
             <th>Série</th>
             <th>Kinder</th>
             <th>ZBA</th>
-            <th>Réf.</th>
             <th>Année</th>
             <th>Attributes</th>
             <th>Collec</th>
@@ -42,7 +41,6 @@
                     <a href="{{ path('admin_kinders_edit', {id: item.kinder.id}) }}">{{ item.kinder }}</a>
                 </td>
                 <td>{{ macro.image(item.image) }} {{ item.name }}</td>
-                <td>{{ item.reference }}</td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ macro.attributes(item) }}</td>
                 <td>{{ item.quantityOwned ?: ''}}</td>
