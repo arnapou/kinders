@@ -34,6 +34,16 @@ class Kernel extends BaseKernel
         }
     }
 
+    public function getCacheDir()
+    {
+        return getenv('APP_VAR_CACHE') ?: parent::getCacheDir();
+    }
+
+    public function getLogDir()
+    {
+        return getenv('APP_VAR_LOG') ?: parent::getLogDir();
+    }
+
     public function getProjectDir(): string
     {
         return \dirname(__DIR__);
