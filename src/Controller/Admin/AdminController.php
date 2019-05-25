@@ -76,9 +76,9 @@ class AdminController extends AbstractController
             $date->setTime(0, 0, 0);
             for ($i = 0; $i < $this->nbBars; $i++) {
                 $dateTo = clone $date;
-                $dateTo->setTime(23, 59, 59);
+                $dateTo->add($interval);
                 $values[] = (int)$this->qb($entityManager, $metadata)
-                    ->andWhere("e.$field >= :date1 AND e.$field <= :date2")
+                    ->andWhere("e.$field >= :date1 AND e.$field < :date2")
                     ->setParameter('date1', $date)
                     ->setParameter('date2', $dateTo)
                     ->getQuery()->getSingleScalarResult();
