@@ -51,14 +51,15 @@ class TwigExtension extends AbstractExtension
         $svg = '<svg class="svgbar" height="' . $height . '" width="' . $width . '">';
         $max = max($values) ?: 1;
         foreach (array_values($values) as $x => $value) {
-            $y   = round($height * $value / $max, 4);
-            $svg .= '<rect data-value="' . $value . '"'
-                . ' fill="' . $bgcolor . '"'
-                . ' x="' . ($x * $barWidth) . '"'
-                . ' y="' . ($height - $y) . '"'
-                . ' width="' . (.9 * $barWidth) . '"'
-                . ' height="' . $y . '"'
-                . '></rect>';
+            if ($y = round($height * $value / $max, 4)) {
+                $svg .= '<rect data-value="' . $value . '"'
+                    . ' fill="' . $bgcolor . '"'
+                    . ' x="' . ($x * $barWidth) . '"'
+                    . ' y="' . ($height - $y) . '"'
+                    . ' width="' . (.9 * $barWidth) . '"'
+                    . ' height="' . $y . '"'
+                    . '></rect>';
+            }
         }
         $svg .= '</svg>';
         return $svg;
