@@ -12,7 +12,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,6 +55,11 @@ class Serie extends BaseItem
      */
     private $items;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Collection", inversedBy="series")
+     */
+    private $collection;
+
     public function __construct()
     {
         parent::__construct();
@@ -80,9 +85,9 @@ class Serie extends BaseItem
     }
 
     /**
-     * @return Collection|Kinder[]
+     * @return DoctrineCollection|Kinder[]
      */
-    public function getKinders(): Collection
+    public function getKinders(): DoctrineCollection
     {
         return $this->kinders;
     }
@@ -111,9 +116,9 @@ class Serie extends BaseItem
     }
 
     /**
-     * @return Collection|Piece[]
+     * @return DoctrineCollection|Piece[]
      */
-    public function getPieces(): Collection
+    public function getPieces(): DoctrineCollection
     {
         return $this->pieces;
     }
@@ -142,9 +147,9 @@ class Serie extends BaseItem
     }
 
     /**
-     * @return Collection|Item[]
+     * @return DoctrineCollection|Item[]
      */
-    public function getItems(): Collection
+    public function getItems(): DoctrineCollection
     {
         return $this->items;
     }
@@ -168,6 +173,18 @@ class Serie extends BaseItem
                 $item->setSerie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCollection(): ?Collection
+    {
+        return $this->collection;
+    }
+
+    public function setCollection(?Collection $collection): self
+    {
+        $this->collection = $collection;
 
         return $this;
     }

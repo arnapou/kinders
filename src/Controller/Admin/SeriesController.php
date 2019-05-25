@@ -79,7 +79,11 @@ class SeriesController extends AbstractController
      */
     public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
-        $result = $autocomplete->images($request, SerieType::class);
+        if ('collection' === $request->get('field_name')) {
+            $result = $autocomplete->entities($request, SerieType::class);
+        } else {
+            $result = $autocomplete->images($request, SerieType::class);
+        }
         return new JsonResponse($result);
     }
 

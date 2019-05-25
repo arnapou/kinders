@@ -11,6 +11,7 @@
 
 namespace App\Form;
 
+use App\Entity\BaseEntity;
 use App\Entity\BaseItem;
 use App\Entity\Image;
 use App\Repository\ImageRepository;
@@ -138,13 +139,16 @@ class AutocompleteService
     private function mapToArray($paginationResults): array
     {
         return array_map(
-            function (BaseItem $entity) {
-                $image = $entity->getImage();
-                return [
-                        'id'   => $entity->getId(),
-                        'text' => \strval($entity),
-                    ] +
-                    (($image && $image->getFile()) ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
+            function (BaseEntity $entity) {
+                $array = [
+                    'id'   => $entity->getId(),
+                    'text' => \strval($entity),
+                ];
+                if ($entity instanceof BaseItem) {
+                    $image = $entity->getImage();
+                    return $array + (($image && $image->getFile()) ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
+                }
+                return $array;
             },
             $paginationResults
         );

@@ -1,0 +1,78 @@
+{% extends "@admin/index.html.twig" %}
+
+{% import "@admin/macros.html.twig" as macro %}
+{% import _self as self %}
+
+{% block body %}
+    {{ macro.breadcrumb() }}
+
+    <table class="table table-striped table-sm table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                <a href="{{ path('admin_collections_add') }}" class="btn-sm btn-primary">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </th>
+            <th>Nom</th>
+            <th>Série</th>
+            <th>Pays</th>
+            <th>Année</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td rowspan="{{ item.series.count ?: 1 }}">
+                    <a href="{{ path('admin_collections_edit', {id: item.id}) }}" class="btn-sm btn-primary">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+                <td rowspan="{{ item.series.count ?: 1 }}" style="width: 30%">
+                    {{ item.name }}
+                </td>
+                {{ self.td_serie(item.series.count ? item.series.first : none) }}
+                {% if item.series.count %}
+                    <td rowspan="{{ item.series.count }}">
+                    <span class="btn-sm btn-danger disabled"  role="button" aria-disabled="true" style="opacity: .4">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    </td>
+                {% else %}
+                    <td rowspan="1">
+                    <span type="button" data-href="{{ path('admin_collections_delete', {id: item.id}) }}" class="action-delete btn-sm btn-danger">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    </td>
+                {% endif %}
+            </tr>
+            {% for serie in item.series.slice(1) %}
+                <tr>
+                    {{ self.td_serie(serie) }}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-right">
+        {{ macro.pagination('séries') }}
+    </div>
+{% endblock %}
+
+{% macro td_serie(item) %}
+    {% import "@admin/macros.html.twig" as macro %}
+    {% if item %}
+        <td style="width: 30%">
+            {{ macro.image(item.image) }}
+            <a href="{{ path('admin_series_view', {id: item.id}) }}">{{ item.name }}</a>
+        </td>
+        <td>{{ item.country }}</td>
+        <td style="min-width: 10%">{{ item.year ?: '' }}</td>
+    {% else %}
+        <td><em class="text-muted">- none -</em></td>
+        <td></td>
+        <td></td>
+    {% endif %}
+{% endmacro %}

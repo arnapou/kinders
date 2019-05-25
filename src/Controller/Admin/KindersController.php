@@ -50,7 +50,7 @@ class KindersController extends AbstractController
 
         $entity = (new Kinder())->setSerie($serieRepository->find(\intval($id)));
 
-        return $formFactory->renderEdit('@admin/kinders/form.html.twig', $entity)
+        return $formFactory->renderAdd('@admin/kinders/form.html.twig', $entity)
             ?: $this->redirect($breadcrumb->previous());
     }
 
