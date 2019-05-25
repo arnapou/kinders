@@ -24,8 +24,8 @@ require('bootstrap');
 
 const bootbox = require('bootbox');
 
-// window.$ = $;
-// window.jQuery = $;
+window.$ = $;
+window.jQuery = $;
 
 window.searchFilterReset = function () {
     $('#searchFilter').val('');

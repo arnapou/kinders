@@ -95,6 +95,11 @@ form p .admin-image {
     height: 1.3rem;
 }
 
+.svgbar{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.05);
+}
+
 /* select2 */
 
 .select2-selection img,

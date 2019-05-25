@@ -11,12 +11,20 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\BaseEntity;
+use DateInterval;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
+    /**
+     * @var int
+     */
+    private $nbBars = 32;
+
     /**
      * @Route("/", name="admin")
      */
@@ -29,22 +37,55 @@ class AdminController extends AbstractController
 
     private function stats(EntityManagerInterface $entityManager): array
     {
-        $stats = [];
-        $meta  = $entityManager->getMetadataFactory()->getAllMetadata();
-        foreach ($meta as $m) {
-            $reflectionClass = new \ReflectionClass($m->getName());
+        $stats       = [];
+        $allMetadata = $entityManager->getMetadataFactory()->getAllMetadata();
+        foreach ($allMetadata as $metadata) {
+            $reflectionClass = new \ReflectionClass($metadata->getName());
             if ($reflectionClass->isInstantiable()) {
-                $repo  = $entityManager->getRepository($m->getName());
-                $qb    = $entityManager->createQueryBuilder();
-                $count = $qb
-                    ->select($qb->expr()->count('e'))
-                    ->from($m->getName(), 'e')
-                    ->getQuery()->getSingleScalarResult();
-
-                $stats[$reflectionClass->getShortName()] = $count;
+                $stats[$reflectionClass->getShortName()] = [
+                    'count'       => $this->statCount($entityManager, $metadata),
+                    'created_day' => $this->statDay($entityManager, $metadata, 'createdAt', new DateInterval('P1D')),
+                    'updated_day' => $this->statDay($entityManager, $metadata, 'updatedAt', new DateInterval('P1D')),
+                    'created_week' => $this->statDay($entityManager, $metadata, 'createdAt', new DateInterval('P1W')),
+                    'updated_week' => $this->statDay($entityManager, $metadata, 'updatedAt', new DateInterval('P1W')),
+                ];
             }
         }
         ksort($stats);
         return $stats;
+    }
+
+    private function qb(EntityManagerInterface $entityManager, ClassMetadata $metadata)
+    {
+        $qb = $entityManager->createQueryBuilder();
+        return $qb
+            ->select($qb->expr()->count('e'))
+            ->from($metadata->getName(), 'e');
+    }
+
+    private function statCount(EntityManagerInterface $entityManager, ClassMetadata $metadata): int
+    {
+        return (int)$this->qb($entityManager, $metadata)->getQuery()->getSingleScalarResult();
+    }
+
+    private function statDay(EntityManagerInterface $entityManager, ClassMetadata $metadata, string $field, DateInterval $interval): array
+    {
+        $values = [];
+        if (is_subclass_of($metadata->getName(), BaseEntity::class)) {
+            $date = new \DateTime();
+            $date->setTime(0, 0, 0);
+            for ($i = 0; $i < $this->nbBars; $i++) {
+                $dateTo = clone $date;
+                $dateTo->setTime(23, 59, 59);
+                $values[] = (int)$this->qb($entityManager, $metadata)
+                    ->andWhere("e.$field >= :date1 AND e.$field <= :date2")
+                    ->setParameter('date1', $date)
+                    ->setParameter('date2', $dateTo)
+                    ->getQuery()->getSingleScalarResult();
+                $date     = $date->sub($interval);
+            }
+        }
+
+        return array_reverse($values);
     }
 }

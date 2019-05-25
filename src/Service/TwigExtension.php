@@ -30,10 +30,38 @@ class TwigExtension extends AbstractExtension
     public function getFilters()
     {
         return [
+            new TwigFilter('svgbar', [$this, 'svgbar'], ['is_safe' => ['html']]),
             new TwigFilter('tn', [$this, 'thumbnail']),
             new TwigFilter('imagetype', [$this, 'imagetype']),
             new TwigFilter('attributechunks', [$this, 'attributechunks']),
         ];
+    }
+
+    public function svgbar(array $values, $bgcolor = '#007bff', int $height = 24, int $width = 0)
+    {
+        if (empty($values)) {
+            return '';
+        }
+        if ($width) {
+            $barWidth = $width / \count($values);
+        } else {
+            $barWidth = 4;
+            $width    = $barWidth * \count($values);
+        }
+        $svg = '<svg class="svgbar" height="' . $height . '" width="' . $width . '">';
+        $max = max($values) ?: 1;
+        foreach (array_values($values) as $x => $value) {
+            $y   = round($height * $value / $max, 4);
+            $svg .= '<rect data-value="' . $value . '"'
+                . ' fill="' . $bgcolor . '"'
+                . ' x="' . ($x * $barWidth) . '"'
+                . ' y="' . ($height - $y) . '"'
+                . ' width="' . (.9 * $barWidth) . '"'
+                . ' height="' . $y . '"'
+                . '></rect>';
+        }
+        $svg .= '</svg>';
+        return $svg;
     }
 
     public function attributechunks(FormView $formView)

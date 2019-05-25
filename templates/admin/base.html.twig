@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+
+    <title>{{ breadcrumb|length ? 'Admin / '~breadcrumb : 'Kinders Admin' }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}"/>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('admin') }}
+    {% endblock %}
+</head>
+<body>
+{% embed "@admin/navbar.html.twig" %}
+{% endembed %}
+<div class="container-fluid">
+    {% block body %}
+    {% endblock %}
+</div>
+
+{% block javascripts %}
+{{ encore_entry_script_tags('admin') }}
+</body>
+{% endblock %}
+</html>

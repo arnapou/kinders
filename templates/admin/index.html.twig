@@ -1,53 +1,77 @@
-<!doctype html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
+{% extends "@admin/base.html.twig" %}
 
-    <title>{{ breadcrumb|length ? 'Admin / '~breadcrumb : 'Kinders Admin' }}</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}"/>
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #tooltip {
+            background: cornsilk;
+            border: 1px solid rgba(0, 0, 0, .8);
+            border-radius: 3px;
+            padding: 3px 6px;
+            font-size: .8em;
+        }
+    </style>
+{% endblock %}
 
-    {% block stylesheets %}
-        {{ encore_entry_link_tags('admin') }}
-    {% endblock %}
-</head>
-<body>
-{% embed "@admin/navbar.html.twig" %}
-{% endembed %}
-<div class="container-fluid">
-    {% block body %}
-        <div class="row mt-3">
-            <div class="col-4">
-                <div class="border border-primary">
-                    <table class="table table-striped table-sm" style="margin: 0">
-                        <tbody>
-                        {% for name, nb in stats %}
-                            <tr>
-                                <td>{{ name }}</td>
-                                <td>{{ nb ?: '' }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% set img='<svg class="bd-placeholder-img rounded" width="150" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="40%" y="50%" fill="#dee2e6" dy=".3em">{TEXT}</text></svg>' %}
-            <div class="col text-right">
-                <div style="display: inline-block; margin-bottom: .2em">
-                    {{ img|replace({'{TEXT}': '1 : 1'})|raw }}
-                    {{ img|replace({'{TEXT}': '1 : 2'})|raw }}
-                </div>
-                <br>
-                <div style="display: inline-block">
-                    {{ img|replace({'{TEXT}': '2 : 1'})|raw }}
-                    {{ img|replace({'{TEXT}': '2 : 2'})|raw }}
-                </div>
+{% block body %}
+    <div class="row mt-3">
+        <div class="col-8">
+            <div class="border border-primary">
+                <table class="table table-striped table-sm" style="margin: 0">
+                    <thead>
+                    <tr style="font-size: .8em;">
+                        <th>objet</th>
+                        <th>nb</th>
+                        <th>created / day</th>
+                        <th>updated / day</th>
+                        <th>created / week</th>
+                        <th>updated / week</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for name, data in stats %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>{{ data.count ?: '' }}</td>
+                            <td>{{ data.created_day|svgbar('#007bff') }}</td>
+                            <td>{{ data.updated_day|svgbar('#007bff') }}</td>
+                            <td>{{ data.created_week|svgbar('#17a2b8') }}</td>
+                            <td>{{ data.updated_week|svgbar('#17a2b8') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-    {% endblock %}
-</div>
+        {% set img='<svg class="bd-placeholder-img rounded" width="150" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="40%" y="50%" fill="#dee2e6" dy=".3em">{TEXT}</text></svg>' %}
+        <div class="col text-right">
+            <div style="display: inline-block; margin-bottom: .2em">
+                {{ img|replace({'{TEXT}': '1 : 1'})|raw }}
+                {{ img|replace({'{TEXT}': '1 : 2'})|raw }}
+            </div>
+            <br>
+            <div style="display: inline-block">
+                {{ img|replace({'{TEXT}': '2 : 1'})|raw }}
+                {{ img|replace({'{TEXT}': '2 : 2'})|raw }}
+            </div>
+        </div>
+    </div>
+    <div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+{% endblock %}
 
 {% block javascripts %}
-{{ encore_entry_script_tags('admin') }}
-</body>
+    {{ parent() }}
+    <script>
+        $(function () {
+            var tooltip = document.getElementById("tooltip");
+            $('.svgbar rect').hover(function (evt) {
+                tooltip.innerHTML = $(this).data('value');
+                tooltip.style.display = "block";
+                tooltip.style.left = evt.pageX + 10 + 'px';
+                tooltip.style.top = evt.pageY + 10 + 'px';
+            }, function () {
+                tooltip.style.display = "none";
+            });
+        });
+    </script>
 {% endblock %}
-</html>
