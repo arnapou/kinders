@@ -100,6 +100,7 @@ abstract class BaseItem extends BaseEntity
 
     public function setReference(string $reference): self
     {
+        $reference       = str_replace(',', '.', $reference);
         $this->reference = $reference;
         return $this;
     }
