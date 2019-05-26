@@ -192,4 +192,17 @@ class Serie extends BaseItem
 
         return $this;
     }
+
+    public function getImage(int $num = 0): ?Image
+    {
+        $image = parent::getImage($num);
+        if ($num === 0 && null === $image) {
+            foreach ($this->getKinders() as $kinder) {
+                if ($image = $kinder->getImage()) {
+                    break;
+                }
+            }
+        }
+        return $image;
+    }
 }
