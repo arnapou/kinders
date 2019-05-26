@@ -27,7 +27,7 @@ class SerieSelectType extends AbstractType
             'primary_key'          => 'id',
             'text_property'        => 'name',
             'minimum_input_length' => 1,
-            'page_limit'           => 10,
+            'page_limit'           => 20,
             'allow_clear'          => true,
             'delay'                => 250,
             'cache'                => true,

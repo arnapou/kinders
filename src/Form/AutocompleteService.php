@@ -74,7 +74,7 @@ class AutocompleteService
             $qbCount->andWhere('e.linked = :linked')->setParameter('linked', false);
         }
 
-        $maxResults = $fieldOptions['page_limit'];
+        $maxResults = $fieldOptions['page_limit'] ?? 20;
         $offset     = ($request->get('page', 1) - 1) * $maxResults;
 
         $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);
@@ -121,7 +121,7 @@ class AutocompleteService
         $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbCount->select($qbCount->expr()->count('e'));
 
-        $maxResults = $fieldOptions['page_limit'] ?? 10;
+        $maxResults = $fieldOptions['page_limit'] ?? 20;
         $offset     = ($request->get('page', 1) - 1) * $maxResults;
 
         $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);
