@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -89,7 +90,8 @@ class Serie extends BaseItem
      */
     public function getKinders(): DoctrineCollection
     {
-        return $this->kinders;
+        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'reference' => 'ASC', 'name' => 'ASC']);
+        return $this->kinders->matching($criteria);
     }
 
     public function addKinder(Kinder $kinder): self
@@ -120,7 +122,8 @@ class Serie extends BaseItem
      */
     public function getPieces(): DoctrineCollection
     {
-        return $this->pieces;
+        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'reference' => 'ASC', 'name' => 'ASC']);
+        return $this->pieces->matching($criteria);
     }
 
     public function addPiece(Piece $piece): self
@@ -151,7 +154,8 @@ class Serie extends BaseItem
      */
     public function getItems(): DoctrineCollection
     {
-        return $this->items;
+        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'reference' => 'ASC', 'name' => 'ASC']);
+        return $this->items->matching($criteria);
     }
 
     public function addItem(Item $item): self
