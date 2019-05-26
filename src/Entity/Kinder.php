@@ -216,6 +216,11 @@ class Kinder extends BaseItem
         return $this->original ? $this->original->getImages() : parent::getImages();
     }
 
+    public function getComment(): string
+    {
+        return parent::getComment() ?: ($this->original ? $this->original->getComment() : '');
+    }
+
     private function hasVirtuals()
     {
         return !$this->virtuals->isEmpty();
