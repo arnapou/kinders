@@ -50,7 +50,7 @@ abstract class BaseItem extends BaseEntity
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    protected $realsorting = '';
+    protected $realsorting = '#';
 
     /**
      * @var bool
