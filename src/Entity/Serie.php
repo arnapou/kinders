@@ -90,7 +90,7 @@ class Serie extends BaseItem
      */
     public function getKinders(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'reference' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC','name' => 'ASC']);
         return $this->kinders->matching($criteria);
     }
 
@@ -122,7 +122,7 @@ class Serie extends BaseItem
      */
     public function getPieces(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'reference' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
         return $this->pieces->matching($criteria);
     }
 
@@ -154,7 +154,7 @@ class Serie extends BaseItem
      */
     public function getItems(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'reference' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['realsorting'=> 'ASC', 'name' => 'ASC']);
         return $this->items->matching($criteria);
     }
 

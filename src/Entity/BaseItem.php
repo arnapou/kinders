@@ -36,14 +36,21 @@ abstract class BaseItem extends BaseEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=40)
      */
     protected $reference = '';
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=40)
+     */
+    protected $sorting = '';
+
     /**
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    protected $sorting = '';
+    protected $realsorting = '';
 
     /**
      * @var bool
@@ -107,6 +114,7 @@ abstract class BaseItem extends BaseEntity
     {
         $reference       = str_replace(',', '.', $reference);
         $this->reference = $reference;
+        $this->calcRealsorting();
         return $this;
     }
 
@@ -118,6 +126,7 @@ abstract class BaseItem extends BaseEntity
     public function setSorting(string $sorting): self
     {
         $this->sorting = $sorting;
+        $this->calcRealsorting();
         return $this;
     }
 
@@ -141,6 +150,23 @@ abstract class BaseItem extends BaseEntity
     {
         $this->year = $year;
         return $this;
+    }
+
+    public function calcRealsorting(): self
+    {
+        $this->realsorting = preg_replace_callback(
+            '!(\d+)!',
+            function ($matches) {
+                return sprintf('%04d', $matches[1]);
+            },
+            $this->sorting . '#' . $this->reference
+        );
+        return $this;
+    }
+
+    public function getRealsorting(): string
+    {
+        return $this->realsorting;
     }
 
     /**
