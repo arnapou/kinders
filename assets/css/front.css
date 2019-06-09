@@ -75,6 +75,10 @@ h1 {
     border-bottom: 1px solid #aaaaaa;
 }
 
+.flag-icon {
+    margin-right: .2rem;
+}
+
 /* TABLE KINDER */
 
 table.kinders {

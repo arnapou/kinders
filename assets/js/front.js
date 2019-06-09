@@ -20,4 +20,5 @@ require('bootstrap');
 window.$ = $;
 window.jQuery = $;
 
+require('flag-icon-css/css/flag-icon.css');
 require('../css/front.css');

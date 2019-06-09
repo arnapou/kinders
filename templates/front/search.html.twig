@@ -19,7 +19,10 @@
         <tbody>
         {% for serie in series %}
             <tr>
-                <td>{{ serie.country }}</td>
+                <td>
+                    <span class="flag-icon flag-icon-{{ serie.country.abbr|lower }}"></span>
+                    {{ serie.country }}
+                </td>
                 <td>{{ serie.year }}</td>
                 <td class="imageserie">
                     <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
