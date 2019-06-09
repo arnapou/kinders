@@ -43,7 +43,7 @@ class Collection extends BaseEntity
      */
     public function getSeries(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['name'=> 'ASC', 'year'=> 'ASC']);
+        $criteria = Criteria::create()->orderBy(['name'=> 'ASC', 'country'=> 'ASC', 'year'=> 'ASC']);
         return $this->series->matching($criteria);
     }
 

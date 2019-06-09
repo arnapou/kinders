@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% import "macros.html.twig" as macro %}
+{% import _self as self %}
 
 {% block title %}
     {{ menuitem.name }}
@@ -8,7 +9,22 @@
 
 {% block content %}
 
-    <table class="kinders">
+    {% for item in collections %}
+        {% if item.collection is defined %}
+            <h2 class="mt-4">
+                <a href="{{ path('front_collection', {id: item.collection.id, slug: item.collection.slug}) }}">
+                    {{ item.collection }}
+                </a>
+            </h2>
+        {% endif %}
+        {{ self.table_series(item.series) }}
+    {% endfor %}
+
+{% endblock %}
+
+{% macro table_series(series, notid) %}
+    {% import "macros.html.twig" as macro %}
+    <table class="kinders series">
         <thead>
         <tr>
             <th>Pays</th>
@@ -18,21 +34,21 @@
         </thead>
         <tbody>
         {% for serie in series %}
-            <tr>
-                <td>
-                    <span class="flag-icon flag-icon-{{ serie.country.abbr|lower }}"></span>
-                    {{ serie.country }}
-                </td>
-                <td>{{ serie.year }}</td>
-                <td class="imageserie">
-                    <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
-                        {{- macro.imageserie(serie) -}}
-                        {{- serie.name -}}
-                    </a>
-                </td>
-            </tr>
+            {% if serie.id != notid %}
+                <tr>
+                    <td>
+                        {{ macro.flag(serie.country) }} {{ serie.country }}
+                    </td>
+                    <td>{{ serie.year }}</td>
+                    <td class="imageserie">
+                        <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
+                            {{- macro.imageserie(serie) -}}
+                            {{- serie.name -}}
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
-
-{% endblock %}
+{% endmacro %}

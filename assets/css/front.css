@@ -117,19 +117,20 @@ table.kinders .variante {
     font-style: italic;
 }
 
+table.kinders.series td:first-child {
+    min-width: 8rem;
+}
+table.kinders.series td:last-child {
+    min-width: 35rem;
+}
+
 /* TABLE PUZZLE */
 
 table.puzzle {
     border: 1px solid #aaaaaa;
 }
 
-table.puzzle td {
-    min-width: 100px;
-    min-height: 100px;
-}
-
 table.puzzle td.empty {
-    font-size: 1.5rem;
     opacity: .5;
     text-align: center;
 }
@@ -185,6 +186,7 @@ a.image.tn img:hover {
 }
 
 span.image.none {
+    z-index: 0;
     display: inline-block;
     width: 100px;
     height: 100px;

@@ -77,3 +77,7 @@
         </nav>
     {% endif %}
 {% endmacro %}
+
+{% macro flag(country) -%}
+    <span class="flag-icon flag-icon-{{ country.abbr|lower }}"></span>
+{%- endmacro %}

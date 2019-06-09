@@ -27,6 +27,10 @@ class FrontSearch
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param MenuItem $menuItem
+     * @return Serie[]
+     */
     public function getSeries(MenuItem $menuItem): array
     {
         $qb = $this->entityManager->createQueryBuilder()
@@ -46,5 +50,30 @@ class FrontSearch
         $qb->addOrderBy('e.name', 'ASC');
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function getSeriesByCollection(MenuItem $menuItem): array
+    {
+        $collections = [];
+        foreach ($this->getSeries($menuItem) as $serie) {
+            if ($collection = $serie->getCollection()) {
+                $collections[$collection->getId()]['collection'] = $collection;
+                $collections[$collection->getId()]['series'][]   = $serie;
+            } else {
+                $collections[0]['series'][] = $serie;
+            }
+        }
+
+        usort($collections, function ($a, $b) {
+            if (!isset($a['collection'])) {
+                return -1;
+            } elseif (!isset($b['collection'])) {
+                return 1;
+            } else {
+                return $a['collection']->getName() <=> $b['collection']->getName();
+            }
+        });
+
+        return $collections;
     }
 }

@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% import "macros.html.twig" as macro %}
+{% import "serie.html.twig" as macroserie %}
+
+{% block title %}
+    {{ collection.name }}
+{% endblock %}
+
+{% block content %}
+
+    {% for serie in collection.series %}
+        {{ block('serie_kinders', 'serie.html.twig') }}
+    {% endfor %}
+
+    {% for serie in collection.series %}
+        {{ block('serie_pieces', 'serie.html.twig') }}
+    {% endfor %}
+
+{% endblock %}

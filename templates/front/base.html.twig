@@ -31,10 +31,15 @@
 
 <div id="content">
     <h1>
-        {% if is_granted('ROLE_ADMIN') and serie is defined %}
-            <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="float-right btn btn-primary">
-                <i class="fas fa-pen"></i> modifier dans l'admin
-            </a>
+        {% if is_granted('ROLE_ADMIN') %}
+            {% if collection is defined and serie is not defined %}
+                {% set serie = collection.series.get(0) %}
+            {% endif %}
+            {% if serie is defined %}
+                <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="float-right btn btn-primary">
+                    <i class="fas fa-pen"></i> modifier dans l'admin
+                </a>
+            {% endif %}
         {% endif %}
         {% block title %}{% endblock %}
     </h1>

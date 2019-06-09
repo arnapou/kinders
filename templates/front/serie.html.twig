@@ -1,22 +1,30 @@
 {% extends "base.html.twig" %}
 
 {% import "macros.html.twig" as macro %}
-{% import _self as self %}
+{% import _self as macroserie %}
 
 {% block title %}
     {{ serie.name }}{% if serie.year %} &ndash; {{ serie.year }}{% endif %}
 {% endblock %}
 
 {% block content %}
-    {% set puzzle = serie.puzzle %}
+    {% set h2_title = '' %}
 
     {{ block('serie_header') }}
-    {{ block('serie_puzzle') }}
     {{ block('serie_kinders') }}
     {{ block('serie_pieces') }}
     {{ block('serie_items') }}
+    {{ block('serie_collection') }}
     {{ block('serie_attributes') }}
 
+{% endblock %}
+
+{% block serie_collection %}
+    {% import "search.html.twig" as search %}
+    {% if serie.collection and serie.collection.series|length > 1 %}
+        <h2 class="mt-5">Autres séries liées</h2>
+        {{ search.table_series(serie.collection.series, serie.id) }}
+    {% endif %}
 {% endblock %}
 
 {% block serie_header %}
@@ -28,6 +36,12 @@
 {% endblock %}
 
 {% block serie_kinders %}
+    <h2 class="mt-5">
+        {{ macro.flag(serie.country) }} {{ serie.country }}
+        {% if collection is defined %} : {{ serie.name }}{% endif %}
+    </h2>
+    {% set puzzle = serie.puzzle %}
+    {{ block('serie_puzzle') }}
     {% if serie.kinders|length == 0 %}
         <p class="alert alert-secondary">
             Aucune figurine dans cette série 🙁
@@ -65,8 +79,8 @@
                         {{ macro.image(kinder) }}
                         {{ macro.status(kinder) }}
                     </td>
-                    {{ self.td_images(kinder.bpzs, maxBpz) }}
-                    {{ self.td_images(kinder.zbas, maxZba) }}
+                    {{ macroserie.td_images(kinder.bpzs, maxBpz) }}
+                    {{ macroserie.td_images(kinder.zbas, maxZba) }}
                 </tr>
             {% endfor %}
             </tbody>
@@ -76,7 +90,7 @@
 
 {% block serie_puzzle %}
     {% if puzzle %}
-        <table class="puzzle mt-5">
+        <table class="puzzle mt-3 mb-3">
             <tbody>
             {% for y in 1..puzzle.height %}
                 <tr>
@@ -88,7 +102,7 @@
                             </td>
                         {% else %}
                             <td class="empty text-muted">
-                                {{ y }}:{{ x }}
+                                <span class="mr-2 ml-2">{{ y }}:{{ x }}</span>
                             </td>
                         {% endif %}
                     {% endfor %}
@@ -96,13 +110,14 @@
             {% endfor %}
             </tbody>
         </table>
-        <h2 class="mt-5">Détail</h2>
     {% endif %}
 {% endblock %}
 
 {% block serie_pieces %}
     {% if serie.pieces|length %}
-        <h2 class="mt-5">Pièces détachées</h2>
+        <h2 class="mt-5">
+            {% if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Pièces détachées
+        </h2>
         <table class="kinders">
             <thead>
             <tr>
@@ -135,7 +150,9 @@
 
 {% block serie_items %}
     {% if serie.items|length %}
-        <h2 class="mt-5">Objets</h2>
+        <h2 class="mt-5">
+            {% if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Objets
+        </h2>
         <table class="kinders">
             <thead>
             <tr>

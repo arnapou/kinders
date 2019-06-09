@@ -17,8 +17,7 @@
             <div class="card-body">
                 <p class="card-text mb-1">
                     <span class="text-muted">Country : </span>
-                    <span class="flag-icon flag-icon-{{ serie.country.abbr|lower }}"></span>
-                    {{ serie.country }}
+                    {{ macro.flag(serie.country) }} {{ serie.country }}
                 </p>
                 {{ self.year(serie) }}
                 {{ self.images(serie) }}
@@ -32,7 +31,8 @@
                     <a href="{{ path('admin_collections_edit', {id: serie.collection.id}) }}" class="float-right">
                         <i class="fas fa-pen"></i>
                     </a>
-                    <span class="text-muted">Collection : </span> <b class="text-primary">{{ serie.collection }}</b>
+                    <span class="text-muted">Collection : </span>
+                    <a href="{{ path('front_collection', {id: serie.collection.id, slug: serie.collection.slug}) }}">{{ serie.collection }}</a>
                 </h5>
                 <div class="card-body">
                     {% for item in serie.collection.series %}
@@ -46,7 +46,7 @@
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <span class="flag-icon flag-icon-{{ item.country.abbr|lower }}"></span> {{ item.country }}
+                                    {{ macro.flag(item.country) }} {{ item.country }}
                                 </div>
                             </div>
                         {% endif %}

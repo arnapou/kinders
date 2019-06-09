@@ -11,6 +11,7 @@
 
 namespace App\Controller\Front;
 
+use App\Repository\CollectionRepository;
 use App\Repository\MenuItemRepository;
 use App\Repository\SerieRepository;
 use App\Service\FrontSearch;
@@ -65,9 +66,28 @@ class FrontController extends AbstractController
         }
 
         $context = [
-            'menuitem' => $item,
-            'series'   => $frontSearch->getSeries($item),
+            'menuitem'    => $item,
+            'collections' => $frontSearch->getSeriesByCollection($item),
         ];
         return $this->render('search.html.twig', $context);
+    }
+
+    /**
+     * @Route("/collection/{id}-{slug}", name="front_collection", requirements={"id": "\d+"})
+     */
+    public function collection(CollectionRepository $repository, int $id, string $slug = '')
+    {
+        $item = $repository->find($id);
+        if (!$item) {
+            throw new ResourceNotFoundException();
+        }
+        if ($item->getSlug() && $item->getSlug() !== $slug) {
+            return $this->redirectToRoute('front_collection', ['id' => $item->getId(), 'slug' => $item->getSlug()]);
+        }
+
+        $context = [
+            'collection' => $item,
+        ];
+        return $this->render('collection.html.twig', $context);
     }
 }

@@ -228,6 +228,11 @@ class Kinder extends BaseItem
         return parent::getDescription() ?: ($this->original ? $this->original->getDescription() : '');
     }
 
+    public function getVariante(): string
+    {
+        return parent::getVariante() ?: ($this->original ? $this->original->getVariante() : '');
+    }
+
     private function hasVirtuals()
     {
         return !$this->virtuals->isEmpty();
