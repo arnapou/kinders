@@ -53,7 +53,8 @@
 {%- endmacro %}
 
 {% macro status(item) -%}
-    {% if item.lookingFor or item.quantityOwned or item.quantityDouble %}
+    {% set attrs = item.attributes(['poids', 'puzzle']) %}
+    {% if item.lookingFor or item.quantityOwned or item.quantityDouble or attrs|length %}
         <div class="item-status">
             {% if item.lookingFor %}
                 <div class="text-danger"><i class="fas fa-search"></i> Je recherche</div>
@@ -64,6 +65,9 @@
             {% if item.quantityDouble %}
                 <div class="text-secondary"><i class="fas fa-check-double"></i> En double</div>
             {% endif %}
+            {% for attr in attrs %}
+                <div class="text-muted"><i class="fas fa-tag"></i> {{ attr.name }}</div>
+            {% endfor %}
         </div>
     {% endif %}
 {%- endmacro %}

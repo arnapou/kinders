@@ -104,11 +104,23 @@ table.kinders .item-status {
     font-size: .8rem;
     display: inline-block;
     padding: 0 .5rem;
+    vertical-align: middle;
 }
 
 table.kinders .variante {
     font-size: .8rem;
     font-style: italic;
+}
+
+/* TABLE KINDER */
+
+table.puzzle {
+    border: 1px solid #aaaaaa;
+}
+table.puzzle td.empty {
+    font-size: 2rem;
+    opacity: .5;
+    text-align: center;
 }
 
 /* ATRIBUTES */

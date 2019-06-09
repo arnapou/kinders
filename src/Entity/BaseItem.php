@@ -220,10 +220,12 @@ abstract class BaseItem extends BaseEntity
     /**
      * @return Collection|Attribute[]
      */
-    public function getAttributes(): Collection
+    public function getAttributes(array $types = []): Collection
     {
         $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
-        return $this->attributes->matching($criteria);
+        return $this->attributes->matching($criteria)->filter(function (Attribute $attr) use ($types) {
+            return $types ? \in_array($attr->getType(), $types) : true;
+        });
     }
 
     public function addAttribute(Attribute $attribute): self
@@ -240,6 +242,20 @@ abstract class BaseItem extends BaseEntity
             $this->attributes->removeElement($attribute);
         }
         return $this;
+    }
+
+    public function hasAttribute(string $type, ?string $name = null): bool
+    {
+        $type = strtolower($type);
+        $name = strtolower($name);
+        foreach ($this->attributes as $attribute) {
+            if (strtolower($attribute->getType()) === $type &&
+                (!$name || strtolower($attribute->getName()) === $name)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getVariante(): string

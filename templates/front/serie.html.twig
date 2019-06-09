@@ -1,13 +1,16 @@
 {% extends "base.html.twig" %}
 
 {% import "macros.html.twig" as macro %}
+{% import _self as self %}
 
 {% block title %}
     {{ serie.name }}{% if serie.year %} &ndash; {{ serie.year }}{% endif %}
 {% endblock %}
 
 {% block content %}
+    {% set puzzle = serie.puzzle %}
 
+    {{ block('serie_puzzle') }}
     {{ block('serie_header') }}
     {{ block('serie_kinders') }}
     {{ block('serie_pieces') }}
@@ -30,13 +33,20 @@
             Aucune figurine dans cette série 🙁
         </p>
     {% else %}
+        {% set maxBpz = serie.maxBpzCount %}
+        {% set maxZba = serie.maxZbaCount %}
         <table class="kinders">
             <thead>
             <tr>
                 <th>Référence</th>
                 <th>Nom</th>
                 <th>Photos</th>
-                <th>BPZ</th>
+                {% if maxBpz %}
+                    <th colspan="{{ maxBpz }}">BPZ</th>
+                {% endif %}
+                {% if maxZba %}
+                    <th colspan="{{ maxZba }}">ZBA</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -55,16 +65,38 @@
                         {{ macro.image(kinder) }}
                         {{ macro.status(kinder) }}
                     </td>
-                    <td class="image">
-                        {% for bpz in kinder.bpzs %}
-                            {{ macro.images(bpz) }}
-                            {{ macro.status(bpz) }}
-                        {% endfor %}
-                    </td>
+                    {{ self.td_images(kinder.bpzs, maxBpz) }}
+                    {{ self.td_images(kinder.zbas, maxZba) }}
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+    {% endif %}
+{% endblock %}
+
+{% block serie_puzzle %}
+    {% if puzzle %}
+        <table class="puzzle mt-5">
+            <tbody>
+            {% for y in 1..puzzle.height %}
+                <tr>
+                    {% for x in 1..puzzle.width %}
+                        {% set kinder = puzzle.kinders[y-1][x-1] ?? none %}
+                        {% if kinder and kinder.image %}
+                            <td class="image">
+                                {{ macro.images(kinder) }}
+                            </td>
+                        {% else %}
+                            <td class="empty text-muted">
+                                {{ y }}:{{ x }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h2 class="mt-5">Détail</h2>
     {% endif %}
 {% endblock %}
 
@@ -141,3 +173,20 @@
         </p>
     {% endif %}
 {% endblock %}
+
+{% macro td_images(images, max) -%}
+    {% import "macros.html.twig" as macro %}
+    {% if max %}
+        {% for img in images %}
+            <td class="image">
+                {{ macro.images(img) }}
+                {{ macro.status(img) }}
+            </td>
+        {% endfor %}
+        {% if max - images|length %}
+            {% for i in 1..(max - images|length) %}
+                <td>&nbsp;</td>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{%- endmacro %}

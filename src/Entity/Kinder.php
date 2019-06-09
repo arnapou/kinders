@@ -203,9 +203,9 @@ class Kinder extends BaseItem
         return $this->original ? true : false;
     }
 
-    public function getAttributes(): Collection
+    public function getAttributes(array $types = []): Collection
     {
-        return $this->original ? $this->original->getAttributes() : parent::getAttributes();
+        return $this->original ? $this->original->getAttributes($types) : parent::getAttributes($types);
     }
 
     public function getImage(int $num = 0): ?Image

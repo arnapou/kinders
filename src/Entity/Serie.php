@@ -87,12 +87,30 @@ class Serie extends BaseItem
         $this->country = $country;
     }
 
+    public function getMaxBpzCount(): int
+    {
+        $max = 0;
+        foreach ($this->kinders as $kinder) {
+            $max = max($max, $kinder->getBpzs()->count());
+        }
+        return $max;
+    }
+
+    public function getMaxZbaCount(): int
+    {
+        $max = 0;
+        foreach ($this->kinders as $kinder) {
+            $max = max($max, $kinder->getZbas()->count());
+        }
+        return $max;
+    }
+
     /**
      * @return DoctrineCollection|Kinder[]
      */
     public function getKinders(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC','name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
         return $this->kinders->matching($criteria);
     }
 
@@ -156,7 +174,7 @@ class Serie extends BaseItem
      */
     public function getItems(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['realsorting'=> 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
         return $this->items->matching($criteria);
     }
 
@@ -193,6 +211,35 @@ class Serie extends BaseItem
         $this->collection = $collection;
 
         return $this;
+    }
+
+    public function isPuzzle(): bool
+    {
+        return $this->hasAttribute('kinder', 'Puzzle');
+    }
+
+    public function getPuzzle(): ?array
+    {
+        if (!$this->isPuzzle()) {
+            return null;
+        }
+        $kinders = [];
+        $w       = $h = 0;
+        foreach ($this->kinders as $kinder) {
+            foreach ($kinder->getAttributes() as $attribute) {
+                if ('puzzle' === strtolower($attribute->getType()) && preg_match('!^(\d+):(\d+)$!', $attribute->getName(), $matches)) {
+                    $kinders[$matches[1] - 1][$matches[2] - 1] = $kinder;
+
+                    $w = max($w, $matches[2]);
+                    $h = max($h, $matches[1]);
+                }
+            }
+        }
+        return [
+            'width'   => $w,
+            'height'  => $h,
+            'kinders' => $kinders,
+        ];
     }
 
     public function getImage(int $num = 0): ?Image
