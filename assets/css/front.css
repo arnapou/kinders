@@ -117,13 +117,19 @@ table.kinders .variante {
     font-style: italic;
 }
 
-/* TABLE KINDER */
+/* TABLE PUZZLE */
 
 table.puzzle {
     border: 1px solid #aaaaaa;
 }
+
+table.puzzle td {
+    min-width: 100px;
+    min-height: 100px;
+}
+
 table.puzzle td.empty {
-    font-size: 2rem;
+    font-size: 1.5rem;
     opacity: .5;
     text-align: center;
 }

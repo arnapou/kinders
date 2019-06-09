@@ -14,6 +14,7 @@ require('select2/dist/js/select2.full.js');
 require('select2/dist/css/select2.css');
 require('select2-bootstrap-theme/dist/select2-bootstrap.css');
 require('../../public/bundles/tetranzselect2entity/js/select2entity.js');
+require('flag-icon-css/css/flag-icon.css');
 // require('bootbox/dist/bootbox.all.min.js');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.

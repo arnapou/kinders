@@ -6,22 +6,54 @@
 {% block body %}
     {{ macro.breadcrumb() }}
 
-    <div class="card border-primary">
-        <h5 class="card-header">
-            <a href="{{ path('admin_series_edit', {id: serie.id}) }}" class="float-right">
-                <i class="fas fa-pen"></i>
-            </a>
-            <span class="text-muted">Série : </span> <b class="text-primary">{{ serie }}</b>
-        </h5>
-        <div class="card-body">
-            <p class="card-text mb-1">
-                <span class="text-muted">Country : </span> {{ serie.country }}
-            </p>
-            {{ self.year(serie) }}
-            {{ self.images(serie) }}
-            {{ self.comment(serie) }}
-            {{ self.attributes(serie) }}
+    <div class="card-group">
+        <div class="card border-primary">
+            <h5 class="card-header">
+                <a href="{{ path('admin_series_edit', {id: serie.id}) }}" class="float-right">
+                    <i class="fas fa-pen"></i>
+                </a>
+                <span class="text-muted">Série : </span> <b class="text-primary">{{ serie }}</b>
+            </h5>
+            <div class="card-body">
+                <p class="card-text mb-1">
+                    <span class="text-muted">Country : </span>
+                    <span class="flag-icon flag-icon-{{ serie.country.abbr|lower }}"></span>
+                    {{ serie.country }}
+                </p>
+                {{ self.year(serie) }}
+                {{ self.images(serie) }}
+                {{ self.comment(serie) }}
+                {{ self.attributes(serie) }}
+            </div>
         </div>
+        {% if serie.collection %}
+            <div class="card">
+                <h5 class="card-header">
+                    <a href="{{ path('admin_collections_edit', {id: serie.collection.id}) }}" class="float-right">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <span class="text-muted">Collection : </span> <b class="text-primary">{{ serie.collection }}</b>
+                </h5>
+                <div class="card-body">
+                    {% for item in serie.collection.series %}
+                        {% if item.id != serie.id %}
+                            <div class="row">
+                                <div class="col collection-serie">
+                                    {{ macro.image(item.image) }}
+                                    <a href="{{ path('admin_series_view', {id: item.id}) }}">
+                                        <i class="fas fa-pen"></i>
+                                        {{ item.name }}
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <span class="flag-icon flag-icon-{{ item.country.abbr|lower }}"></span> {{ item.country }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 
     {% block links %}
@@ -258,3 +290,13 @@
         </p>
     {% endif %}
 {%- endmacro %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .collection-serie .admin-image {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+{% endblock %}

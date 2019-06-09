@@ -32,7 +32,10 @@
                     {{ macro.image(item.image) }}
                     <a href="{{ path('admin_series_view', {id: item.id}) }}">{{ item.name }}</a>
                 </td>
-                <td>{{ item.country }}</td>
+                <td>
+                    <span class="flag-icon flag-icon-{{ item.country.abbr|lower }}"></span>
+                    {{ item.country }}
+                </td>
                 <td>{{ item.year ?: '' }}</td>
                 <td>{{ macro.attributes(item) }}</td>
                 <td>
