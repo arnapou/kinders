@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,7 +49,8 @@ class MenuCategory extends BaseEntity
      */
     public function getItems(): Collection
     {
-        return $this->items;
+        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'year' => 'ASC', 'name' => 'ASC']);
+        return $this->items->matching($criteria);
     }
 
     public function addItem(MenuItem $item): self
