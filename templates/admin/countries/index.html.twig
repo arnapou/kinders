@@ -15,6 +15,7 @@
             </th>
             <th>Pays</th>
             <th>Abréviation</th>
+            <th>Sorting</th>
             <th>Commentaire</th>
             <th></th>
         </tr>
@@ -29,6 +30,7 @@
                 </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.abbr }}</td>
+                <td>{{ item.sorting}}</td>
                 <td>{{ item.comment }}</td>
                 <td>
                     <span type="button" data-href="{{ path('admin_countries_delete', {id: item.id}) }}" class="action-delete btn-sm btn-danger">

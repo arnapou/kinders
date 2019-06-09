@@ -30,6 +30,11 @@ class Country extends BaseEntity
      * @ORM\Column(type="string", length=10)
      */
     private $abbr = '';
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=40)
+     */
+    private $sorting = '';
 
     /**
      * @return string
@@ -45,5 +50,16 @@ class Country extends BaseEntity
     public function setAbbr(string $abbr): void
     {
         $this->abbr = $abbr;
+    }
+
+    public function getSorting(): string
+    {
+        return $this->sorting;
+    }
+
+    public function setSorting(string $sorting): self
+    {
+        $this->sorting = $sorting;
+        return $this;
     }
 }

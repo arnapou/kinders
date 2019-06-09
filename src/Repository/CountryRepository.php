@@ -36,7 +36,7 @@ class CountryRepository extends ServiceEntityRepository
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return parent::findBy($criteria, $orderBy ?: ['name' => 'ASC'], $limit, $offset);
+        return parent::findBy($criteria, $orderBy ?: ['sorting' => 'ASC', 'name' => 'ASC'], $limit, $offset);
     }
 
     // /**

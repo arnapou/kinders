@@ -25,6 +25,7 @@ class CountryType extends AbstractType
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('abbr', TextType::class)
+            ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 

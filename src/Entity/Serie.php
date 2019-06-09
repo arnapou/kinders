@@ -71,20 +71,15 @@ class Serie extends BaseItem
         $this->pieces  = new ArrayCollection();
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCountry()
+    public function getCountry(): Country
     {
         return $this->country;
     }
 
-    /**
-     * @param mixed $country
-     */
-    public function setCountry($country): void
+    public function setCountry(Country $country): self
     {
         $this->country = $country;
+        return $this;
     }
 
     public function getMaxBpzCount(): int
