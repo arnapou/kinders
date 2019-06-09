@@ -150,7 +150,7 @@ td .attribute em {
     color: #6c757d !important;
 }
 
-/* IMAGES */
+/* IMAGES PAGE SERIE */
 
 a.image.tn img {
     height: 100px;
@@ -163,14 +163,6 @@ a.image.tn img:hover {
     border: 1px solid #aaaaaa;
 }
 
-td.imageserie a img,
-td.imageserie a .none {
-    max-width: 32px;
-    max-height: 32px;
-    margin-right: .3rem;
-}
-
-td.imageserie a .none,
 span.image.none {
     display: inline-block;
     width: 100px;
@@ -183,8 +175,21 @@ span.image.none {
     vertical-align: middle;
 }
 
+/* IMAGES LISTE SERIE */
+
+td.imageserie a .img-wrapper,
 td.imageserie a .none {
+    display: inline-block;
     width: 32px;
     height: 32px;
     line-height: 32px;
+    margin-right: .3rem;
+    text-align: center;
+    box-sizing: content-box;
+    background: rgba(238, 238, 238, .5);
+}
+
+td.imageserie a .none {
+    background: rgb(238, 238, 238);
+    opacity: .5;
 }
