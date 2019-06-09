@@ -13,6 +13,7 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass
@@ -46,6 +47,13 @@ abstract class BaseEntity
      * @ORM\Column(type="string", length=100)
      */
     protected $name = '';
+
+    /**
+     * @var string
+     * @Gedmo\Slug(fields={"name"}, updatable=true)
+     * @ORM\Column(type="string", length=150)
+     */
+    protected $slug;
 
     /**
      * @var string
@@ -109,6 +117,17 @@ abstract class BaseEntity
     public function setComment(string $comment): self
     {
         $this->comment = $comment;
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function updateSlug(): self
+    {
+        $this->slug = null;
         return $this;
     }
 

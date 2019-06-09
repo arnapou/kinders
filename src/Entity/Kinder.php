@@ -22,6 +22,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="created_at", columns={"created_at"}),
  *     @ORM\Index(name="updated_at", columns={"updated_at"}),
+ *     @ORM\Index(name="realsorting", columns={"realsorting"}),
+ *     @ORM\Index(name="slug", columns={"slug"}),
  *     @ORM\Index(name="name", columns={"name"}),
  *     @ORM\Index(name="quantity_owned", columns={"quantity_owned"}),
  *     @ORM\Index(name="quantity_double", columns={"quantity_double"}),
