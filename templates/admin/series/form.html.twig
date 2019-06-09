@@ -16,6 +16,14 @@
         <div class="col-9">{{ form_row(form.collection) }}</div>
     </div>
 
+    {{ form_row(form.attributes) }}
+    {{ form_row(form.images) }}
+
+    <div class="row">
+        <div class="col">{{ form_row(form.comment) }}</div>
+        <div class="col">{{ form_row(form.description) }}</div>
+    </div>
+
     {{ form_widget(form) }}
 
     <div class="form-group">

@@ -61,6 +61,12 @@ abstract class BaseEntity
      */
     protected $comment = '';
 
+    /**
+     * @var string
+     * @ORM\Column(type="text")
+     */
+    protected $description = '';
+
 
     public function __construct()
     {
@@ -117,6 +123,17 @@ abstract class BaseEntity
     public function setComment(string $comment): self
     {
         $this->comment = $comment;
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
         return $this;
     }
 

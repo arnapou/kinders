@@ -10,8 +10,8 @@
 {% block content %}
     {% set puzzle = serie.puzzle %}
 
-    {{ block('serie_puzzle') }}
     {{ block('serie_header') }}
+    {{ block('serie_puzzle') }}
     {{ block('serie_kinders') }}
     {{ block('serie_pieces') }}
     {{ block('serie_items') }}
@@ -20,9 +20,9 @@
 {% endblock %}
 
 {% block serie_header %}
-    {% if serie.comment %}
+    {% if serie.description %}
         <p>
-            {{ serie.comment|nl2br }}
+            {{ serie.description|nl2br }}
         </p>
     {% endif %}
 {% endblock %}

@@ -166,6 +166,7 @@
     {{ self.reference(item) }}
     {{ self.quantity(item) }}
     {{ self.images(item) }}
+    {{ self.variante(item) }}
     {{ self.comment(item) }}
     {{ self.attributes(item) }}
 {%- endmacro %}
@@ -230,6 +231,14 @@
     {%- if item.comment -%}
         <p class="card-text mb-1">
             <span class="text-muted">Comment : </span> {{ item.comment|nl2br }}
+        </p>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro variante(item) -%}
+    {%- if item.variante -%}
+        <p class="card-text mb-1">
+            <span class="text-muted">Variante : </span> {{ item.variante|nl2br }}
         </p>
     {%- endif -%}
 {%- endmacro %}
