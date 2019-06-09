@@ -9,7 +9,7 @@ body {
 #menu {
     margin-top: -70px;
     float: left;
-    width: 10rem;
+    width: 14rem;
     box-sizing: border-box;
     padding: 0 .5rem;
     font-size: .8rem;
@@ -46,7 +46,7 @@ body {
 
 #content {
     margin-top: 70px;
-    margin-left: 10rem;
+    margin-left: 14rem;
     padding: 1rem;
     background: white;
     border-top: 1px solid #aaaaaa;
