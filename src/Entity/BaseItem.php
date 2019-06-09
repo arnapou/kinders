@@ -76,6 +76,12 @@ abstract class BaseItem extends BaseEntity
      */
     protected $attributes;
 
+    /**
+     * @var string
+     * @ORM\Column(type="text")
+     */
+    protected $variante = '';
+
     public function __construct()
     {
         parent::__construct();
@@ -174,7 +180,7 @@ abstract class BaseItem extends BaseEntity
      */
     public function getImages(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['id' => 'ASC']);
         return $this->images->matching($criteria);
     }
 
@@ -233,6 +239,17 @@ abstract class BaseItem extends BaseEntity
         if ($this->attributes->contains($attribute)) {
             $this->attributes->removeElement($attribute);
         }
+        return $this;
+    }
+
+    public function getVariante(): string
+    {
+        return $this->variante;
+    }
+
+    public function setVariante(string $variante): self
+    {
+        $this->variante = $variante;
         return $this;
     }
 }

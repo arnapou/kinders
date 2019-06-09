@@ -9,6 +9,7 @@ twig:
     searchfilter: '@App\Service\SearchFilter'
     pagination: '@App\Service\Pagination'
     blank_img: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+    frontmenu: '@App\Service\FrontMenu'
   form_themes:
     - '@admin/form_bootstrap.html.twig'             # extends 'bootstrap_4_layout.html.twig'
     - '@admin/form_tetranzselect2entity.html.twig'  # extends '@TetranzSelect2Entity/Form/fields.html.twig'

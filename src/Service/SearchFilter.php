@@ -16,6 +16,8 @@ use App\Entity\BPZ;
 use App\Entity\Image;
 use App\Entity\Item;
 use App\Entity\Kinder;
+use App\Entity\MenuCategory;
+use App\Entity\MenuItem;
 use App\Entity\Piece;
 use App\Entity\Serie;
 use App\Entity\ZBA;
@@ -187,6 +189,10 @@ class SearchFilter
             case ZBA::class:
             case BPZ::class:
                 return $qb->addOrderBy('s.name')->addOrderBy('k.year', 'DESC')->addOrderBy('e.name');
+            case MenuCategory::class:
+                return $qb->addOrderBy('e.sorting')->addOrderBy('e.name');
+            case MenuItem::class:
+                return $qb->addOrderBy('e.sorting')->addOrderBy('e.year')->addOrderBy('e.name');
             default:
                 return $qb->addOrderBy('e.name', 'ASC');
         }

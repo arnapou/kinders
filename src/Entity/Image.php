@@ -21,6 +21,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="created_at", columns={"created_at"}),
  *     @ORM\Index(name="updated_at", columns={"updated_at"}),
+ *     @ORM\Index(name="slug", columns={"slug"}),
  *     @ORM\Index(name="name", columns={"name"}),
  *     @ORM\Index(name="type", columns={"type"}),
  *     @ORM\Index(name="file", columns={"file"}),

@@ -12,12 +12,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
  * @ORM\Table(indexes={
  *     @ORM\Index(name="created_at", columns={"created_at"}),
  *     @ORM\Index(name="updated_at", columns={"updated_at"}),
+ *     @ORM\Index(name="slug", columns={"slug"}),
  *     @ORM\Index(name="name", columns={"name"}),
  *     @ORM\Index(name="type", columns={"type"}),
  * })
@@ -29,6 +31,13 @@ class Attribute extends BaseEntity
      * @ORM\Column(type="string", length=100)
      */
     private $type = '';
+
+    /**
+     * @var string
+     * @Gedmo\Slug(fields={"type", "name"}, updatable=true)
+     * @ORM\Column(type="string", length=150)
+     */
+    protected $slug;
 
     /**
      * @return string

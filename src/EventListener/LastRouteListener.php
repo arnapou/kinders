@@ -71,7 +71,7 @@ class LastRouteListener implements EventSubscriberInterface
     private function isBlacklisted($routeName): bool
     {
         return $routeName[0] == '_'
-            || \in_array($routeName, ['image_thumbnail'])
+            || stripos($routeName, 'image_thumbnail') !== false
             || stripos($routeName, 'autocomplete') !== false
             || stripos($routeName, 'admin_') === false;
     }

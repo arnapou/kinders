@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+
+    <title>{{ block('title') }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}"/>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('front') }}
+    {% endblock %}
+</head>
+<body>
+
+<div id="menu">
+    {% block menu %}
+        <a href="{{ path('front_home') }}" class="logo">
+            <img src="{{ asset('wiki.png') }}">
+        </a>
+
+        {% for categ in frontmenu.categories %}
+            {{ categ.name }}
+            <ul>
+                {% for item in categ.items %}
+                    <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% endblock %}
+</div>
+
+<div id="content">
+    <h1>{% block title %}{% endblock %}</h1>
+    {% block content %}
+    {% endblock %}
+</div>
+
+<div id="footer">
+    {% block footer %}
+        &copy; {{ 'now'|date('Y') }} &mdash; Elodie Buathier &mdash; <a href="mailto:kinder@arnapou.net">✉ Contact</a>
+    {% endblock %}
+</div>
+
+
+{% block javascripts %}
+{{ encore_entry_script_tags('front') }}
+</body>
+{% endblock %}
+</html>

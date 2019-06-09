@@ -70,10 +70,18 @@ class TwigExtension extends AbstractExtension
         return $this->attributeChoices->getChunks($formView);
     }
 
-    public function thumbnail($filename)
+    public function thumbnail($filename, int $w = 0, int $h = 0)
     {
         $infos = pathinfo($filename);
-        return $infos['dirname'] . '/' . $infos['filename'] . '_tn.' . $infos['extension'];
+        if ($w && $h) {
+            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}x${h}." . $infos['extension'];
+        } elseif ($w) {
+            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}." . $infos['extension'];
+        } elseif ($h) {
+            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.x${h}." . $infos['extension'];
+        } else {
+            return $infos['dirname'] . '/' . $infos['filename'] . '_tn.' . $infos['extension'];
+        }
     }
 
     public function imagetype($object)

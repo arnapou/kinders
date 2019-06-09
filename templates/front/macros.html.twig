@@ -1,0 +1,67 @@
+{% macro image(item, num) -%}
+    {% set num = (num ?? 0) ?: 0 %}
+    {% set image = item.image(num) %}
+    {% if image and image.file is defined and image.file %}
+        <a href="{{ vich_uploader_asset(image, 'diskFile') }}" target="_blank" class="image tn">
+            <img src="{{ vich_uploader_asset(image, 'diskFile')|tn(0,200) }}">
+        </a>
+    {% elseif item.lookingFor %}
+        <span class="image none text-danger">
+            <i class="fas fa-question"></i>
+        </span>
+    {% else %}
+        <span class="image none text-muted">
+            <i class="fas fa-question"></i>
+        </span>
+    {% endif %}
+{%- endmacro %}
+
+{% macro imageserie(item) -%}
+    {% set image = item.image %}
+    {%- if image and image.file is defined and image.file -%}
+        <img src="{{ vich_uploader_asset(image, 'diskFile')|tn(32, 32) }}">
+    {%- else -%}
+        <span class="none text-muted">
+            <i class="fas fa-question"></i>
+        </span>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro images(item) -%}
+    {% import "macros.html.twig" as macro %}
+    {% set num = item.images|length %}
+    {% if num %}
+        {% for i in 1..num %}
+            {{ macro.image(item, i-1) }}
+        {% endfor %}
+    {% else %}
+        {{ macro.image(item, 0) }}
+    {% endif %}
+{%- endmacro %}
+
+{% macro attributes(item) -%}
+    {% for attr in item.attributes %}
+        {% spaceless %}
+            <span class="attribute attributes-{{ attr.type }}">
+                <em>{{ attr.type }}</em>
+                <span>{{ attr.name }}</span>
+            </span>
+        {% endspaceless %}
+    {% endfor %}
+{%- endmacro %}
+
+{% macro status(item) -%}
+    {% if item.lookingFor or item.quantityOwned or item.quantityDouble %}
+        <div class="item-status">
+            {% if item.lookingFor %}
+                <div class="text-danger"><i class="fas fa-search"></i> Je recherche</div>
+            {% endif %}
+            {% if item.quantityOwned %}
+                <div class="text-primary"><i class="fas fa-check"></i> J'ai</div>
+            {% endif %}
+            {% if item.quantityDouble %}
+                <div class="text-secondary"><i class="fas fa-check-double"></i> En double</div>
+            {% endif %}
+        </div>
+    {% endif %}
+{%- endmacro %}

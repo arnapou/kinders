@@ -6,15 +6,18 @@
  */
 
 // any CSS you require will output into a single css file (app.css in this case)
-require('../css/front.css');
-// require('../css/bootstrap.scss');
-// require('@fortawesome/fontawesome-free/css/all.min.css');
-// require('@fortawesome/fontawesome-free/js/all.js');
+require('../css/bootstrap.scss');
+
+require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/js/all.js');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 const $ = require('jquery');
 
 // the bootstrap module doesn't export/return anything
-// require('bootstrap');
+require('bootstrap');
 
+window.$ = $;
+window.jQuery = $;
 
+require('../css/front.css');

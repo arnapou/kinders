@@ -40,6 +40,7 @@ class KinderType extends AbstractType
             ->add('attributes', AttributesListType::class)
             ->add('images', ImageListType::class, ['remote_route' => 'admin_kinders_autocomplete'])
             ->add('original', KinderSelectType::class, ['remote_route' => 'admin_kinders_autocomplete', 'empty_data' => $options['original'] ?? null])
+            ->add('variante', TextareaType::class, ['required' => false, 'empty_data' => ''])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 

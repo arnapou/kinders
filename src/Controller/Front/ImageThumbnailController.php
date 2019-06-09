@@ -55,19 +55,23 @@ class ImageThumbnailController extends AbstractController
     }
 
     /**
-     * @Route("/img/{path}_tn.{ext}", requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png"}, name="image_thumbnail")
+     * @Route("/img/{path}_tn.{ext}",         requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png"}, name="image_thumbnail")
+     * @Route("/img/{path}_tn.{w}.{ext}",     requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png", "w": "\d+"}, name="image_thumbnail_w")
+     * @Route("/img/{path}_tn.x{h}.{ext}",    requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png", "h": "\d+"}, name="image_thumbnail_h")
+     * @Route("/img/{path}_tn.{w}x{h}.{ext}", requirements={"path": "[a-zA-Z0-9]+/[a-z0-9]/[a-z0-9]{8}", "ext": "jpg|png", "w": "\d+", "h": "\d+"}, name="image_thumbnail_wh")
      */
-    public function thumbnailAction(string $path, string $ext)
+    public function thumbnailAction(string $path, string $ext, int $w = 0, int $h = 0)
     {
+        $this->sanitizeWH($w, $h);
         $filename = $this->path . "/$path.$ext";
         if (is_file($filename)) {
             $filemtime = filemtime($filename);
             $filesize  = filesize($filename);
             $content   = $this->cache->get(
-                $this->tnSize . md5($path) . ".$ext.$filemtime.$filesize",
-                function (ItemInterface $item) use ($filename, $ext) {
+                "${w}x${h}" . md5($path) . ".$ext.$filemtime.$filesize",
+                function (ItemInterface $item) use ($filename, $ext, $w, $h) {
                     $item->expiresAfter($this->tnExpire);
-                    return $this->imgResize($filename, $ext);
+                    return $this->imgResize($filename, $ext, $w, $h);
                 }
             );
             return $this->fileResponse($content, $ext, $filemtime);
@@ -89,32 +93,32 @@ class ImageThumbnailController extends AbstractController
         return $response;
     }
 
-    private function imgResize(string $filename, string $ext): string
+    private function imgResize(string $filename, string $ext, int $width, int $height): string
     {
         if (class_exists('Imagick')) {
-            return $this->imgResizeImagick($filename, $ext);
+            return $this->imgResizeImagick($filename, $ext, $width, $height);
         } elseif (\function_exists('imagecreatefromjpeg')) {
-            return $this->imgResizeGD($filename, $ext);
+            return $this->imgResizeGD($filename, $ext, $width, $height);
         }
         throw new \RuntimeException();
     }
 
-    private function imgResizeImagick(string $filename, string $ext): string
+    private function imgResizeImagick(string $filename, string $ext, int $width, int $height): string
     {
         $img = new \Imagick($filename);
         $w1  = $img->getImageWidth();
         $h1  = $img->getImageHeight();
-        [$w2, $h2] = $this->newSize($w1, $h1);
+        [$w2, $h2] = $this->newSize($w1, $h1, $width, $height);
         $img->resizeImage($w2, $h2, \Imagick::FILTER_LANCZOS, 1);
         return $img->getImageBlob();
     }
 
-    private function imgResizeGD(string $filename, string $ext): string
+    private function imgResizeGD(string $filename, string $ext, int $width, int $height): string
     {
-        $resize = function ($img) {
+        $resize = function ($img) use ($width, $height) {
             $w1 = imagesx($img);
             $h1 = imagesy($img);
-            [$w2, $h2] = $this->newSize($w1, $h1);
+            [$w2, $h2] = $this->newSize($w1, $h1, $width, $height);
             $dst = imagecreate($w2, $h2);
             imagecopyresampled($dst, $img, 0, 0, 0, 0, $w2, $h2, $w1, $h1);
             return $dst;
@@ -132,10 +136,23 @@ class ImageThumbnailController extends AbstractController
         throw new \RuntimeException();
     }
 
-    private function newSize($width, $height): array
+    private function newSize(float $w1, float $h1, float $width, float $height): array
     {
-        return $width > $height
-            ? [$this->tnSize, floor($this->tnSize * $height / $width)]
-            : [floor($this->tnSize * $width / $height), $this->tnSize];
+        if ($w1 / $h1 > $width / $height) {
+            return [$width, floor($width * $h1 / $w1)];
+        } else {
+            return [floor($height * $w1 / $h1), $height];
+        }
+    }
+
+    private function sanitizeWH(int &$w, int &$h)
+    {
+        if ($w === 0 && $h === 0) {
+            $w = $h = $this->tnSize;
+        } elseif ($w === 0) {
+            $w = 2000;
+        } elseif ($h === 0) {
+            $h = 2000;
+        }
     }
 }

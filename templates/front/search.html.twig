@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% import "macros.html.twig" as macro %}
+
+{% block title %}
+    {{ menuitem.name }}
+{% endblock %}
+
+{% block content %}
+
+    <table class="kinders">
+        <thead>
+        <tr>
+            <th>Pays</th>
+            <th>Année</th>
+            <th>Série</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for serie in series %}
+            <tr>
+                <td>{{ serie.country }}</td>
+                <td>{{ serie.year }}</td>
+                <td class="imageserie">
+                    <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
+                        {{- macro.imageserie(serie) -}}
+                        {{- serie.name -}}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
