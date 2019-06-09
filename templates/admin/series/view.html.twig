@@ -31,6 +31,9 @@
         <a href="{{ path('admin_series_copy_virtual_to', {id: serie.id}) }}" class="btn btn-info mt-5 ml-2">
             <i class="fas fa-arrow-alt-circle-down"></i> Importer en tant que virtuel
         </a>
+        <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}" class="btn btn-success mt-5 ml-2">
+            <i class="fas fa-eye"></i> Voir dans le front public
+        </a>
     {% endblock %}
 
     {% for kinder in serie.kinders %}

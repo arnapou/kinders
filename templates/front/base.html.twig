@@ -30,7 +30,14 @@
 </div>
 
 <div id="content">
-    <h1>{% block title %}{% endblock %}</h1>
+    <h1>
+        {% if is_granted('ROLE_ADMIN') and serie is defined %}
+            <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="float-right btn btn-primary">
+                <i class="fas fa-pen"></i> modifier dans l'admin
+            </a>
+        {% endif %}
+        {% block title %}{% endblock %}
+    </h1>
     {% block content %}
     {% endblock %}
 </div>
