@@ -52,6 +52,7 @@ body {
     border-top: 1px solid #aaaaaa;
     border-left: 1px solid #aaaaaa;
     border-bottom: 1px solid #aaaaaa;
+    min-height: 30rem;
 }
 
 /* FOOTER */
