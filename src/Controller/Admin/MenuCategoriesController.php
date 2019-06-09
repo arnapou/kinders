@@ -28,7 +28,7 @@ class MenuCategoriesController extends AbstractController
     public function index(MenuCategoryRepository $repository, Breadcrumb $breadcrumb, SearchFilter $searchFilter)
     {
         $breadcrumb->add('Config', '');
-        $breadcrumb->add('Pays', $this->generateUrl('admin_menucategs'));
+        $breadcrumb->add('Menu catégorie', $this->generateUrl('admin_menucategs'));
         return $this->render('@admin/menucategs/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);

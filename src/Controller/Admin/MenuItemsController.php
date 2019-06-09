@@ -28,7 +28,7 @@ class MenuItemsController extends AbstractController
     public function index(MenuItemRepository $repository, Breadcrumb $breadcrumb, SearchFilter $searchFilter)
     {
         $breadcrumb->add('Config', '');
-        $breadcrumb->add('Pays', $this->generateUrl('admin_menuitems'));
+        $breadcrumb->add('Menu item', $this->generateUrl('admin_menuitems'));
         return $this->render('@admin/menuitems/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -40,7 +40,7 @@ class MenuItemsController extends AbstractController
     public function add(Breadcrumb $breadcrumb, FormFactory $formFactory)
     {
         $breadcrumb->add('Config', '');
-        $breadcrumb->add('Menu catégorie', $this->generateUrl('admin_menuitems'));
+        $breadcrumb->add('Menu item', $this->generateUrl('admin_menuitems'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_menuitems_add'));
 
         return $formFactory->renderAdd('@admin/menuitems/form.html.twig', new MenuItem())
@@ -53,7 +53,7 @@ class MenuItemsController extends AbstractController
     public function edit(Breadcrumb $breadcrumb, FormFactory $formFactory, MenuItemRepository $repository, int $id)
     {
         $breadcrumb->add('Config', '');
-        $breadcrumb->add('Menu catégorie', $this->generateUrl('admin_menuitems'));
+        $breadcrumb->add('Menu item', $this->generateUrl('admin_menuitems'));
         $breadcrumb->add('Modifier', $this->generateUrl('admin_menuitems_edit', ['id' => $id]));
 
         return $formFactory->renderEdit('@admin/menuitems/form.html.twig', $repository->find($id))
