@@ -98,8 +98,6 @@ table.kinders td.image {
 
 table.kinders td.imageserie {
     padding: 0 .3rem 0 0;
-    height: 32px;
-    box-sizing: content-box;
 }
 
 table.kinders .item-status {
@@ -185,8 +183,11 @@ td.imageserie a .none {
     line-height: 32px;
     margin-right: .3rem;
     text-align: center;
-    box-sizing: content-box;
-    background: rgba(238, 238, 238, .5);
+    vertical-align: middle;
+    background-color: rgba(238, 238, 238, .5);
+    background-size: auto;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 td.imageserie a .none {

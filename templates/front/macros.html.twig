@@ -19,8 +19,8 @@
 {% macro imageserie(item) -%}
     {% set image = item.image %}
     {%- if image and image.file is defined and image.file -%}
-        <span class="img-wrapper">
-            <img src="{{ vich_uploader_asset(image, 'diskFile')|tn(32, 32) }}">
+        <span class="img-wrapper"
+              style="background-image: url({{ vich_uploader_asset(image, 'diskFile')|tn(32, 32) }});">
         </span>
     {%- else -%}
         <span class="none text-muted">
