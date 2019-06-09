@@ -192,7 +192,7 @@ class SearchFilter
             case MenuCategory::class:
                 return $qb->addOrderBy('e.sorting')->addOrderBy('e.name');
             case MenuItem::class:
-                return $qb->addOrderBy('e.sorting')->addOrderBy('e.year')->addOrderBy('e.name');
+                return $qb->addOrderBy('e.sorting')->addOrderBy('e.year', 'DESC')->addOrderBy('e.name');
             default:
                 return $qb->addOrderBy('e.name', 'ASC');
         }
