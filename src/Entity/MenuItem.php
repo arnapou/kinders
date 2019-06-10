@@ -49,6 +49,11 @@ class MenuItem extends BaseEntity
      */
     private $maxYear = 0;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $routeName = '';
+
     public function __construct()
     {
         parent::__construct();
@@ -93,7 +98,7 @@ class MenuItem extends BaseEntity
 
     public function getMinYear(): ?int
     {
-        return $this->minYear;
+        return $this->routeName ? 0 : $this->minYear;
     }
 
     public function setMinYear(int $minYear): self
@@ -104,7 +109,7 @@ class MenuItem extends BaseEntity
 
     public function getMaxYear(): ?int
     {
-        return $this->maxYear ?: $this->minYear;
+        return $this->routeName ? 0 : ($this->maxYear ?: $this->minYear);
     }
 
     public function setMaxYear(int $maxYear): self
@@ -121,6 +126,17 @@ class MenuItem extends BaseEntity
     public function setSorting(string $sorting): self
     {
         $this->sorting = $sorting;
+        return $this;
+    }
+
+    public function getRouteName(): ?string
+    {
+        return $this->routeName;
+    }
+
+    public function setRouteName(string $routeName): self
+    {
+        $this->routeName = $routeName;
         return $this;
     }
 }

@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+
+{% import "macros.html.twig" as macro %}
+{% import _self as self %}
+
+{% block title -%}
+    Mes recherches
+{%- endblock %}
+
+{% block content %}
+
+    {% set total_kinder = 0 %}
+    {% set total_bpzs = 0 %}
+    {% set total_zbas = 0 %}
+
+    <table class="kinders">
+        <thead>
+        <tr>
+            <th>Pays</th>
+            <th>Année</th>
+            <th>Série</th>
+            <th>Kinder</th>
+            <th>BPZ</th>
+            <th>ZBA</th>
+            {% if is_granted('ROLE_ADMIN') %}
+                <th></th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in series %}
+            {% set serie = item.serie %}
+            {% set total_kinder = total_kinder + (item.kinders ?? 0) %}
+            {% set total_bpzs = total_bpzs + (item.bpzs ?? 0) %}
+            {% set total_zbas = total_zbas + (item.zbas ?? 0) %}
+            <tr>
+                <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
+                <td>{{ serie.year }}</td>
+                <td class="imageserie">
+                    <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
+                        {{- macro.imageserie(serie) -}}
+                        {{- serie.name -}}
+                    </a>
+                </td>
+                <td class="text-center">{% if item.kinders is defined %}{{ item.kinders }}{% endif %}</td>
+                <td class="text-center">{% if item.bpzs is defined %}{{ item.bpzs }}{% endif %}</td>
+                <td class="text-center">{% if item.zbas is defined %}{{ item.zbas }}{% endif %}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="btn-sm btn-danger">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3" class="text-right text-muted">Total</td>
+            <td class="text-center">{{ total_kinder }}</td>
+            <td class="text-center">{{ total_bpzs }}</td>
+            <td class="text-center">{{ total_zbas }}</td>
+            {% if is_granted('ROLE_ADMIN') %}
+                <td></td>
+            {% endif %}
+        </tr>
+        </tfoot>
+    </table>
+
+{% endblock %}

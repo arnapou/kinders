@@ -14,6 +14,7 @@ namespace App\Controller\Front;
 use App\Repository\CollectionRepository;
 use App\Repository\MenuItemRepository;
 use App\Repository\SerieRepository;
+use App\Service\FrontLookingFor;
 use App\Service\FrontSearch;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +29,17 @@ class FrontController extends AbstractController
     {
         $context = [];
         return $this->render('index.html.twig', $context);
+    }
+
+    /**
+     * @Route("/looking-for", name="front_lookingfor")
+     */
+    public function recherches(FrontLookingFor $lookingFor)
+    {
+        $context = [
+            'series' => $lookingFor->getSeries(),
+        ];
+        return $this->render('looking-for.html.twig', $context);
     }
 
     /**
@@ -51,26 +63,6 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/search/{id}-{slug}", name="front_search", requirements={"id": "\d+"})
-     */
-    public function search(FrontSearch $frontSearch, MenuItemRepository $repository, int $id, string $slug = '')
-    {
-        $menuItem = $repository->find($id);
-        if (!$menuItem) {
-            throw new ResourceNotFoundException();
-        }
-        if ($menuItem->getSlug() && $menuItem->getSlug() !== $slug) {
-            return $this->redirectToRoute('front_search', ['id' => $menuItem->getId(), 'slug' => $menuItem->getSlug()]);
-        }
-
-        $context = [
-            'menuitem'    => $menuItem,
-            'collections' => $frontSearch->getSeriesByCollection($menuItem),
-        ];
-        return $this->render('search.html.twig', $context);
-    }
-
-    /**
      * @Route("/collection/{id}-{slug}", name="front_collection", requirements={"id": "\d+"})
      */
     public function collection(CollectionRepository $repository, int $id, string $slug = '')
@@ -91,5 +83,25 @@ class FrontController extends AbstractController
             'collection' => $collection,
         ];
         return $this->render('collection.html.twig', $context);
+    }
+
+    /**
+     * @Route("/search/{id}-{slug}", name="front_search", requirements={"id": "\d+"})
+     */
+    public function search(FrontSearch $frontSearch, MenuItemRepository $repository, int $id, string $slug = '')
+    {
+        $menuItem = $repository->find($id);
+        if (!$menuItem) {
+            throw new ResourceNotFoundException();
+        }
+        if ($menuItem->getSlug() && $menuItem->getSlug() !== $slug) {
+            return $this->redirectToRoute('front_search', ['id' => $menuItem->getId(), 'slug' => $menuItem->getSlug()]);
+        }
+
+        $context = [
+            'menuitem'    => $menuItem,
+            'collections' => $frontSearch->getSeriesByCollection($menuItem),
+        ];
+        return $this->render('search.html.twig', $context);
     }
 }

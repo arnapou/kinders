@@ -90,6 +90,7 @@ table.kinders {
     border: 1px solid #aaaaaa;
 }
 
+table.kinders tfoot td,
 table.kinders th {
     background: #eeeeee;
     border: 1px solid #aaaaaa;

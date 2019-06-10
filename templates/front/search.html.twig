@@ -48,9 +48,7 @@
         {% for serie in series %}
             {% if serie.id != notid %}
                 <tr>
-                    <td class="country">
-                        {{ macro.flag(serie.country) }} {{ serie.country }}
-                    </td>
+                    <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
                     <td>{{ serie.year }}</td>
                     <td class="imageserie">
                         <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">

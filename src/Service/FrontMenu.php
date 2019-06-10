@@ -25,20 +25,25 @@ class FrontMenu
      * @var MenuCategoryRepository
      */
     private $repository;
+    /**
+     * @var PublicRoutes
+     */
+    private $publicRoutes;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, MenuCategoryRepository $repository)
+    public function __construct(UrlGeneratorInterface $urlGenerator, MenuCategoryRepository $repository, PublicRoutes $publicRoutes)
     {
         $this->repository   = $repository;
         $this->urlGenerator = $urlGenerator;
+        $this->publicRoutes = $publicRoutes;
     }
 
     public function getCategories(): array
     {
         $categories = [];
         foreach ($this->repository->findAll() as $category) {
-            $items = $category->getItems();
-            if ($items->count()) {
-                $categories[] = $this->getCategory($category);
+            $array = $this->getCategory($category);
+            if (!empty($array['items'])) {
+                $categories[] = $array;
             }
         }
         return $categories;
@@ -46,11 +51,20 @@ class FrontMenu
 
     private function getCategory(MenuCategory $category): array
     {
-        $items = [];
+        $publicRouteNames = $this->publicRoutes->names();
+        $items            = [];
         foreach ($category->getItems() as $item) {
+            if ($item->getRouteName()) {
+                if (!isset($publicRouteNames[$item->getRouteName()])) {
+                    continue;
+                }
+                $url = $this->urlGenerator->generate($item->getRouteName());
+            } else {
+                $url = $this->urlGenerator->generate('front_search', ['id' => $item->getId(), 'slug' => $item->getSlug()]);
+            }
             $items[] = [
                 'name' => $item->getName(),
-                'url'  => $this->urlGenerator->generate('front_search', ['id' => $item->getId(), 'slug' => $item->getSlug()]),
+                'url'  => $url,
             ];
         }
         return [
