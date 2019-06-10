@@ -50,7 +50,7 @@ abstract class BaseEntity
 
     /**
      * @var string
-     * @Gedmo\Slug(fields={"name"}, updatable=true)
+     * @Gedmo\Slug(fields={"name"}, updatable=true, unique=false)
      * @ORM\Column(type="string", length=150)
      */
     protected $slug;
