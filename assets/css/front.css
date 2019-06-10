@@ -34,7 +34,8 @@ body {
     background: white;
     margin-left: -.5rem;
     margin-right: .5rem;
-    padding: 0 0 0 .5rem;
+    margin-bottom: .3rem;
+    padding: .15rem 0 .15rem .5rem;
 }
 
 #menu li {
