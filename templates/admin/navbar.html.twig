@@ -43,6 +43,7 @@
                         {% for menuItem in menuGear %}
                             <a class="dropdown-item" href="{{ path('admin_'~menuItem.0) }}"><i class="{{ menuItem.1 }}"></i> {{ menuItem.2 }}</a>
                         {% endfor %}
+                        <a class="dropdown-item" href="{{ path('logout') }}"><i class="fas fa-door-open"></i> Logout</a>
                     </div>
                 </li>
             </ul>
