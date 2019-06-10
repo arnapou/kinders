@@ -47,9 +47,9 @@ class FrontSearch
             $qb->andWhere('a IN (:attributes)')->setParameter(':attributes', $menuItem->getAttributes());
         }
 
+        $qb->addOrderBy('e.year', 'ASC');
         $qb->addOrderBy('c.sorting', 'ASC');
         $qb->addOrderBy('c.name', 'ASC');
-        $qb->addOrderBy('e.year', 'ASC');
         $qb->addOrderBy('e.name', 'ASC');
 
         return $qb->getQuery()->getResult();
