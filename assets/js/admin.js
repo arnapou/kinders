@@ -17,16 +17,12 @@ require('../../public/bundles/tetranzselect2entity/js/select2entity.js');
 require('flag-icon-css/css/flag-icon.css');
 // require('bootbox/dist/bootbox.all.min.js');
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-const $ = require('jquery');
-
-// the bootstrap module doesn't export/return anything
-require('bootstrap');
-
-const bootbox = require('bootbox');
-
+const $ = require("jquery");
 window.$ = $;
 window.jQuery = $;
+
+require("bootstrap");
+const bootbox = require('bootbox');
 
 window.searchFilterReset = function () {
     $('#searchFilter').val('');
