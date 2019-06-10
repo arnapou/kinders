@@ -15,7 +15,6 @@ use App\Repository\CollectionRepository;
 use App\Repository\MenuItemRepository;
 use App\Repository\SerieRepository;
 use App\Service\FrontSearch;
-use App\Service\FrontSerie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -35,7 +34,7 @@ class FrontController extends AbstractController
      * @Route("/serie/{id}-{slug}", name="front_serie", requirements={"id": "\d+"})
      * @Route("/serie/{id}", requirements={"id": "\d+"})
      */
-    public function serie(FrontSerie $frontSerie, SerieRepository $repository, int $id, string $slug = '')
+    public function serie(SerieRepository $repository, int $id, string $slug = '')
     {
         $serie = $repository->find($id);
         if (!$serie) {
@@ -47,7 +46,6 @@ class FrontController extends AbstractController
 
         $context = [
             'serie' => $serie,
-            'refs'  => $frontSerie->getKinderReferences($serie),
         ];
         return $this->render('serie.html.twig', $context);
     }

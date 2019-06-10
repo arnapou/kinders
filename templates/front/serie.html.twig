@@ -17,7 +17,6 @@
 {% endblock %}
 
 {% block content %}
-    {% set h2_title = '' %}
 
     {{ block('serie_header') }}
     {{ block('serie_kinders') }}
@@ -132,6 +131,7 @@
 
 {% block serie_pieces %}
     {% if serie.pieces|length %}
+        {% set refs = serie|kinderRefs %}
         <h2 class="mt-5">
             {% if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Pièces détachées
         </h2>
@@ -167,6 +167,7 @@
 
 {% block serie_items %}
     {% if serie.items|length %}
+        {% set refs = serie|kinderRefs %}
         <h2 class="mt-5">
             {% if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Objets
         </h2>

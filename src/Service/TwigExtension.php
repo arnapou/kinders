@@ -11,6 +11,7 @@
 
 namespace App\Service;
 
+use App\Entity\Serie;
 use Symfony\Component\Form\FormView;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -34,7 +35,19 @@ class TwigExtension extends AbstractExtension
             new TwigFilter('tn', [$this, 'thumbnail']),
             new TwigFilter('imagetype', [$this, 'imagetype']),
             new TwigFilter('attributechunks', [$this, 'attributechunks']),
+            new TwigFilter('kinderRefs', [$this, 'kinderReferences']),
         ];
+    }
+
+    public function kinderReferences(Serie $serie): array
+    {
+        $refs = [];
+        foreach ($serie->getKinders() as $kinder) {
+            if ($kinder->getReference() && !isset($refs[$kinder->getReference()])) {
+                $refs[$kinder->getReference()] = $kinder->getName();
+            }
+        }
+        return $refs;
     }
 
     public function svgbar(array $values, $bgcolor = '#007bff', int $height = 24, int $width = 0)
