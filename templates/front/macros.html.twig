@@ -6,11 +6,11 @@
             <img src="{{ vich_uploader_asset(image, 'diskFile')|tn(0,200) }}">
         </a>
     {% elseif item.lookingFor %}
-        <span class="image none text-danger">
+        <span class="image none lookingfor">
             <i class="fas fa-question"></i>
         </span>
     {% else %}
-        <span class="image none text-muted">
+        <span class="image none">
             <i class="fas fa-question"></i>
         </span>
     {% endif %}
@@ -23,7 +23,7 @@
               style="background-image: url({{ vich_uploader_asset(image, 'diskFile')|tn(32, 32) }});">
         </span>
     {%- else -%}
-        <span class="none text-muted">
+        <span class="none">
             <i class="fas fa-question"></i>
         </span>
     {%- endif -%}

@@ -137,8 +137,8 @@ table.puzzle {
 }
 
 table.puzzle td.empty {
-    opacity: .5;
     text-align: center;
+    color: rgba(108, 117, 125, .5);
 }
 
 /* ATRIBUTES */
@@ -188,20 +188,23 @@ a.image.tn img {
 a.image.tn img:hover {
     z-index: 1;
     transform: scale(2);
-    border: 1px solid #aaaaaa;
+    box-shadow: 0 0 3px rgba(80, 80, 80, .8);
 }
 
 span.image.none {
-    z-index: 0;
     display: inline-block;
     width: 100px;
     height: 100px;
-    background: #eeeeee;
+    background: rgba(238, 238, 238, .3);
     text-align: center;
     font-size: 3rem;
     line-height: 100px;
-    opacity: .5;
     vertical-align: middle;
+    color: rgba(108, 117, 125, .5);
+}
+
+span.image.none.lookingfor {
+    color: rgba(220, 53, 69, .3);
 }
 
 /* IMAGES LISTE SERIE */
@@ -215,13 +218,9 @@ td.imageserie a .none {
     margin-right: .3rem;
     text-align: center;
     vertical-align: middle;
-    background-color: rgba(238, 238, 238, .5);
+    background-color: rgba(238, 238, 238, .3);
     background-size: auto;
     background-position: center center;
     background-repeat: no-repeat;
-}
-
-td.imageserie a .none {
-    background: rgb(238, 238, 238);
-    opacity: .5;
+    color: rgba(108, 117, 125, .5);
 }
