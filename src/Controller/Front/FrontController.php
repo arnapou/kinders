@@ -57,17 +57,17 @@ class FrontController extends AbstractController
      */
     public function search(FrontSearch $frontSearch, MenuItemRepository $repository, int $id, string $slug = '')
     {
-        $item = $repository->find($id);
-        if (!$item) {
+        $menuItem = $repository->find($id);
+        if (!$menuItem) {
             throw new ResourceNotFoundException();
         }
-        if ($item->getSlug() && $item->getSlug() !== $slug) {
-            return $this->redirectToRoute('front_search', ['id' => $item->getId(), 'slug' => $item->getSlug()]);
+        if ($menuItem->getSlug() && $menuItem->getSlug() !== $slug) {
+            return $this->redirectToRoute('front_search', ['id' => $menuItem->getId(), 'slug' => $menuItem->getSlug()]);
         }
 
         $context = [
-            'menuitem'    => $item,
-            'collections' => $frontSearch->getSeriesByCollection($item),
+            'menuitem'    => $menuItem,
+            'collections' => $frontSearch->getSeriesByCollection($menuItem),
         ];
         return $this->render('search.html.twig', $context);
     }
@@ -77,16 +77,20 @@ class FrontController extends AbstractController
      */
     public function collection(CollectionRepository $repository, int $id, string $slug = '')
     {
-        $item = $repository->find($id);
-        if (!$item) {
+        $collection = $repository->find($id);
+        if (!$collection) {
             throw new ResourceNotFoundException();
         }
-        if ($item->getSlug() && $item->getSlug() !== $slug) {
-            return $this->redirectToRoute('front_collection', ['id' => $item->getId(), 'slug' => $item->getSlug()]);
+        if ($collection->getSlug() && $collection->getSlug() !== $slug) {
+            return $this->redirectToRoute('front_collection', ['id' => $collection->getId(), 'slug' => $collection->getSlug()]);
+        }
+        if ($collection->getSeries()->count() == 1) {
+            $serie = $collection->getSeries()->get(0);
+            return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
         }
 
         $context = [
-            'collection' => $item,
+            'collection' => $collection,
         ];
         return $this->render('collection.html.twig', $context);
     }

@@ -47,7 +47,7 @@ class FrontSearch
             $qb->andWhere('a IN (:attributes)')->setParameter(':attributes', $menuItem->getAttributes());
         }
 
-        $qb->addOrderBy('e.year', 'ASC');
+        $qb->addOrderBy('e.year', 'DESC');
         $qb->addOrderBy('c.sorting', 'ASC');
         $qb->addOrderBy('c.name', 'ASC');
         $qb->addOrderBy('e.name', 'ASC');
@@ -59,7 +59,8 @@ class FrontSearch
     {
         $collections = [];
         foreach ($this->getSeries($menuItem) as $serie) {
-            if ($collection = $serie->getCollection()) {
+            $collection = $serie->getCollection();
+            if ($collection && $collection->getSeries()->count() > 1) {
                 $collections[$collection->getId()]['collection'] = $collection;
                 $collections[$collection->getId()]['series'][]   = $serie;
             } else {
