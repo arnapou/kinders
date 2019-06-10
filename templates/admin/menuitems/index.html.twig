@@ -16,7 +16,7 @@
             <th>Menu item</th>
             <th>Category</th>
             <th>Sorting</th>
-            <th>Year</th>
+            <th>Years</th>
             <th>Attributes</th>
             <th></th>
         </tr>
@@ -32,7 +32,11 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.category }}</td>
                 <td>{{ item.sorting }}</td>
-                <td>{{ item.year }}</td>
+                <td>
+                    {% if item.minYear %}
+                        {{ item.minYear }} &ndash; {{ item.maxYear }}
+                    {% endif %}
+                </td>
                 <td>{{ macro.attributes(item) }}</td>
                 <td>
                     <span type="button" data-href="{{ path('admin_menuitems_delete', {id: item.id}) }}" class="action-delete btn-sm btn-danger">

@@ -49,7 +49,7 @@ class MenuCategory extends BaseEntity
      */
     public function getItems(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'year' => 'DESC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'minYear' => 'DESC', 'name' => 'ASC']);
         return $this->items->matching($criteria);
     }
 

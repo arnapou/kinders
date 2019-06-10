@@ -43,8 +43,8 @@ class Collection extends BaseEntity
      */
     public function getSeries(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['country.sorting' => 'ASC', 'country.name' => 'ASC', 'name' => 'ASC', 'year' => 'ASC']);
-        $iterator = $this->series->getIterator();
+        $criteria = Criteria::create()->orderBy(['name' => 'ASC', 'year' => 'ASC']);
+        $iterator = $this->series->matching($criteria)->getIterator();
         $iterator->uasort(function (Serie $a, Serie $b) {
             return ($a->getCountry()->getSorting() <=> $b->getCountry()->getSorting())
                 ?: ($a->getCountry()->getName() <=> $b->getCountry()->getName());

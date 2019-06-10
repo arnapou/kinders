@@ -29,7 +29,8 @@ class MenuItemType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('minYear', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('maxYear', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('category', EntityType::class, [
                 'class'         => MenuCategory::class,

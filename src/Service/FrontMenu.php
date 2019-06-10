@@ -50,7 +50,6 @@ class FrontMenu
         foreach ($category->getItems() as $item) {
             $items[] = [
                 'name' => $item->getName(),
-                'year' => $item->getYear(),
                 'url'  => $this->urlGenerator->generate('front_search', ['id' => $item->getId(), 'slug' => $item->getSlug()]),
             ];
         }

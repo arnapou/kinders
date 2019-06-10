@@ -167,6 +167,8 @@ class SearchFilter
             case ZBA::class:
             case BPZ::class:
                 return $qb->join('e.kinder', 'k')->join('k.serie', 's');
+            case MenuItem::class:
+                return $qb->join('e.category', 'c');
             default:
                 return $qb;
         }
@@ -192,7 +194,7 @@ class SearchFilter
             case MenuCategory::class:
                 return $qb->addOrderBy('e.sorting')->addOrderBy('e.name');
             case MenuItem::class:
-                return $qb->addOrderBy('e.sorting')->addOrderBy('e.year', 'DESC')->addOrderBy('e.name');
+                return $qb->addOrderBy('c.sorting')->addOrderBy('e.sorting')->addOrderBy('e.minYear', 'DESC')->addOrderBy('e.name');
             default:
                 return $qb->addOrderBy('e.name', 'ASC');
         }

@@ -86,7 +86,7 @@ $(document).ready(function () {
         }
     });
 
-    $('input[name*="year"]').click(function () {
+    $('input[name*="year"], input[name*="Year"]').click(function () {
         $(this).select();
     });
 });

@@ -38,8 +38,9 @@ class FrontSearch
             ->from(Serie::class, 'e')
             ->join('e.country', 'c');
 
-        if ($menuItem->getYear()) {
-            $qb->andWhere('e.year = :year')->setParameter(':year', $menuItem->getYear());
+        if ($menuItem->getMinYear()) {
+            $qb->andWhere('e.year >= :minYear')->setParameter(':minYear', $menuItem->getMinYear());
+            $qb->andWhere('e.year <= :maxYear')->setParameter(':maxYear', $menuItem->getMaxYear());
         }
         if ($menuItem->getAttributes()->count()) {
             $qb->join('e.attributes', 'a');

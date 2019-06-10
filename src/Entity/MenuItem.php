@@ -42,7 +42,12 @@ class MenuItem extends BaseEntity
     /**
      * @ORM\Column(type="integer")
      */
-    private $year = 0;
+    private $minYear = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $maxYear = 0;
 
     public function __construct()
     {
@@ -86,14 +91,25 @@ class MenuItem extends BaseEntity
         return $this;
     }
 
-    public function getYear(): ?int
+    public function getMinYear(): ?int
     {
-        return $this->year;
+        return $this->minYear;
     }
 
-    public function setYear(int $year): self
+    public function setMinYear(int $minYear): self
     {
-        $this->year = $year;
+        $this->minYear = $minYear;
+        return $this;
+    }
+
+    public function getMaxYear(): ?int
+    {
+        return $this->maxYear ?: $this->minYear;
+    }
+
+    public function setMaxYear(int $maxYear): self
+    {
+        $this->maxYear = $maxYear;
         return $this;
     }
 
