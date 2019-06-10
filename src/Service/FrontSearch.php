@@ -35,7 +35,8 @@ class FrontSearch
     {
         $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
-            ->from(Serie::class, 'e');
+            ->from(Serie::class, 'e')
+            ->join('e.country', 'c');
 
         if ($menuItem->getYear()) {
             $qb->andWhere('e.year = :year')->setParameter(':year', $menuItem->getYear());
@@ -45,8 +46,9 @@ class FrontSearch
             $qb->andWhere('a IN (:attributes)')->setParameter(':attributes', $menuItem->getAttributes());
         }
 
+        $qb->addOrderBy('c.sorting', 'ASC');
+        $qb->addOrderBy('c.name', 'ASC');
         $qb->addOrderBy('e.year', 'ASC');
-        $qb->addOrderBy('e.country', 'ASC');
         $qb->addOrderBy('e.name', 'ASC');
 
         return $qb->getQuery()->getResult();

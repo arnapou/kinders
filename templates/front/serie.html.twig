@@ -3,8 +3,17 @@
 {% import "macros.html.twig" as macro %}
 {% import _self as macroserie %}
 
-{% block title %}
+{% block title -%}
     {{ serie.name }}{% if serie.year %} &ndash; {{ serie.year }}{% endif %}
+{%- endblock %}
+
+{% block h1_wrapper %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="float-right btn btn-danger">
+            <i class="fas fa-pen"></i>
+        </a>
+    {% endif %}
+    {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -37,8 +46,16 @@
 
 {% block serie_kinders %}
     <h2 class="mt-5">
-        {{ macro.flag(serie.country) }} {{ serie.country }}
-        {% if collection is defined %} : {{ serie.name }}{% endif %}
+        {% if collection is defined %}
+            {{ macro.flag(serie.country) }} {{ serie.country }} : {{ serie.name }}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="ml-5 btn btn-danger">
+                    <i class="fas fa-pen"></i>
+                </a>
+            {% endif %}
+        {% else %}
+            {{ macro.flag(serie.country) }} {{ serie.country }}
+        {% endif %}
     </h2>
     {% set puzzle = serie.puzzle %}
     {{ block('serie_puzzle') }}

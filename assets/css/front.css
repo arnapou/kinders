@@ -9,7 +9,7 @@ body {
 #menu {
     margin-top: -70px;
     float: left;
-    width: 14rem;
+    width: 12rem;
     box-sizing: border-box;
     padding: 0 .5rem;
     font-size: .8rem;
@@ -42,11 +42,15 @@ body {
     list-style-position: inside;
 }
 
+#menu ul.admin li {
+    list-style-type: circle;
+}
+
 /* CONTENT */
 
 #content {
     margin-top: 70px;
-    margin-left: 14rem;
+    margin-left: 12rem;
     padding: 1rem;
     background: white;
     border-top: 1px solid #aaaaaa;
@@ -117,10 +121,11 @@ table.kinders .variante {
     font-style: italic;
 }
 
-table.kinders.series td:first-child {
+table.kinders.series td.country {
     min-width: 8rem;
 }
-table.kinders.series td:last-child {
+
+table.kinders.series td.imageserie {
     min-width: 35rem;
 }
 

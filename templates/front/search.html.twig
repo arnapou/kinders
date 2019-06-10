@@ -3,8 +3,17 @@
 {% import "macros.html.twig" as macro %}
 {% import _self as self %}
 
-{% block title %}
+{% block title -%}
     {{ menuitem.name }}
+{%- endblock %}
+
+{% block h1_wrapper %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_series') }}" class="float-right btn btn-danger">
+            <i class="fas fa-bars"></i> Séries
+        </a>
+    {% endif %}
+    {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -30,13 +39,16 @@
             <th>Pays</th>
             <th>Année</th>
             <th>Série</th>
+            {% if is_granted('ROLE_ADMIN') %}
+                <th></th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
         {% for serie in series %}
             {% if serie.id != notid %}
                 <tr>
-                    <td>
+                    <td class="country">
                         {{ macro.flag(serie.country) }} {{ serie.country }}
                     </td>
                     <td>{{ serie.year }}</td>
@@ -46,6 +58,13 @@
                             {{- serie.name -}}
                         </a>
                     </td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="btn-sm btn-danger">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endif %}
         {% endfor %}

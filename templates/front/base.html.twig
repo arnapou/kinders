@@ -18,6 +18,15 @@
             <img src="{{ asset('wiki.png') }}">
         </a>
 
+        {% if is_granted('ROLE_ADMIN') %}
+            ADMIN
+            <ul class="admin">
+                <li><a href="{{ path('admin_menucategs_add') }}">Ajouter une catégorie</a></li>
+                <li><a href="{{ path('admin_menuitems_add') }}">Ajouter un lien</a></li>
+                <li><a href="{{ path('admin_series') }}">Séries</a></li>
+            </ul>
+        {% endif %}
+
         {% for categ in frontmenu.categories %}
             {{ categ.name }}
             <ul>
@@ -31,17 +40,9 @@
 
 <div id="content">
     <h1>
-        {% if is_granted('ROLE_ADMIN') %}
-            {% if collection is defined and serie is not defined %}
-                {% set serie = collection.series.get(0) %}
-            {% endif %}
-            {% if serie is defined %}
-                <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="float-right btn btn-primary">
-                    <i class="fas fa-pen"></i> modifier dans l'admin
-                </a>
-            {% endif %}
-        {% endif %}
-        {% block title %}{% endblock %}
+        {% block h1_wrapper %}
+            {% block title %}{% endblock %}
+        {% endblock %}
     </h1>
     {% block content %}
     {% endblock %}
