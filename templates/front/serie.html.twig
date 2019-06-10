@@ -8,11 +8,11 @@
 {%- endblock %}
 
 {% block h1_wrapper %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') -%}
         <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="float-right btn btn-danger">
             <i class="fas fa-pen"></i>
         </a>
-    {% endif %}
+    {%- endif -%}
     {{ parent() }}
 {% endblock %}
 
@@ -38,23 +38,23 @@
 {% block serie_header %}
     {% if serie.description %}
         <p>
-            {{ serie.description|nl2br }}
+            {{- serie.description|nl2br -}}
         </p>
     {% endif %}
 {% endblock %}
 
 {% block serie_kinders %}
     <h2 class="mt-5">
-        {% if collection is defined %}
+        {%- if collection is defined -%}
             {{ macro.flag(serie.country) }} {{ serie.country }} : {{ serie.name }} &ndash; {{ serie.year }}
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="ml-5 btn btn-danger">
                     <i class="fas fa-pen"></i>
                 </a>
             {% endif %}
-        {% else %}
+        {%- else -%}
             {{ macro.flag(serie.country) }} {{ serie.country }}
-        {% endif %}
+        {%- endif -%}
     </h2>
     {% set puzzle = serie.puzzle %}
     {{ block('serie_puzzle') }}
@@ -71,69 +71,69 @@
                 <th>Référence</th>
                 <th>Nom</th>
                 <th>Photos</th>
-                {% if maxBpz %}
+                {%- if maxBpz -%}
                     <th colspan="{{ maxBpz }}">BPZ</th>
-                {% endif %}
-                {% if maxZba %}
+                {%- endif -%}
+                {%- if maxZba -%}
                     <th colspan="{{ maxZba }}">ZBA</th>
-                {% endif %}
+                {%- endif %}
             </tr>
             </thead>
             <tbody>
-            {% for kinder in serie.kinders %}
+            {%- for kinder in serie.kinders -%}
                 <tr>
                     <td class="text-center">{{ kinder.reference ?: '' }}</td>
                     <td>
                         {{ kinder.name }}
-                        {% if kinder.variante %}
+                        {%- if kinder.variante -%}
                             <p class="text-muted variante">
-                                Variante : {{ kinder.variante }}
+                                Variante : {{ kinder.variante -}}
                             </p>
-                        {% endif %}
+                        {%- endif -%}
                     </td>
                     <td class="image">
-                        {{ macro.image(kinder) }}
-                        {{ macro.status(kinder) }}
+                        {{- macro.image(kinder) -}}
+                        {{- macro.status(kinder) -}}
                     </td>
-                    {{ macroserie.td_images(kinder.bpzs, maxBpz) }}
-                    {{ macroserie.td_images(kinder.zbas, maxZba) }}
+                    {{- macroserie.td_images(kinder.bpzs, maxBpz) -}}
+                    {{- macroserie.td_images(kinder.zbas, maxZba) -}}
                 </tr>
-            {% endfor %}
+            {%- endfor -%}
             </tbody>
         </table>
     {% endif %}
 {% endblock %}
 
 {% block serie_puzzle %}
-    {% if puzzle %}
+    {% if puzzle -%}
         <table class="puzzle mt-3 mb-3">
             <tbody>
-            {% for y in 1..puzzle.height %}
+            {%- for y in 1..puzzle.height -%}
                 <tr>
-                    {% for x in 1..puzzle.width %}
+                    {%- for x in 1..puzzle.width -%}
                         {% set kinder = puzzle.kinders[y-1][x-1] ?? none %}
-                        {% if kinder and kinder.image %}
+                        {%- if kinder and kinder.image -%}
                             <td class="image">
-                                {{ macro.images(kinder) }}
+                                {{- macro.images(kinder) -}}
                             </td>
-                        {% else %}
+                        {%- else -%}
                             <td class="empty">
                                 <span class="mr-2 ml-2">{{ y }}:{{ x }}</span>
                             </td>
-                        {% endif %}
-                    {% endfor %}
+                        {%- endif -%}
+                    {%- endfor -%}
                 </tr>
-            {% endfor %}
+            {%- endfor -%}
             </tbody>
         </table>
-    {% endif %}
+    {%- endif %}
 {% endblock %}
 
 {% block serie_pieces %}
     {% if serie.pieces|length %}
         {% set refs = serie|kinderRefs %}
         <h2 class="mt-5">
-            {% if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Pièces détachées
+            {%- if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Pièces détachées
         </h2>
         <table class="kinders">
             <thead>
@@ -146,20 +146,20 @@
             </tr>
             </thead>
             <tbody>
-            {% for piece in serie.pieces %}
+            {%- for piece in serie.pieces -%}
                 <tr>
                     <td class="text-center">{{ piece.reference ?: '' }}</td>
                     <td>{{ refs[piece.reference] ?? '?' }}</td>
                     <td>{{ piece.name }}</td>
                     <td class="image">
-                        {{ macro.images(piece) }}
-                        {{ macro.status(piece) }}
+                        {{- macro.images(piece) -}}
+                        {{- macro.status(piece) -}}
                     </td>
                     <td>
-                        {{ macro.attributes(piece) }}
+                        {{- macro.attributes(piece) -}}
                     </td>
                 </tr>
-            {% endfor %}
+            {%- endfor -%}
             </tbody>
         </table>
     {% endif %}
@@ -169,7 +169,7 @@
     {% if serie.items|length %}
         {% set refs = serie|kinderRefs %}
         <h2 class="mt-5">
-            {% if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Objets
+            {%- if collection is defined %}{{ macro.flag(serie.country) }} {{ serie.country }} : {% endif %}Objets
         </h2>
         <table class="kinders">
             <thead>
@@ -182,46 +182,46 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in serie.items %}
+            {%- for item in serie.items -%}
                 <tr>
                     <td class="text-center">{{ item.reference ?: '' }}</td>
                     <td>{{ refs[item.reference] ?? '?' }}</td>
                     <td>{{ item.name }}</td>
                     <td class="image">
-                        {{ macro.images(item) }}
-                        {{ macro.status(item) }}
+                        {{- macro.images(item) -}}
+                        {{- macro.status(item) -}}
                     </td>
                     <td>
-                        {{ macro.attributes(item) }}
+                        {{- macro.attributes(item) -}}
                     </td>
                 </tr>
-            {% endfor %}
+            {%- endfor -%}
             </tbody>
         </table>
     {% endif %}
 {% endblock %}
 
 {% block serie_attributes %}
-    {% if serie.attributes|length %}
+    {% if serie.attributes|length -%}
         <p class="mt-5 kinder">
-            Tags : {{ macro.attributes(serie) }}
+            Tags : {{ macro.attributes(serie) -}}
         </p>
-    {% endif %}
+    {%- endif %}
 {% endblock %}
 
 {% macro td_images(images, max) -%}
     {% import "macros.html.twig" as macro %}
     {% if max %}
-        {% for img in images %}
+        {% for img in images -%}
             <td class="image">
-                {{ macro.images(img) }}
-                {{ macro.status(img) }}
+                {{- macro.images(img) -}}
+                {{- macro.status(img) -}}
             </td>
         {% endfor %}
         {% if max - images|length %}
-            {% for i in 1..(max - images|length) %}
+            {%- for i in 1..(max - images|length) -%}
                 <td>&nbsp;</td>
-            {% endfor %}
+            {%- endfor -%}
         {% endif %}
     {% endif %}
 {%- endmacro %}

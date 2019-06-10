@@ -43,12 +43,12 @@
 
 {% macro attributes(item) -%}
     {% for attr in item.attributes %}
-        {% spaceless %}
+        {% apply spaceless %}
             <span class="attribute attributes-{{ attr.type }}">
                 <em>{{ attr.type }}</em>
                 <span>{{ attr.name }}</span>
             </span>
-        {% endspaceless %}
+        {% endapply %}
     {% endfor %}
 {%- endmacro %}
 

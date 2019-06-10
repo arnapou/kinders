@@ -18,21 +18,21 @@
             <img src="{{ asset('wiki.png') }}">
         </a>
 
-        {% if is_granted('ROLE_ADMIN') %}
-            ADMIN
+        {%- if is_granted('ROLE_ADMIN') -%}
+            {{ 'ADMIN' -}}
             <ul class="admin">
                 <li><a href="{{ path('admin_menucategs_add') }}">Ajouter une catégorie</a></li>
                 <li><a href="{{ path('admin_menuitems_add') }}">Ajouter un lien</a></li>
                 <li><a href="{{ path('admin_series') }}">Séries</a></li>
             </ul>
-        {% endif %}
+        {%- endif -%}
 
-        {% for categ in frontmenu.categories %}
-            {{ categ.name }}
+        {%- for categ in frontmenu.categories -%}
+            {{- categ.name -}}
             <ul>
-                {% for item in categ.items %}
+                {%- for item in categ.items -%}
                     <li><a href="{{ item.url }}">{{ item.name }}</a></li>
-                {% endfor %}
+                {%- endfor -%}
             </ul>
         {% endfor %}
     {% endblock %}
@@ -40,20 +40,19 @@
 
 <div id="content">
     <h1>
-        {% block h1_wrapper %}
-            {% block title %}{% endblock %}
-        {% endblock %}
+        {%- block h1_wrapper -%}
+            {%- block title -%}{%- endblock -%}
+        {%- endblock -%}
     </h1>
-    {% block content %}
-    {% endblock %}
+    {%- block content -%}
+    {%- endblock -%}
 </div>
 
 <div id="footer">
-    {% block footer %}
+    {%- block footer -%}
         &copy; {{ 'now'|date('Y') }} &mdash; Elodie Buathier &mdash; <a href="mailto:kinder@arnapou.net">✉ Contact</a>
-    {% endblock %}
+    {%- endblock -%}
 </div>
-
 
 {% block javascripts %}
 {{ encore_entry_script_tags('front') }}

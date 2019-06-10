@@ -13,7 +13,7 @@
 {% endmacro %}
 
 {% macro image(item) -%}
-    {%- spaceless %}
+    {%- apply spaceless %}
         {% if item and item.file is defined and item.file %}
             <a href="{{ vich_uploader_asset(item, 'diskFile') }}" target="_blank" class="admin-image tn"
                style="background-image: url('{{ vich_uploader_asset(item, 'diskFile')|tn }}');">
@@ -21,17 +21,17 @@
         {% else %}
             <span class="admin-image blank"></span>
         {% endif %}
-    {% endspaceless -%}
+    {% endapply -%}
 {%- endmacro %}
 
 {% macro attributes(item) -%}
     {% for attr in item.attributes %}
-        {% spaceless %}
+        {% apply spaceless %}
             <span class="attribute attributes-{{ attr.type }}">
                 <em>{{ attr.type }}</em>
                 <span>{{ attr.name }}</span>
             </span>
-        {% endspaceless %}
+        {% endapply %}
     {% endfor %}
 {%- endmacro %}
 

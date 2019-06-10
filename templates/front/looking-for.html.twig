@@ -22,17 +22,17 @@
             <th>Kinder</th>
             <th>BPZ</th>
             <th>ZBA</th>
-            {% if is_granted('ROLE_ADMIN') %}
+            {%- if is_granted('ROLE_ADMIN') -%}
                 <th></th>
-            {% endif %}
+            {%- endif -%}
         </tr>
         </thead>
         <tbody>
-        {% for item in series %}
-            {% set serie = item.serie %}
-            {% set total_kinder = total_kinder + (item.kinders ?? 0) %}
-            {% set total_bpzs = total_bpzs + (item.bpzs ?? 0) %}
-            {% set total_zbas = total_zbas + (item.zbas ?? 0) %}
+        {%- for item in series -%}
+            {%- set serie = item.serie %}
+            {%- set total_kinder = total_kinder + (item.kinders ?? 0) %}
+            {%- set total_bpzs = total_bpzs + (item.bpzs ?? 0) %}
+            {%- set total_zbas = total_zbas + (item.zbas ?? 0) -%}
             <tr>
                 <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
                 <td>{{ serie.year }}</td>
@@ -45,15 +45,15 @@
                 <td class="text-center">{% if item.kinders is defined %}{{ item.kinders }}{% endif %}</td>
                 <td class="text-center">{% if item.bpzs is defined %}{{ item.bpzs }}{% endif %}</td>
                 <td class="text-center">{% if item.zbas is defined %}{{ item.zbas }}{% endif %}</td>
-                {% if is_granted('ROLE_ADMIN') %}
+                {%- if is_granted('ROLE_ADMIN') -%}
                     <td>
                         <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="btn-sm btn-danger">
                             <i class="fas fa-pen"></i>
                         </a>
                     </td>
-                {% endif %}
+                {%- endif -%}
             </tr>
-        {% endfor %}
+        {%- endfor -%}
         </tbody>
         <tfoot>
         <tr>
@@ -61,9 +61,9 @@
             <td class="text-center">{{ total_kinder }}</td>
             <td class="text-center">{{ total_bpzs }}</td>
             <td class="text-center">{{ total_zbas }}</td>
-            {% if is_granted('ROLE_ADMIN') %}
+            {%- if is_granted('ROLE_ADMIN') -%}
                 <td></td>
-            {% endif %}
+            {%- endif -%}
         </tr>
         </tfoot>
     </table>

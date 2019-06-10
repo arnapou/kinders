@@ -15,6 +15,7 @@
             </th>
             <th>Menu catégorie</th>
             <th>Sorting</th>
+            <th>Sidebar</th>
             <th>Commentaire</th>
             <th></th>
         </tr>
@@ -29,6 +30,11 @@
                 </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.sorting }}</td>
+                <td>
+                    {% if item.sidebar %}
+                        <i class="fas fa-check"></i>
+                    {% endif %}
+                </td>
                 <td>{{ item.comment }}</td>
                 <td>
                     <span type="button" data-href="{{ path('admin_menucategs_delete', {id: item.id}) }}" class="action-delete btn-sm btn-danger">

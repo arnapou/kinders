@@ -37,10 +37,10 @@ class FrontMenu
         $this->publicRoutes = $publicRoutes;
     }
 
-    public function getCategories(): array
+    public function getCategories(bool $sidebar = true): array
     {
         $categories = [];
-        foreach ($this->repository->findAll() as $category) {
+        foreach ($this->repository->findBy(['sidebar' => $sidebar]) as $category) {
             $array = $this->getCategory($category);
             if (!empty($array['items'])) {
                 $categories[] = $array;

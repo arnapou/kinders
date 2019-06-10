@@ -46,6 +46,31 @@ body {
     list-style-type: circle;
 }
 
+/* HOME MENU */
+
+.home-menu {
+    display: inline-block;
+    vertical-align: top;
+    font-size: .8rem;
+}
+
+.home-menu .title {
+    padding: .25rem 1rem;
+    font-weight: bold;
+}
+
+.home-menu ul {
+    margin-left: -.5rem;
+    margin-right: .5rem;
+    padding: .5rem 1rem 1rem 1rem;
+    margin: 0;
+}
+
+.home-menu li {
+    list-style-type: square;
+    list-style-position: inside;
+}
+
 /* CONTENT */
 
 #content {

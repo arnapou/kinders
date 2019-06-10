@@ -12,6 +12,7 @@
 namespace App\Form\Type\Entity;
 
 use App\Entity\MenuCategory;
+use App\Form\Type\BooleanType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,6 +26,7 @@ class MenuCategoryType extends AbstractType
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
+            ->add('sidebar', BooleanType::class)
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 

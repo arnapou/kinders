@@ -38,6 +38,11 @@ class MenuCategory extends BaseEntity
      */
     protected $sorting = '';
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $sidebar = true;
+
     public function __construct()
     {
         parent::__construct();
@@ -84,6 +89,17 @@ class MenuCategory extends BaseEntity
     public function setSorting(string $sorting): self
     {
         $this->sorting = $sorting;
+        return $this;
+    }
+
+    public function getSidebar(): ?bool
+    {
+        return $this->sidebar;
+    }
+
+    public function setSidebar(bool $bool): self
+    {
+        $this->sidebar = $bool;
         return $this;
     }
 }

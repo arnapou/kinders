@@ -1,4 +1,3 @@
-
 {% extends "base.html.twig" %}
 
 {% block title %}
@@ -7,6 +6,37 @@
 
 {% block content %}
 
-    ... en construction ...
+    <div class="row ">
+        <div class="col">
+            <p>
+                Je collectionne les kinders depuis 2004, j'ai énormément de doubles et d'objets à mettre sur ce site.<br/>
+                Par conséquent, il s'étoffe de jour en jour : n'hésitez pas à y revenir régulièrement 😉
+            </p>
+            <p>
+                Ce site est là pour faire des échanges également.<br/>
+                Vous pouvez m'envoyer un email avec le lien en bas de page.
+            </p>
+            <p>
+                Pour parcourir le site, vous pouvez cliquer sur un des liens à gauche ou les catégories qui suivent.<br/>
+                Bonne visite ! 🙂
+            </p>
+        </div>
+        <div class="col-3 text-right">
+            <img src="{{ asset('en-construction.png') }}">
+        </div>
+    </div>
+
+    <div class="border-top mt-4 mb-4"></div>
+
+    {%- for categ in frontmenu.categories(false) -%}
+        <div class="home-menu border rounded">
+            <div class="title border-bottom">{{- categ.name -}}</div>
+            <ul>
+                {%- for item in categ.items -%}
+                    <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+                {%- endfor -%}
+            </ul>
+        </div>
+    {% endfor %}
 
 {% endblock %}
