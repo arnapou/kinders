@@ -26,10 +26,10 @@
         </div>
     </div>
 
-    <div class="border-top mt-4 mb-4"></div>
+    <div class="mt-5"></div>
 
     {%- for categ in frontmenu.categories(false) -%}
-        <div class="home-menu border rounded mr-3">
+        <div class="home-menu border rounded mr-3 mb-3">
             <div class="title border-bottom">{{- categ.name -}}</div>
             <ul>
                 {%- for item in categ.items -%}
