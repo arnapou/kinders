@@ -40,6 +40,7 @@
             <th>Année</th>
             <th>Série</th>
             {% if is_granted('ROLE_ADMIN') %}
+                <th>Complet</th>
                 <th></th>
             {% endif %}
         </tr>
@@ -47,16 +48,22 @@
         <tbody>
         {% for serie in series %}
             {% if serie.id != notid %}
+                {% set complete = is_granted('ROLE_ADMIN') ? serie.complete : true %}
                 <tr>
                     <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
                     <td>{{ serie.year }}</td>
                     <td class="imageserie">
-                        <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
+                        <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}" class="{{ complete ? '' : 'text-danger' }}">
                             {{- macro.imageserie(serie) -}}
                             {{- serie.name -}}
                         </a>
                     </td>
                     {% if is_granted('ROLE_ADMIN') %}
+                        {% if complete %}
+                            <td class="text-center text-primary"><i class="fas fa-check"></i></td>
+                        {% else %}
+                            <td class="text-center text-danger"><i class="fas fa-times"></i></td>
+                        {% endif %}
                         <td>
                             <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="btn-sm btn-danger">
                                 <i class="fas fa-pen"></i>

@@ -249,4 +249,24 @@ class Serie extends BaseItem
         }
         return $image;
     }
+
+    public function isComplete(): bool
+    {
+        foreach ($this->getKinders() as $kinder) {
+            if ($kinder->isLookingFor()) {
+                return false;
+            }
+            foreach ($kinder->getBpzs() as $bpz) {
+                if ($bpz->isLookingFor()) {
+                    return false;
+                }
+            }
+            foreach ($kinder->getZbas() as $zba) {
+                if ($zba->isLookingFor()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
