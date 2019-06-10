@@ -71,7 +71,7 @@ class Serie extends BaseItem
         $this->pieces  = new ArrayCollection();
     }
 
-    public function getCountry(): Country
+    public function getCountry(): ?Country
     {
         return $this->country;
     }
