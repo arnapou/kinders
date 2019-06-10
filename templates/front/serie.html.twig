@@ -47,7 +47,7 @@
 {% block serie_kinders %}
     <h2 class="mt-5">
         {% if collection is defined %}
-            {{ macro.flag(serie.country) }} {{ serie.country }} : {{ serie.name }}
+            {{ macro.flag(serie.country) }} {{ serie.country }} : {{ serie.name }} &ndash; {{ serie.year }}
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="ml-5 btn btn-danger">
                     <i class="fas fa-pen"></i>
