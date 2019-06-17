@@ -1,5 +1,5 @@
 parameters:
-    admin.pagination.page_size: 25
+    admin.pagination.page_size: 30
     thumbnail.size: 200
     thumbnail.expire: 8640000
 
