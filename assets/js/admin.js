@@ -1,28 +1,3 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you require will output into a single css file (app.css in this case)
-require('../css/admin.css');
-require('../css/bootstrap.scss');
-require('@fortawesome/fontawesome-free/css/all.min.css');
-require('@fortawesome/fontawesome-free/js/all.js');
-require('select2/dist/js/select2.full.js');
-require('select2/dist/css/select2.css');
-require('select2-bootstrap-theme/dist/select2-bootstrap.css');
-require('../../public/bundles/tetranzselect2entity/js/select2entity.js');
-require('flag-icon-css/css/flag-icon.css');
-// require('bootbox/dist/bootbox.all.min.js');
-
-const $ = require("jquery");
-window.$ = $;
-window.jQuery = $;
-
-require("bootstrap");
-const bootbox = require('bootbox');
 
 window.searchFilterReset = function () {
     $('#searchFilter').val('');
@@ -86,5 +61,3 @@ $(document).ready(function () {
         $(this).select();
     });
 });
-
-
