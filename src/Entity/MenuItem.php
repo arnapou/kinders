@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class MenuItem extends BaseEntity
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\MenuCategory", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MenuCategory", inversedBy="items", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;

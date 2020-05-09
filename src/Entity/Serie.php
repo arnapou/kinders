@@ -35,7 +35,7 @@ class Serie extends BaseItem
 {
     /**
      * @var Country
-     * @ORM\ManyToOne(targetEntity="App\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Country", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $country;
@@ -59,7 +59,7 @@ class Serie extends BaseItem
     private $items;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Collection", inversedBy="series")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Collection", inversedBy="series", fetch="EAGER")
      */
     private $collection;
 

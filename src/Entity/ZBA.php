@@ -32,7 +32,7 @@ class ZBA extends BaseItem
 {
     /**
      * @var Kinder
-     * @ORM\ManyToOne(targetEntity="App\Entity\Kinder", inversedBy="bpzs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Kinder", inversedBy="zbas", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $kinder;

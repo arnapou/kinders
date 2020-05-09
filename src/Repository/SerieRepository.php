@@ -15,7 +15,7 @@ use App\Entity\Kinder;
 use App\Entity\Serie;
 use App\Exception\KinderVirtualException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Serie|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,7 +24,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class SerieRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Serie::class);
     }

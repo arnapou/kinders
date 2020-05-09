@@ -7,7 +7,7 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}"/>
 
     {% block stylesheets %}
-        {{ encore_entry_link_tags('admin') }}
+        <link href="{{ asset('admin.css'|assetbuilder) }}" rel="stylesheet">
     {% endblock %}
 </head>
 <body>
@@ -19,7 +19,7 @@
 </div>
 
 {% block javascripts %}
-{{ encore_entry_script_tags('admin') }}
-</body>
+    <script src="{{ asset('admin.js'|assetbuilder) }}"></script>
 {% endblock %}
+</body>
 </html>

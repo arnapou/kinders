@@ -30,9 +30,12 @@ class AdminController extends AbstractController
      */
     public function index(EntityManagerInterface $entityManager)
     {
-        return $this->render('@admin/index.html.twig', [
-            'stats' => $this->stats($entityManager),
-        ]);
+        return $this->render(
+            '@admin/index.html.twig',
+            [
+                'stats' => $this->stats($entityManager),
+            ]
+        );
     }
 
     private function stats(EntityManagerInterface $entityManager): array
@@ -43,9 +46,9 @@ class AdminController extends AbstractController
             $reflectionClass = new \ReflectionClass($metadata->getName());
             if ($reflectionClass->isInstantiable()) {
                 $stats[$reflectionClass->getShortName()] = [
-                    'count'       => $this->statCount($entityManager, $metadata),
-                    'created_day' => $this->statDay($entityManager, $metadata, 'createdAt', new DateInterval('P1D')),
-                    'updated_day' => $this->statDay($entityManager, $metadata, 'updatedAt', new DateInterval('P1D')),
+                    'count'        => $this->statCount($entityManager, $metadata),
+                    'created_day'  => $this->statDay($entityManager, $metadata, 'createdAt', new DateInterval('P1D')),
+                    'updated_day'  => $this->statDay($entityManager, $metadata, 'updatedAt', new DateInterval('P1D')),
                     'created_week' => $this->statDay($entityManager, $metadata, 'createdAt', new DateInterval('P1W')),
                     'updated_week' => $this->statDay($entityManager, $metadata, 'updatedAt', new DateInterval('P1W')),
                 ];
@@ -65,7 +68,12 @@ class AdminController extends AbstractController
 
     private function statCount(EntityManagerInterface $entityManager, ClassMetadata $metadata): int
     {
-        return (int)$this->qb($entityManager, $metadata)->getQuery()->getSingleScalarResult();
+        try {
+            $result = $this->qb($entityManager, $metadata)->getQuery()->getArrayResult()[0] ?? [0];
+            return $result ? (int)current($result) : 0;
+        } catch (\Throwable $exception) {
+            return 0;
+        }
     }
 
     private function statDay(EntityManagerInterface $entityManager, ClassMetadata $metadata, string $field, DateInterval $interval): array

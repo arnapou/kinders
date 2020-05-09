@@ -12,7 +12,7 @@
 namespace App\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -36,14 +36,14 @@ class LastRouteListener implements EventSubscriberInterface
      *
      * @return array The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => [['onKernelRequest', 0]],
         ];
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if ($event->getRequestType() !== HttpKernel::MASTER_REQUEST) {
             return;
@@ -55,7 +55,7 @@ class LastRouteListener implements EventSubscriberInterface
         $routeName   = $request->get('_route');
         $routeParams = $request->get('_route_params');
 
-        if (!$this->isBlacklisted($routeName)) {
+        if ($session && !$this->isBlacklisted($routeName)) {
             $routeData = ['name' => $routeName, 'params' => $routeParams];
 
             // Do not save same matched route twice
@@ -70,7 +70,7 @@ class LastRouteListener implements EventSubscriberInterface
 
     private function isBlacklisted($routeName): bool
     {
-        return $routeName[0] == '_'
+        return $routeName[0] === '_'
             || stripos($routeName, 'image_thumbnail') !== false
             || stripos($routeName, 'autocomplete') !== false
             || stripos($routeName, 'admin_') === false;

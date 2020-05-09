@@ -36,26 +36,26 @@ class Kinder extends BaseItem
 {
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="App\Entity\BPZ", mappedBy="kinder", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\BPZ", mappedBy="kinder", orphanRemoval=true, fetch="EAGER")
      */
     private $bpzs;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="App\Entity\ZBA", mappedBy="kinder", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ZBA", mappedBy="kinder", orphanRemoval=true, fetch="EAGER")
      */
     private $zbas;
 
     /**
      * @var Serie
-     * @ORM\ManyToOne(targetEntity="App\Entity\Serie", inversedBy="kinders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Serie", inversedBy="kinders", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $serie;
 
     /**
      * @var self
-     * @ORM\ManyToOne(targetEntity="App\Entity\Kinder", inversedBy="virtuals")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Kinder", inversedBy="virtuals", fetch="EAGER")
      */
     private $original;
 

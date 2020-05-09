@@ -1,7 +1,9 @@
 twig:
+#  default_path: '%kernel.project_dir%/templates'
   default_path: '%kernel.project_dir%/templates/front'
   debug: '%kernel.debug%'
   strict_variables: '%kernel.debug%'
+  exception_controller: null
   paths:
     '%kernel.project_dir%/templates/admin': admin
   globals:
