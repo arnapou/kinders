@@ -12,24 +12,3 @@ pas les éventuels problèmes que vous auriez.
 En bref, il s'agit d'un site de gestion de collection de kinders surprise, collection
 que fait mon épouse. Il y a un admin et un front.
 
-
-#### Miscellaneous
-
-JS Dependencies
-
-    sudo aptitude install nodejs
-    
-    curl -o- -L https://yarnpkg.com/install.sh | bash
-    
-    yarn install
-    yarn encore production
-
-
-Exemple d'installation 
-
-    sudo composer install
-    sudo bin/console doctrine:schema:update --force --dump-sql
-    sudo /root/.yarn/bin/yarn install
-    sudo /root/.yarn/bin/yarn encore production
-    sudo chown www-data:www-data -R .
-    sudo chown www-data:www-data -R /cache/kinders
