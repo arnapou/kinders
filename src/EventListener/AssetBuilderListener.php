@@ -170,6 +170,9 @@ class AssetBuilderListener extends AbstractExtension implements CacheWarmerInter
 
     private function cleanup(): void
     {
+        if (!is_dir($this->destDir)) {
+            return;
+        }
         $flags   = FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO;
         $folders = new RecursiveDirectoryIterator($this->destDir, $flags);
         $flags   = RecursiveIteratorIterator::LEAVES_ONLY;
