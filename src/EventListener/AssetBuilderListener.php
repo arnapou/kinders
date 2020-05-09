@@ -12,6 +12,7 @@
 namespace App\EventListener;
 
 use FilesystemIterator;
+use JSMin\JSMin;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -139,6 +140,7 @@ class AssetBuilderListener extends AbstractExtension implements CacheWarmerInter
     private function compileJsSingleContent(string $filename, string &$content, array &$deps): void
     {
         if (substr($filename, -7) !== '.min.js') {
+            $content = JSMin::minify($content);
         }
     }
 
