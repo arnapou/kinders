@@ -31,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Piece extends BaseItem
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Serie", inversedBy="pieces", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Serie", inversedBy="pieces")
      */
     private $serie;
 

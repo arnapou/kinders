@@ -38,13 +38,13 @@ class Kinder extends BaseItem
     public const ZBAS_SORTING = ['name' => 'ASC'];
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="App\Entity\BPZ", mappedBy="kinder", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\BPZ", mappedBy="kinder", orphanRemoval=true)
      */
     private $bpzs;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="App\Entity\ZBA", mappedBy="kinder", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\ZBA", mappedBy="kinder", orphanRemoval=true)
      */
     private $zbas;
 
