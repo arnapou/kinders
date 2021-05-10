@@ -187,7 +187,7 @@ abstract class BaseItem extends BaseEntity
      */
     public function getImages(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['id' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
 
         return $this->images->matching($criteria);
     }
