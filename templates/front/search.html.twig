@@ -16,15 +16,15 @@
 
 {% block content %}
 
-    {% for item in collections -%}
-        {% if item.collection is defined -%}
+    {% for collection in collections -%}
+        {% if collection.id -%}
             <h2 class="mt-4">
-                <a href="{{ path('front_collection', {id: item.collection.id, slug: item.collection.slug}) }}">
-                    {{ item.collection }}
+                <a href="{{ path('front_collection', {id: collection.id, slug: collection.slug}) }}">
+                    {{ collection }}
                 </a>
             </h2>
         {%- endif %}
-        {{- _self.table_series(item.series) -}}
+        {{- _self.table_series(collection.series) -}}
     {% endfor %}
 
 {% endblock %}
@@ -46,18 +46,17 @@
         <tbody>
         {%- for serie in series -%}
             {% if serie.id != notid -%}
-                {% set complete = is_granted('ROLE_ADMIN') ? serie.complete : true -%}
                 <tr>
                     <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
                     <td>{{ serie.year }}</td>
                     <td class="imageserie">
-                        <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}" class="{{ complete ? '' : 'text-danger' }}">
+                        <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}" class="{{ serie.complete ? '' : 'text-danger' }}">
                             {{- macro.imageserie(serie) -}}
                             {{- serie.name -}}
                         </a>
                     </td>
                     {%- if is_granted('ROLE_ADMIN') -%}
-                        {%- if complete -%}
+                        {%- if serie.complete -%}
                             <td class="text-center text-primary"><i class="fas fa-check"></i></td>
                         {%- else -%}
                             <td class="text-center text-danger"><i class="fas fa-times"></i></td>
