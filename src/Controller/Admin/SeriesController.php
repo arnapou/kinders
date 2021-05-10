@@ -34,6 +34,7 @@ class SeriesController extends AbstractController
     {
         $breadcrumb->add('Séries', $this->generateUrl('admin_series'));
         $searchFilter->setRouteName('admin_series');
+
         return $this->render('@admin/series/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -72,9 +73,8 @@ class SeriesController extends AbstractController
         $breadcrumb->add('Copie en tant que virtuel', $this->generateUrl('admin_series_copy_virtual_to', ['id' => $id]));
 
         $data = [
-            'serie_from' => null ,
-            'serie_to' => $repository->find($id) ,
-
+            'serie_from' => null,
+            'serie_to' => $repository->find($id),
         ];
 
         $form = $this->container->get('form.factory')->create(SerieCopyVirtualType::class, $data, $data);
@@ -89,7 +89,7 @@ class SeriesController extends AbstractController
         }
 
         return $this->render('@admin/series/form_copy_virtual.html.twig', [
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -102,6 +102,7 @@ class SeriesController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_series');
     }
 
@@ -117,6 +118,7 @@ class SeriesController extends AbstractController
             case 'serie_to':
                 $request->request->set('field_name', 'name');
                 $request->query->set('field_name', 'name');
+
                 return new JsonResponse($autocomplete->entities($request, SerieType::class, Serie::class));
             default:
                 return new JsonResponse($autocomplete->images($request, SerieType::class));

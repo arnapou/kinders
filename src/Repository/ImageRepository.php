@@ -36,10 +36,9 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param null       $limit
-     * @param null       $offset
+     * @param null $limit
+     * @param null $offset
+     *
      * @return Image[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
@@ -50,14 +49,15 @@ class ImageRepository extends ServiceEntityRepository
     public function getTypes(): array
     {
         $types = [];
-        $em    = $this->getEntityManager();
-        $meta  = $em->getMetadataFactory()->getAllMetadata();
+        $em = $this->getEntityManager();
+        $meta = $em->getMetadataFactory()->getAllMetadata();
         foreach ($meta as $m) {
             $reflectionClass = new \ReflectionClass($m->getName());
             if ($reflectionClass->isInstantiable() && $reflectionClass->isSubclassOf(BaseItem::class)) {
                 $types[] = $reflectionClass->getShortName();
             }
         }
+
         return array_combine($types, $types);
     }
 
@@ -79,6 +79,7 @@ class ImageRepository extends ServiceEntityRepository
                 return true;
             }
         }
+
         return false;
     }
 
@@ -95,7 +96,6 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Image $image
      * @return BPZ[]
      */
     public function linkedBPZ(Image $image)
@@ -104,7 +104,6 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Image $image
      * @return ZBA[]
      */
     public function linkedZBA(Image $image)
@@ -113,7 +112,6 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Image $image
      * @return Kinder[]
      */
     public function linkedKinder(Image $image)
@@ -122,7 +120,6 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Image $image
      * @return Piece[]
      */
     public function linkedPiece(Image $image)
@@ -131,7 +128,6 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Image $image
      * @return Serie[]
      */
     public function linkedSerie(Image $image)
@@ -140,7 +136,6 @@ class ImageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Image $image
      * @return Item[]
      */
     public function linkedItem(Image $image)
@@ -151,6 +146,7 @@ class ImageRepository extends ServiceEntityRepository
     public static function getTypeFrom($class): string
     {
         $reflectionClass = new \ReflectionClass($class);
+
         return $reflectionClass->getShortName();
     }
 

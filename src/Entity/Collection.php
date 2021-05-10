@@ -49,6 +49,7 @@ class Collection extends BaseEntity
             return ($a->getCountry()->getSorting() <=> $b->getCountry()->getSorting())
                 ?: ($a->getCountry()->getName() <=> $b->getCountry()->getName());
         });
+
         return new ArrayCollection(iterator_to_array($iterator));
     }
 

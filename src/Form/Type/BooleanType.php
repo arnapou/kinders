@@ -20,9 +20,9 @@ class BooleanType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices'  => ['Oui' => true, 'Non' => false],
+            'choices' => ['Oui' => true, 'Non' => false],
             'expanded' => true,
-            'attr'=> ['class' => 'yesno'],
+            'attr' => ['class' => 'yesno'],
         ]);
     }
 

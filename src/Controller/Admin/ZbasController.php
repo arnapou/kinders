@@ -34,6 +34,7 @@ class ZbasController extends AbstractController
     {
         $breadcrumb->add('ZBAs', $this->generateUrl('admin_zbas'));
         $searchFilter->setRouteName('admin_zbas');
+
         return $this->render('@admin/zbas/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -75,6 +76,7 @@ class ZbasController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_zbas');
     }
 
@@ -88,6 +90,7 @@ class ZbasController extends AbstractController
         } else {
             $result = $autocomplete->entities($request, ZBAType::class);
         }
+
         return new JsonResponse($result);
     }
 }

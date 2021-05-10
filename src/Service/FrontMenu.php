@@ -32,7 +32,7 @@ class FrontMenu
 
     public function __construct(UrlGeneratorInterface $urlGenerator, MenuCategoryRepository $repository, PublicRoutes $publicRoutes)
     {
-        $this->repository   = $repository;
+        $this->repository = $repository;
         $this->urlGenerator = $urlGenerator;
         $this->publicRoutes = $publicRoutes;
     }
@@ -46,13 +46,14 @@ class FrontMenu
                 $categories[] = $array;
             }
         }
+
         return $categories;
     }
 
     private function getCategory(MenuCategory $category): array
     {
         $publicRouteNames = $this->publicRoutes->names();
-        $items            = [];
+        $items = [];
         foreach ($category->getItems() as $item) {
             if ($item->getRouteName()) {
                 if (!isset($publicRouteNames[$item->getRouteName()])) {
@@ -64,11 +65,12 @@ class FrontMenu
             }
             $items[] = [
                 'name' => $item->getName(),
-                'url'  => $url,
+                'url' => $url,
             ];
         }
+
         return [
-            'name'  => $category->getName(),
+            'name' => $category->getName(),
             'items' => $items,
         ];
     }

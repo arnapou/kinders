@@ -31,6 +31,7 @@ class ImagesController extends AbstractController
     {
         $breadcrumb->add('Images', $this->generateUrl('admin_images'));
         $searchFilter->setRouteName('admin_images');
+
         return $this->render('@admin/images/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -62,7 +63,7 @@ class ImagesController extends AbstractController
             if (!\in_array($data['type'], $imageRepository->getTypes())) {
                 throw new \InvalidArgumentException('Not allowed image type');
             }
-            for ($n = 1; $n <= ImagesUploadType::NB_IMAGES; $n++) {
+            for ($n = 1; $n <= ImagesUploadType::NB_IMAGES; ++$n) {
                 /** @var Image $image */
                 if ($image = $data["image$n"]) {
                     $image->setType($data['type']);
@@ -70,11 +71,12 @@ class ImagesController extends AbstractController
                 }
             }
             $entityManager->flush();
+
             return $this->redirect($breadcrumb->previous());
         }
 
         return $this->render('@admin/images/add.html.twig', [
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
             'nbimages' => ImagesUploadType::NB_IMAGES,
         ]);
     }
@@ -88,6 +90,7 @@ class ImagesController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_images');
     }
 

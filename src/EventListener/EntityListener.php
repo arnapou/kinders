@@ -38,12 +38,12 @@ class EntityListener
     public function __construct(ImageRepository $imageRepository, LoggerInterface $logger)
     {
         $this->imageRepository = $imageRepository;
-        $this->logger          = $logger;
+        $this->logger = $logger;
     }
 
     public function onFlush(OnFlushEventArgs $args)
     {
-        $uow      = $args->getEntityManager()->getUnitOfWork();
+        $uow = $args->getEntityManager()->getUnitOfWork();
         $entities = $this->changedEntities($uow);
 
         foreach ($entities as $entity) {
@@ -60,8 +60,8 @@ class EntityListener
 
     public function postFlush(PostFlushEventArgs $args)
     {
-        $em           = $args->getEntityManager();
-        $images       = $this->images;
+        $em = $args->getEntityManager();
+        $images = $this->images;
         $this->images = [];
 
         if ($images) {
@@ -79,15 +79,13 @@ class EntityListener
         $linked = $this->imageRepository->linked($image);
         if ($linked !== $image->isLinked()) {
             $image->setLinked($linked);
+
             return true;
         }
+
         return false;
     }
 
-    /**
-     * @param UnitOfWork $uow
-     * @return array
-     */
     private function changedEntities(UnitOfWork $uow): array
     {
         $entities = [];
@@ -117,6 +115,7 @@ class EntityListener
                 $entities[] = $entity;
             }
         }
+
         return $entities;
     }
 }

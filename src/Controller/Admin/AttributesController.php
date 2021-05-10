@@ -30,6 +30,7 @@ class AttributesController extends AbstractController
         $breadcrumb->add('Config', '');
         $breadcrumb->add('Attributs', $this->generateUrl('admin_attributes'));
         $searchFilter->setRouteName('admin_attributes');
+
         return $this->render('@admin/attributes/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -70,6 +71,7 @@ class AttributesController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_attributes');
     }
 }

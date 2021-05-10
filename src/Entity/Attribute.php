@@ -47,6 +47,7 @@ class Attribute extends BaseEntity
     public function setType(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 }

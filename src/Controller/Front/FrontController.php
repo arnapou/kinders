@@ -28,6 +28,7 @@ class FrontController extends AbstractController
     public function home()
     {
         $context = [];
+
         return $this->render('index.html.twig', $context);
     }
 
@@ -39,6 +40,7 @@ class FrontController extends AbstractController
         $context = [
             'series' => $lookingFor->getSeries(),
         ];
+
         return $this->render('looking-for.html.twig', $context);
     }
 
@@ -59,6 +61,7 @@ class FrontController extends AbstractController
         $context = [
             'serie' => $serie,
         ];
+
         return $this->render('serie.html.twig', $context);
     }
 
@@ -74,14 +77,16 @@ class FrontController extends AbstractController
         if ($collection->getSlug() && $collection->getSlug() !== $slug) {
             return $this->redirectToRoute('front_collection', ['id' => $collection->getId(), 'slug' => $collection->getSlug()]);
         }
-        if ($collection->getSeries()->count() == 1) {
+        if (1 == $collection->getSeries()->count()) {
             $serie = $collection->getSeries()->get(0);
+
             return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
         }
 
         $context = [
             'collection' => $collection,
         ];
+
         return $this->render('collection.html.twig', $context);
     }
 
@@ -99,9 +104,10 @@ class FrontController extends AbstractController
         }
 
         $context = [
-            'menuitem'    => $menuItem,
+            'menuitem' => $menuItem,
             'collections' => $frontSearch->getSeriesByCollection($menuItem),
         ];
+
         return $this->render('search.html.twig', $context);
     }
 }

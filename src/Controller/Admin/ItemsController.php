@@ -34,6 +34,7 @@ class ItemsController extends AbstractController
     {
         $breadcrumb->add('Items', $this->generateUrl('admin_items'));
         $searchFilter->setRouteName('admin_items');
+
         return $this->render('@admin/items/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -75,6 +76,7 @@ class ItemsController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_items');
     }
 
@@ -88,6 +90,7 @@ class ItemsController extends AbstractController
         } else {
             $result = $autocomplete->entities($request, ItemType::class);
         }
+
         return new JsonResponse($result);
     }
 }

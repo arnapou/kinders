@@ -55,6 +55,7 @@ class MenuCategory extends BaseEntity
     public function getItems(): Collection
     {
         $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'minYear' => 'DESC', 'name' => 'ASC']);
+
         return $this->items->matching($criteria);
     }
 
@@ -89,6 +90,7 @@ class MenuCategory extends BaseEntity
     public function setSorting(string $sorting): self
     {
         $this->sorting = $sorting;
+
         return $this;
     }
 
@@ -100,6 +102,7 @@ class MenuCategory extends BaseEntity
     public function setSidebar(bool $bool): self
     {
         $this->sidebar = $bool;
+
         return $this;
     }
 }

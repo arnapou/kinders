@@ -17,9 +17,10 @@ use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer
 class EntityDataTransformer extends EntityToPropertyTransformer
 {
     /**
-     * Transform entity to array
+     * Transform entity to array.
      *
      * @param BaseItem $entity
+     *
      * @return array
      */
     public function transform($entity)

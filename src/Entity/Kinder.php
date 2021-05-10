@@ -68,8 +68,8 @@ class Kinder extends BaseItem
     public function __construct()
     {
         parent::__construct();
-        $this->bpzs     = new ArrayCollection();
-        $this->zbas     = new ArrayCollection();
+        $this->bpzs = new ArrayCollection();
+        $this->zbas = new ArrayCollection();
         $this->virtuals = new ArrayCollection();
     }
 
@@ -79,6 +79,7 @@ class Kinder extends BaseItem
     public function getBpzs(): Collection
     {
         $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+
         return $this->bpzs->matching($criteria);
     }
 
@@ -88,6 +89,7 @@ class Kinder extends BaseItem
             $this->bpzs[] = $bpz;
             $bpz->setKinder($this);
         }
+
         return $this;
     }
 
@@ -100,6 +102,7 @@ class Kinder extends BaseItem
                 $bpz->setKinder(null);
             }
         }
+
         return $this;
     }
 
@@ -109,6 +112,7 @@ class Kinder extends BaseItem
     public function getZbas(): Collection
     {
         $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+
         return $this->zbas->matching($criteria);
     }
 
@@ -118,6 +122,7 @@ class Kinder extends BaseItem
             $this->zbas[] = $zba;
             $zba->setKinder($this);
         }
+
         return $this;
     }
 
@@ -130,6 +135,7 @@ class Kinder extends BaseItem
                 $zba->setKinder(null);
             }
         }
+
         return $this;
     }
 
@@ -141,6 +147,7 @@ class Kinder extends BaseItem
     public function setSerie(?Serie $serie): self
     {
         $this->serie = $serie;
+
         return $this;
     }
 

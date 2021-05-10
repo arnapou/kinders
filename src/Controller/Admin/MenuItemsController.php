@@ -29,6 +29,7 @@ class MenuItemsController extends AbstractController
     {
         $breadcrumb->add('Config', '');
         $breadcrumb->add('Menu item', $this->generateUrl('admin_menuitems'));
+
         return $this->render('@admin/menuitems/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -69,6 +70,7 @@ class MenuItemsController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_menuitems');
     }
 }

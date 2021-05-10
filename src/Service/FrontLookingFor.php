@@ -33,15 +33,15 @@ class FrontLookingFor
     {
         $stats = [];
         foreach ($this->findKinders() as $item) {
-            $serieid                    = $item->getSerie()->getId();
+            $serieid = $item->getSerie()->getId();
             $stats[$serieid]['kinders'] = ($stats[$serieid]['kinders'] ?? 0) + 1;
         }
         foreach ($this->findBpzs() as $item) {
-            $serieid                 = $item->getKinder()->getSerie()->getId();
+            $serieid = $item->getKinder()->getSerie()->getId();
             $stats[$serieid]['bpzs'] = ($stats[$serieid]['bpzs'] ?? 0) + 1;
         }
         foreach ($this->findZbas() as $item) {
-            $serieid                 = $item->getKinder()->getSerie()->getId();
+            $serieid = $item->getKinder()->getSerie()->getId();
             $stats[$serieid]['zbas'] = ($stats[$serieid]['zbas'] ?? 0) + 1;
         }
 
@@ -60,6 +60,7 @@ class FrontLookingFor
         foreach ($qb->getQuery()->getResult() as $serie) {
             $series[] = array_merge(['serie' => $serie], $stats[$serie->getId()] ?? []);
         }
+
         return $series;
     }
 

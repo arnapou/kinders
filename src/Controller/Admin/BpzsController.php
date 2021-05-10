@@ -34,6 +34,7 @@ class BpzsController extends AbstractController
     {
         $breadcrumb->add('BPZs', $this->generateUrl('admin_bpzs'));
         $searchFilter->setRouteName('admin_bpzs');
+
         return $this->render('@admin/bpzs/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -75,6 +76,7 @@ class BpzsController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_bpzs');
     }
 
@@ -88,6 +90,7 @@ class BpzsController extends AbstractController
         } else {
             $result = $autocomplete->entities($request, BPZType::class);
         }
+
         return new JsonResponse($result);
     }
 }

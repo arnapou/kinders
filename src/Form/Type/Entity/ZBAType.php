@@ -45,7 +45,7 @@ class ZBAType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ZBA::class,
-            'kinder'     => null,
+            'kinder' => null,
         ]);
     }
 }

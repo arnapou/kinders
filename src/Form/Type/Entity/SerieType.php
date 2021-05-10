@@ -33,11 +33,11 @@ class SerieType extends AbstractType
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('country', EntityType::class, [
-                'class'         => Country::class,
+                'class' => Country::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')->orderBy('u.name', 'ASC');
                 },
-                'choice_label'  => 'name',
+                'choice_label' => 'name',
             ])
             ->add('collection', CollectionSelectType::class, ['remote_route' => 'admin_series_autocomplete'])
             ->add('attributes', AttributesListType::class)

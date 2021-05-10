@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImagesUploadType extends AbstractType
 {
-    const NB_IMAGES = 10;
+    public const NB_IMAGES = 10;
     /**
      * @var ImageRepository
      */
@@ -34,10 +34,10 @@ class ImagesUploadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('type', ChoiceType::class, [
-            'choices'    => $this->imageRepository->getTypes(),
+            'choices' => $this->imageRepository->getTypes(),
             'empty_data' => $options['image_type'] ?? '',
         ]);
-        for ($nb = 1; $nb <= self::NB_IMAGES; $nb++) {
+        for ($nb = 1; $nb <= self::NB_IMAGES; ++$nb) {
             $builder->add("image$nb", SimpleImageType::class, ['required' => false]);
         }
     }

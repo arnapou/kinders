@@ -48,7 +48,7 @@ class KinderVirtualType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Kinder::class,
-            'serie'      => null,
+            'serie' => null,
         ]);
     }
 }

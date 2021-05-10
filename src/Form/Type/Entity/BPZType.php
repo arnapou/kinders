@@ -45,7 +45,7 @@ class BPZType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => BPZ::class,
-            'kinder'     => null,
+            'kinder' => null,
         ]);
     }
 }

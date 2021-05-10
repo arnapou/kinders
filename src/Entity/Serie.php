@@ -67,8 +67,8 @@ class Serie extends BaseItem
     {
         parent::__construct();
         $this->kinders = new ArrayCollection();
-        $this->items   = new ArrayCollection();
-        $this->pieces  = new ArrayCollection();
+        $this->items = new ArrayCollection();
+        $this->pieces = new ArrayCollection();
     }
 
     public function getCountry(): ?Country
@@ -79,6 +79,7 @@ class Serie extends BaseItem
     public function setCountry(Country $country): self
     {
         $this->country = $country;
+
         return $this;
     }
 
@@ -88,6 +89,7 @@ class Serie extends BaseItem
         foreach ($this->kinders as $kinder) {
             $max = max($max, $kinder->getBpzs()->count());
         }
+
         return $max;
     }
 
@@ -97,6 +99,7 @@ class Serie extends BaseItem
         foreach ($this->kinders as $kinder) {
             $max = max($max, $kinder->getZbas()->count());
         }
+
         return $max;
     }
 
@@ -106,6 +109,7 @@ class Serie extends BaseItem
     public function getKinders(): DoctrineCollection
     {
         $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
+
         return $this->kinders->matching($criteria);
     }
 
@@ -138,6 +142,7 @@ class Serie extends BaseItem
     public function getPieces(): DoctrineCollection
     {
         $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
+
         return $this->pieces->matching($criteria);
     }
 
@@ -170,6 +175,7 @@ class Serie extends BaseItem
     public function getItems(): DoctrineCollection
     {
         $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
+
         return $this->items->matching($criteria);
     }
 
@@ -219,7 +225,7 @@ class Serie extends BaseItem
             return null;
         }
         $kinders = [];
-        $w       = $h = 0;
+        $w = $h = 0;
         foreach ($this->kinders as $kinder) {
             foreach ($kinder->getAttributes() as $attribute) {
                 if ('puzzle' === strtolower($attribute->getType()) && preg_match('!^(\d+):(\d+)$!', $attribute->getName(), $matches)) {
@@ -230,9 +236,10 @@ class Serie extends BaseItem
                 }
             }
         }
+
         return [
-            'width'   => $w,
-            'height'  => $h,
+            'width' => $w,
+            'height' => $h,
             'kinders' => $kinders,
         ];
     }
@@ -240,13 +247,14 @@ class Serie extends BaseItem
     public function getImage(int $num = 0): ?Image
     {
         $image = parent::getImage($num);
-        if ($num === 0 && null === $image) {
+        if (0 === $num && null === $image) {
             foreach ($this->getKinders() as $kinder) {
                 if ($image = $kinder->getImage()) {
                     break;
                 }
             }
         }
+
         return $image;
     }
 
@@ -267,6 +275,7 @@ class Serie extends BaseItem
                 }
             }
         }
+
         return true;
     }
 }

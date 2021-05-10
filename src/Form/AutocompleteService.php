@@ -47,50 +47,50 @@ class AutocompleteService
         UploaderHelper $uploaderHelper,
         SearchFilter $searchFilter
     ) {
-        $this->formFactory    = $formFactory;
-        $this->doctrine       = $doctrine;
+        $this->formFactory = $formFactory;
+        $this->doctrine = $doctrine;
         $this->uploaderHelper = $uploaderHelper;
-        $this->searchFilter   = $searchFilter;
+        $this->searchFilter = $searchFilter;
     }
 
     public function images(Request $request, $type)
     {
-        $form         = $this->formFactory->create($type);
+        $form = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
-        $dataClass    = $form->get($request->get('field_name'))->getParent()->getConfig()->getDataClass();
+        $dataClass = $form->get($request->get('field_name'))->getParent()->getConfig()->getDataClass();
 
         $imageType = ImageRepository::getTypeFrom($dataClass);
 
         /** @var ImageRepository $repo */
         $repo = $this->doctrine->getRepository($fieldOptions['class']);
 
-        $term = str_replace('*', '%', (string)$request->get('q'));
+        $term = str_replace('*', '%', (string) $request->get('q'));
 
         $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbCount
             ->select($qbCount->expr()->count('e'))
             ->andWhere('e.type = :type')->setParameter('type', $imageType);
-        if ($term === '') {
+        if ('' === $term) {
             $qbCount->andWhere('e.linked = :linked')->setParameter('linked', false);
         }
 
         $maxResults = $fieldOptions['page_limit'] ?? 20;
-        $offset     = ($request->get('page', 1) - 1) * $maxResults;
+        $offset = ($request->get('page', 1) - 1) * $maxResults;
 
         $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbResult
             ->andWhere('e.type = :type')->setParameter('type', $imageType)
             ->setMaxResults($maxResults)->setFirstResult($offset);
-        if ($term === '') {
+        if ('' === $term) {
             $qbResult->andWhere('e.linked = :linked')->setParameter('linked', false);
         }
 
-        $count             = $qbCount->getQuery()->getSingleScalarResult();
+        $count = $qbCount->getQuery()->getSingleScalarResult();
         $paginationResults = $qbResult->getQuery()->getResult();
 
         return [
             'results' => $this->mapImageToArray($paginationResults),
-            'more'    => $count > ($offset + $maxResults),
+            'more' => $count > ($offset + $maxResults),
         ];
     }
 
@@ -99,7 +99,7 @@ class AutocompleteService
         return array_map(
             function (Image $image) {
                 return [
-                        'id'   => $image->getId(),
+                        'id' => $image->getId(),
                         'text' => \strval($image),
                     ] +
                     ($image->getFile() ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
@@ -110,29 +110,29 @@ class AutocompleteService
 
     public function entities(Request $request, $type, $class = null)
     {
-        $form         = $this->formFactory->create($type);
+        $form = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
 
         /** @var ImageRepository $repo */
         $repo = $this->doctrine->getRepository($class ?: $fieldOptions['class']);
 
-        $term = str_replace('*', '%', (string)$request->get('q'));
+        $term = str_replace('*', '%', (string) $request->get('q'));
 
         $qbCount = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbCount->select($qbCount->expr()->count('e'));
 
         $maxResults = $fieldOptions['page_limit'] ?? 20;
-        $offset     = ($request->get('page', 1) - 1) * $maxResults;
+        $offset = ($request->get('page', 1) - 1) * $maxResults;
 
         $qbResult = $this->searchFilter->searchQueryBuilder($repo, [$term]);
         $qbResult->setMaxResults($maxResults)->setFirstResult($offset);
 
-        $count             = $qbCount->getQuery()->getSingleScalarResult();
+        $count = $qbCount->getQuery()->getSingleScalarResult();
         $paginationResults = $qbResult->getQuery()->getResult();
 
         return [
             'results' => $this->mapToArray($paginationResults),
-            'more'    => $count > ($offset + $maxResults),
+            'more' => $count > ($offset + $maxResults),
         ];
     }
 
@@ -141,13 +141,15 @@ class AutocompleteService
         return array_map(
             function (BaseEntity $entity) {
                 $array = [
-                    'id'   => $entity->getId(),
+                    'id' => $entity->getId(),
                     'text' => \strval($entity),
                 ];
                 if ($entity instanceof BaseItem) {
                     $image = $entity->getImage();
+
                     return $array + (($image && $image->getFile()) ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
                 }
+
                 return $array;
             },
             $paginationResults

@@ -26,7 +26,6 @@ class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
 
     /**
      * Breadcrumb constructor.
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -37,7 +36,7 @@ class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
     {
         $this->items[] = [
             'label' => $label,
-            'url'   => $url,
+            'url' => $url,
         ];
     }
 
@@ -84,6 +83,7 @@ class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
         if ($previous = $request->getSession()->get('last_route')) {
             return $this->container->get('router')->generate($previous['name'], $previous['params']);
         }
+
         return ($this[0] ?: $this[1] ?: ['url' => './'])['url'];
     }
 }

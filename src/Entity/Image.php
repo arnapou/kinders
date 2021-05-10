@@ -63,9 +63,6 @@ class Image extends BaseEntity
      */
     private $linked = false;
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
@@ -74,6 +71,7 @@ class Image extends BaseEntity
     public function setType(?string $type): self
     {
         $this->type = $type ?: $this->type;
+
         return $this;
     }
 
@@ -85,6 +83,7 @@ class Image extends BaseEntity
     public function setFile(?string $file): self
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -96,6 +95,7 @@ class Image extends BaseEntity
     public function setSize(?int $size): self
     {
         $this->size = $size;
+
         return $this;
     }
 

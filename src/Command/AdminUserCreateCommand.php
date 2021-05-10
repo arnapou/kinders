@@ -43,9 +43,9 @@ class AdminUserCreateCommand extends Command
         UserPasswordEncoderInterface $encoder
     ) {
         parent::__construct();
-        $this->repository    = $repository;
+        $this->repository = $repository;
         $this->entityManager = $entityManager;
-        $this->encoder       = $encoder;
+        $this->encoder = $encoder;
     }
 
     protected function configure()
@@ -58,7 +58,7 @@ class AdminUserCreateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io       = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
         $question = new Question('Password: ');
         $question->setHidden(true);
         $password = $io->askQuestion($question);

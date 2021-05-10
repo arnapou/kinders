@@ -33,6 +33,7 @@ class PublicRoutes
     public function names(): array
     {
         $keys = array_keys($this->routes());
+
         return array_combine($keys, $keys);
     }
 
@@ -44,7 +45,7 @@ class PublicRoutes
         if (null === $this->routes) {
             $this->routes = [];
             foreach ($this->container->get('router')->getRouteCollection()->all() as $name => $route) {
-                if (strpos($name, 'front') === 0) {
+                if (0 === strpos($name, 'front')) {
                     if ($variables = $route->compile()->getVariables()) {
                         foreach ($variables as $variable) {
                             if (!isset($route->getDefaults()[$variable])) {
@@ -56,6 +57,7 @@ class PublicRoutes
                 }
             }
         }
+
         return $this->routes;
     }
 }

@@ -28,7 +28,6 @@ class FrontSearch
     }
 
     /**
-     * @param MenuItem $menuItem
      * @return Serie[]
      */
     public function getSeries(MenuItem $menuItem): array
@@ -62,7 +61,7 @@ class FrontSearch
             $collection = $serie->getCollection();
             if ($collection && $collection->getSeries()->count() > 1) {
                 $collections[$collection->getId()]['collection'] = $collection;
-                $collections[$collection->getId()]['series'][]   = $serie;
+                $collections[$collection->getId()]['series'][] = $serie;
             } else {
                 $collections[0]['series'][] = $serie;
             }

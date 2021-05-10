@@ -28,17 +28,15 @@ class AttributeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param null       $limit
-     * @param null       $offset
+     * @param null $limit
+     * @param null $offset
+     *
      * @return Attribute[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return parent::findBy($criteria, $orderBy ?: ['type' => 'ASC', 'name' => 'ASC'], $limit, $offset);
     }
-
 
     // /**
     //  * @return Attribute[] Returns an array of Attribute objects

@@ -45,6 +45,7 @@ class ZBA extends BaseItem
     public function setKinder(?Kinder $kinder): self
     {
         $this->kinder = $kinder;
+
         return $this;
     }
 }

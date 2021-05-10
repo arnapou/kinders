@@ -29,10 +29,9 @@ class CollectionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param null       $limit
-     * @param null       $offset
+     * @param null $limit
+     * @param null $offset
+     *
      * @return Country[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)

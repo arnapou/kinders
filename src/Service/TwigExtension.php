@@ -47,6 +47,7 @@ class TwigExtension extends AbstractExtension
                 $refs[$kinder->getReference()] = $kinder->getName();
             }
         }
+
         return $refs;
     }
 
@@ -59,7 +60,7 @@ class TwigExtension extends AbstractExtension
             $barWidth = $width / \count($values);
         } else {
             $barWidth = 4;
-            $width    = $barWidth * \count($values);
+            $width = $barWidth * \count($values);
         }
         $svg = '<svg class="svgbar" height="' . $height . '" width="' . $width . '">';
         $max = max($values) ?: 1;
@@ -75,6 +76,7 @@ class TwigExtension extends AbstractExtension
             }
         }
         $svg .= '</svg>';
+
         return $svg;
     }
 
@@ -101,8 +103,10 @@ class TwigExtension extends AbstractExtension
     {
         if (\is_object($object)) {
             $reflection = new \ReflectionClass($object);
+
             return $reflection->getShortName();
         }
+
         return '';
     }
 }

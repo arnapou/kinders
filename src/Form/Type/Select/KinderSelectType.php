@@ -22,20 +22,20 @@ class KinderSelectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'multiple'             => false,
-            'class'                => Kinder::class,
-            'primary_key'          => 'id',
-            'text_property'        => 'name',
+            'multiple' => false,
+            'class' => Kinder::class,
+            'primary_key' => 'id',
+            'text_property' => 'name',
             'minimum_input_length' => 1,
-            'page_limit'           => 20,
-            'allow_clear'          => true,
-            'delay'                => 250,
-            'cache'                => true,
-            'cache_timeout'        => 60000,
-            'language'             => 'fr',
-            'placeholder'          => 'kinder ...',
-            'auto_start'           => false,
-            'transformer'          => EntityDataTransformer::class,
+            'page_limit' => 20,
+            'allow_clear' => true,
+            'delay' => 250,
+            'cache' => true,
+            'cache_timeout' => 60000,
+            'language' => 'fr',
+            'placeholder' => 'kinder ...',
+            'auto_start' => false,
+            'transformer' => EntityDataTransformer::class,
         ]);
     }
 

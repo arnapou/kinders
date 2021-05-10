@@ -85,7 +85,7 @@ abstract class BaseItem extends BaseEntity
     public function __construct()
     {
         parent::__construct();
-        $this->images     = new ArrayCollection();
+        $this->images = new ArrayCollection();
         $this->attributes = new ArrayCollection();
     }
 
@@ -97,6 +97,7 @@ abstract class BaseItem extends BaseEntity
     public function setQuantityOwned(int $quantityOwned): self
     {
         $this->quantityOwned = $quantityOwned;
+
         return $this;
     }
 
@@ -108,6 +109,7 @@ abstract class BaseItem extends BaseEntity
     public function setQuantityDouble(int $quantityDouble): self
     {
         $this->quantityDouble = $quantityDouble;
+
         return $this;
     }
 
@@ -118,9 +120,10 @@ abstract class BaseItem extends BaseEntity
 
     public function setReference(string $reference): self
     {
-        $reference       = str_replace(',', '.', $reference);
+        $reference = str_replace(',', '.', $reference);
         $this->reference = $reference;
         $this->calcRealsorting();
+
         return $this;
     }
 
@@ -133,6 +136,7 @@ abstract class BaseItem extends BaseEntity
     {
         $this->sorting = $sorting;
         $this->calcRealsorting();
+
         return $this;
     }
 
@@ -144,6 +148,7 @@ abstract class BaseItem extends BaseEntity
     public function setLookingFor(bool $lookingFor): self
     {
         $this->lookingFor = $lookingFor;
+
         return $this;
     }
 
@@ -155,6 +160,7 @@ abstract class BaseItem extends BaseEntity
     public function setYear(int $year): self
     {
         $this->year = $year;
+
         return $this;
     }
 
@@ -167,6 +173,7 @@ abstract class BaseItem extends BaseEntity
             },
             $this->sorting . '#' . $this->reference
         );
+
         return $this;
     }
 
@@ -181,6 +188,7 @@ abstract class BaseItem extends BaseEntity
     public function getImages(): Collection
     {
         $criteria = Criteria::create()->orderBy(['id' => 'ASC']);
+
         return $this->images->matching($criteria);
     }
 
@@ -193,6 +201,7 @@ abstract class BaseItem extends BaseEntity
             $this->images[] = $image;
             $this->updateTimestamps();
         }
+
         return $this;
     }
 
@@ -202,6 +211,7 @@ abstract class BaseItem extends BaseEntity
             $this->images->removeElement($image);
             $this->updateTimestamps();
         }
+
         return $this;
     }
 
@@ -212,8 +222,9 @@ abstract class BaseItem extends BaseEntity
             if ($i === $num) {
                 return $image;
             }
-            $i++;
+            ++$i;
         }
+
         return null;
     }
 
@@ -223,6 +234,7 @@ abstract class BaseItem extends BaseEntity
     public function getAttributes(array $types = []): Collection
     {
         $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
+
         return $this->attributes->matching($criteria)->filter(function (Attribute $attr) use ($types) {
             return $types ? \in_array($attr->getType(), $types) : true;
         });
@@ -233,6 +245,7 @@ abstract class BaseItem extends BaseEntity
         if (!$this->attributes->contains($attribute)) {
             $this->attributes[] = $attribute;
         }
+
         return $this;
     }
 
@@ -241,6 +254,7 @@ abstract class BaseItem extends BaseEntity
         if ($this->attributes->contains($attribute)) {
             $this->attributes->removeElement($attribute);
         }
+
         return $this;
     }
 
@@ -255,6 +269,7 @@ abstract class BaseItem extends BaseEntity
                 return true;
             }
         }
+
         return false;
     }
 
@@ -266,6 +281,7 @@ abstract class BaseItem extends BaseEntity
     public function setVariante(string $variante): self
     {
         $this->variante = $variante;
+
         return $this;
     }
 }

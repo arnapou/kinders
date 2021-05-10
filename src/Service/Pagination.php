@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Pagination implements \IteratorAggregate
 {
-    const MAX_PAGES = 10;
+    public const MAX_PAGES = 10;
     /**
      * @var ContainerInterface
      */
@@ -52,8 +52,8 @@ class Pagination implements \IteratorAggregate
     public function getPageNum(): int
     {
         if (null == $this->pageNum) {
-            $request   = $this->container->get('request_stack')->getCurrentRequest();
-            $num       = $request->get('page');
+            $request = $this->container->get('request_stack')->getCurrentRequest();
+            $num = $request->get('page');
             $routeName = $request->get('_route');
             if ($num && ctype_digit("$num")) {
                 $request->getSession()->set("page.$routeName", \intval($num));
@@ -68,6 +68,7 @@ class Pagination implements \IteratorAggregate
             }
             $this->pageNum = $num;
         }
+
         return $this->pageNum;
     }
 
@@ -89,6 +90,7 @@ class Pagination implements \IteratorAggregate
     public function offsetStart(): int
     {
         $offset = ($this->getPageNum() - 1) * $this->getPageSize();
+
         return $offset < 0 ? 0 : $offset;
     }
 
@@ -97,16 +99,13 @@ class Pagination implements \IteratorAggregate
         return new \ArrayIterator($this->getPages());
     }
 
-    /**
-     * @return array
-     */
     public function getPages(): array
     {
-        $page  = $this->getPageNum();
+        $page = $this->getPageNum();
         $count = $this->getPageCount();
 
         if ($count > self::MAX_PAGES) {
-            $half  = floor(self::MAX_PAGES / 2);
+            $half = floor(self::MAX_PAGES / 2);
             $pages = range($page - $half + 1, $page + $half);
             if ($pages[0] < 1) {
                 $val = 1 - $pages[0];
@@ -123,12 +122,13 @@ class Pagination implements \IteratorAggregate
             $pages = array_unique(array_merge($pages, [1, $count]));
             sort($pages);
             $newPages = [$pages[0]];
-            for ($i = 1; $i < \count($pages); $i++) {
+            for ($i = 1; $i < \count($pages); ++$i) {
                 if ($pages[$i] - $pages[$i - 1] > 1) {
                     $newPages[] = 0;
                 }
                 $newPages[] = $pages[$i];
             }
+
             return $newPages;
         } else {
             return range(1, $count);

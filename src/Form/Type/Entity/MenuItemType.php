@@ -45,16 +45,16 @@ class MenuItemType extends AbstractType
             ->add('maxYear', IntegerType::class, ['required' => false, 'empty_data' => 0])
             ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('routeName', ChoiceType::class, [
-                'required'   => false,
+                'required' => false,
                 'empty_data' => '',
-                'choices'    => array_merge(['' => ''], $this->publicRoutes->names()),
+                'choices' => array_merge(['' => ''], $this->publicRoutes->names()),
             ])
             ->add('category', EntityType::class, [
-                'class'         => MenuCategory::class,
+                'class' => MenuCategory::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')->orderBy('u.sorting', 'ASC')->addOrderBy('u.name', 'ASC');
                 },
-                'choice_label'  => 'name',
+                'choice_label' => 'name',
             ])
             ->add('attributes', AttributesListType::class)
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);

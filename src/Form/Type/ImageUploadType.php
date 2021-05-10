@@ -20,10 +20,10 @@ class ImageUploadType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'label'         => 'Picture (.jpg or .png)',
+            'label' => 'Picture (.jpg or .png)',
             'download_link' => false,
-            'required'      => false,
-            'delete_label'  => 'Supprimer ?',
+            'required' => false,
+            'delete_label' => 'Supprimer ?',
         ]);
     }
 

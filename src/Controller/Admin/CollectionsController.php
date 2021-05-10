@@ -33,6 +33,7 @@ class CollectionsController extends AbstractController
     {
         $breadcrumb->add('Collections', $this->generateUrl('admin_collections'));
         $searchFilter->setRouteName('admin_collections');
+
         return $this->render('@admin/collections/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -71,6 +72,7 @@ class CollectionsController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_collections');
     }
 
@@ -80,6 +82,7 @@ class CollectionsController extends AbstractController
     public function autocomplete(AutocompleteService $autocomplete, Request $request)
     {
         $result = $autocomplete->entities($request, CollectionType::class);
+
         return new JsonResponse($result);
     }
 }

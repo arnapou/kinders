@@ -22,20 +22,20 @@ class CollectionSelectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'multiple'             => false,
-            'class'                => Collection::class,
-            'primary_key'          => 'id',
-            'text_property'        => 'name',
+            'multiple' => false,
+            'class' => Collection::class,
+            'primary_key' => 'id',
+            'text_property' => 'name',
             'minimum_input_length' => 0,
-            'page_limit'           => 20,
-            'allow_clear'          => true,
-            'delay'                => 250,
-            'cache'                => true,
-            'cache_timeout'        => 60000,
-            'language'             => 'fr',
-            'placeholder'          => 'collection ...',
-            'auto_start'           => false,
-            'transformer'          => EntityDataTransformer::class,
+            'page_limit' => 20,
+            'allow_clear' => true,
+            'delay' => 250,
+            'cache' => true,
+            'cache_timeout' => 60000,
+            'language' => 'fr',
+            'placeholder' => 'collection ...',
+            'auto_start' => false,
+            'transformer' => EntityDataTransformer::class,
         ]);
     }
 

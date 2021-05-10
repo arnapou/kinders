@@ -31,13 +31,13 @@ abstract class BaseEntity
     protected $id;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
@@ -67,11 +67,10 @@ abstract class BaseEntity
      */
     protected $description = '';
 
-
     public function __construct()
     {
-        $this->createdAt = new DateTime();
-        $this->updatedAt = new DateTime();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -80,15 +79,15 @@ abstract class BaseEntity
      */
     public function updateTimestamps()
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
@@ -101,6 +100,7 @@ abstract class BaseEntity
     public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -112,6 +112,7 @@ abstract class BaseEntity
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -123,6 +124,7 @@ abstract class BaseEntity
     public function setComment(string $comment): self
     {
         $this->comment = $comment;
+
         return $this;
     }
 
@@ -134,6 +136,7 @@ abstract class BaseEntity
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -145,6 +148,7 @@ abstract class BaseEntity
     public function updateSlug(): self
     {
         $this->slug = null;
+
         return $this;
     }
 

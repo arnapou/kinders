@@ -15,8 +15,8 @@ use Symfony\Component\Form\FormView;
 
 class AttributeChoices
 {
-    const MAX_COLUMNS = 10;
-    const MIN_COLUMN_COUNT = 5;
+    public const MAX_COLUMNS = 10;
+    public const MIN_COLUMN_COUNT = 5;
     /**
      * @var array
      */
@@ -33,6 +33,7 @@ class AttributeChoices
                 $items[] = ['choice' => $this->findChild($formView, $id)];
             }
         }
+
         return $this->chunk($items);
     }
 
@@ -50,6 +51,7 @@ class AttributeChoices
             }
         }
         ksort($choiceTypes, SORT_STRING | SORT_FLAG_CASE);
+
         return $choiceTypes;
     }
 
@@ -60,6 +62,7 @@ class AttributeChoices
                 return $child;
             }
         }
+
         return null;
     }
 
@@ -71,9 +74,9 @@ class AttributeChoices
         $nbColumns = ceil(\count($items) / self::MIN_COLUMN_COUNT);
         $nbColumns = $nbColumns <= self::MAX_COLUMNS ? $nbColumns : self::MAX_COLUMNS;
         $chunkSize = ceil(\count($items) / $nbColumns);
-        $chunks    = [];
-        $chunk     = [];
-        $chunked   = 0;
+        $chunks = [];
+        $chunk = [];
+        $chunked = 0;
         foreach ($items as $item) {
             if (\count($chunks) < $nbColumns &&
                 (
@@ -86,10 +89,10 @@ class AttributeChoices
                 )
             ) {
                 $chunks[] = $chunk;
-                $chunk    = [];
+                $chunk = [];
             }
             $chunk[] = $item;
-            $chunked++;
+            ++$chunked;
         }
         if ($chunk) {
             $chunks[] = $chunk;

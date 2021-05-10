@@ -35,6 +35,7 @@ class KindersController extends AbstractController
     {
         $breadcrumb->add('Kinders', $this->generateUrl('admin_kinders'));
         $searchFilter->setRouteName('admin_kinders');
+
         return $this->render('@admin/kinders/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -80,6 +81,7 @@ class KindersController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_kinders');
     }
 
@@ -93,6 +95,7 @@ class KindersController extends AbstractController
         } else {
             $result = $autocomplete->entities($request, KinderType::class);
         }
+
         return new JsonResponse($result);
     }
 }

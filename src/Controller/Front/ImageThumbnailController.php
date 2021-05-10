@@ -48,10 +48,10 @@ class ImageThumbnailController extends AbstractController
 
     public function __construct(ContainerInterface $container, KernelInterface $kernel)
     {
-        $this->tnSize   = $container->getParameter('thumbnail.size');
+        $this->tnSize = $container->getParameter('thumbnail.size');
         $this->tnExpire = $container->getParameter('thumbnail.expire');
-        $this->path     = $kernel->getProjectDir() . '/public/img';
-        $this->cache    = new FilesystemAdapter();
+        $this->path = $kernel->getProjectDir() . '/public/img';
+        $this->cache = new FilesystemAdapter();
     }
 
     /**
@@ -66,14 +66,16 @@ class ImageThumbnailController extends AbstractController
         $filename = $this->path . "/$path.$ext";
         if (is_file($filename)) {
             $filemtime = filemtime($filename);
-            $filesize  = filesize($filename);
-            $content   = $this->cache->get(
+            $filesize = filesize($filename);
+            $content = $this->cache->get(
                 "${w}x${h}" . md5($path) . ".$ext.$filemtime.$filesize",
                 function (ItemInterface $item) use ($filename, $ext, $w, $h) {
                     $item->expiresAfter($this->tnExpire);
+
                     return $this->imgResize($filename, $ext, $w, $h);
                 }
             );
+
             return $this->fileResponse($content, $ext, $filemtime);
         }
     }
@@ -83,13 +85,14 @@ class ImageThumbnailController extends AbstractController
         $response = new Response($content);
         $response->headers->set('Content-Type', $this->mimeTypes[$ext]);
         $response->setCache([
-            'etag'          => base64_encode(hash('sha256', $content, true)),
+            'etag' => base64_encode(hash('sha256', $content, true)),
             'last_modified' => \DateTime::createFromFormat('U', $filemtime),
-            'max_age'       => 864000,
-            's_maxage'      => 864000,
-            'public'        => true,
+            'max_age' => 864000,
+            's_maxage' => 864000,
+            'public' => true,
         ]);
         $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+
         return $response;
     }
 
@@ -106,10 +109,11 @@ class ImageThumbnailController extends AbstractController
     private function imgResizeImagick(string $filename, string $ext, int $width, int $height): string
     {
         $img = new \Imagick($filename);
-        $w1  = $img->getImageWidth();
-        $h1  = $img->getImageHeight();
+        $w1 = $img->getImageWidth();
+        $h1 = $img->getImageHeight();
         [$w2, $h2] = $this->newSize($w1, $h1, $width, $height);
         $img->resizeImage($w2, $h2, \Imagick::FILTER_LANCZOS, 1);
+
         return $img->getImageBlob();
     }
 
@@ -121,16 +125,19 @@ class ImageThumbnailController extends AbstractController
             [$w2, $h2] = $this->newSize($w1, $h1, $width, $height);
             $dst = imagecreate($w2, $h2);
             imagecopyresampled($dst, $img, 0, 0, 0, 0, $w2, $h2, $w1, $h1);
+
             return $dst;
         };
         switch ($ext) {
             case 'jpg':
                 ob_start();
                 imagejpeg($resize(imagecreatefromjpeg($filename)), null, 95);
+
                 return ob_get_clean();
             case 'png':
                 ob_start();
                 imagepng($resize(imagecreatefrompng($filename)), null, 9);
+
                 return ob_get_clean();
         }
         throw new \RuntimeException();
@@ -147,11 +154,11 @@ class ImageThumbnailController extends AbstractController
 
     private function sanitizeWH(int &$w, int &$h)
     {
-        if ($w === 0 && $h === 0) {
+        if (0 === $w && 0 === $h) {
             $w = $h = $this->tnSize;
-        } elseif ($w === 0) {
+        } elseif (0 === $w) {
             $w = 2000;
-        } elseif ($h === 0) {
+        } elseif (0 === $h) {
             $h = 2000;
         }
     }

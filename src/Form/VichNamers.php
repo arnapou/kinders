@@ -50,7 +50,7 @@ class VichNamers implements NamerInterface, DirectoryNamerInterface
         $file = $mapping->getFile($object);
 
         $name = '';
-        for ($i = 0; $i < self::LENGTH; $i++) {
+        for ($i = 0; $i < self::LENGTH; ++$i) {
             $name .= self::CHARS[random_int(0, \strlen(self::CHARS) - 1)];
         }
 

@@ -26,11 +26,11 @@ class AdminUserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AdminUser::class);
     }
+
     /**
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param null       $limit
-     * @param null       $offset
+     * @param null $limit
+     * @param null $offset
+     *
      * @return AdminUser[]
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)

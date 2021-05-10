@@ -68,6 +68,7 @@ class MenuItem extends BaseEntity
     public function setCategory(?MenuCategory $category): self
     {
         $this->category = $category;
+
         return $this;
     }
 
@@ -77,6 +78,7 @@ class MenuItem extends BaseEntity
     public function getAttributes(): Collection
     {
         $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
+
         return $this->attributes->matching($criteria);
     }
 
@@ -85,6 +87,7 @@ class MenuItem extends BaseEntity
         if (!$this->attributes->contains($attribute)) {
             $this->attributes[] = $attribute;
         }
+
         return $this;
     }
 
@@ -93,6 +96,7 @@ class MenuItem extends BaseEntity
         if ($this->attributes->contains($attribute)) {
             $this->attributes->removeElement($attribute);
         }
+
         return $this;
     }
 
@@ -104,6 +108,7 @@ class MenuItem extends BaseEntity
     public function setMinYear(int $minYear): self
     {
         $this->minYear = $minYear;
+
         return $this;
     }
 
@@ -115,6 +120,7 @@ class MenuItem extends BaseEntity
     public function setMaxYear(int $maxYear): self
     {
         $this->maxYear = $maxYear;
+
         return $this;
     }
 
@@ -126,6 +132,7 @@ class MenuItem extends BaseEntity
     public function setSorting(string $sorting): self
     {
         $this->sorting = $sorting;
+
         return $this;
     }
 
@@ -137,6 +144,7 @@ class MenuItem extends BaseEntity
     public function setRouteName(string $routeName): self
     {
         $this->routeName = $routeName;
+
         return $this;
     }
 }

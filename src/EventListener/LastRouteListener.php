@@ -45,14 +45,14 @@ class LastRouteListener implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if ($event->getRequestType() !== HttpKernel::MASTER_REQUEST) {
+        if (HttpKernel::MASTER_REQUEST !== $event->getRequestType()) {
             return;
         }
 
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        $routeName   = $request->get('_route');
+        $routeName = $request->get('_route');
         $routeParams = $request->get('_route_params');
 
         if ($session && !$this->isBlacklisted($routeName)) {
@@ -70,9 +70,9 @@ class LastRouteListener implements EventSubscriberInterface
 
     private function isBlacklisted($routeName): bool
     {
-        return $routeName[0] === '_'
-            || stripos($routeName, 'image_thumbnail') !== false
-            || stripos($routeName, 'autocomplete') !== false
-            || stripos($routeName, 'admin_') === false;
+        return '_' === $routeName[0]
+            || false !== stripos($routeName, 'image_thumbnail')
+            || false !== stripos($routeName, 'autocomplete')
+            || false === stripos($routeName, 'admin_');
     }
 }

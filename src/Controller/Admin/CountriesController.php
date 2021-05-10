@@ -29,6 +29,7 @@ class CountriesController extends AbstractController
     {
         $breadcrumb->add('Config', '');
         $breadcrumb->add('Pays', $this->generateUrl('admin_countries'));
+
         return $this->render('@admin/countries/index.html.twig', [
             'items' => $searchFilter->search($repository),
         ]);
@@ -69,6 +70,7 @@ class CountriesController extends AbstractController
             $entityManager->remove($item);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('admin_countries');
     }
 }

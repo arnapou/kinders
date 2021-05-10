@@ -30,7 +30,7 @@ class SerieCopyVirtualType extends AbstractType
         $resolver->setDefaults([
             'data_class' => null,
             'serie_from' => '',
-            'serie_to'   => '',
+            'serie_to' => '',
         ]);
     }
 }

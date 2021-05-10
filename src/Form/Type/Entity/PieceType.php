@@ -45,7 +45,7 @@ class PieceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Piece::class,
-            'serie'      => null,
+            'serie' => null,
         ]);
     }
 }

@@ -52,8 +52,8 @@ class SearchFilter
 
     public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, Pagination $pagination)
     {
-        $this->container     = $container;
-        $this->pagination    = $pagination;
+        $this->container = $container;
+        $this->pagination = $pagination;
         $this->entityManager = $entityManager;
     }
 
@@ -81,7 +81,7 @@ class SearchFilter
 
     public function search(ServiceEntityRepository $repository): array
     {
-        $qb    = $this->searchQueryBuilder($repository, $this->values());
+        $qb = $this->searchQueryBuilder($repository, $this->values());
         $count = $qb
             ->select($qb->expr()->count('e'))
             ->getQuery()->getSingleScalarResult();
@@ -116,16 +116,19 @@ class SearchFilter
 
             $this->cachedValues[$routeName] = trim($search ?: '');
         }
+
         return $this->cachedValues[$routeName];
     }
 
     public function values(?string $routeName = null): array
     {
         $value = $this->value($routeName);
-        if ($value !== '') {
+        if ('' !== $value) {
             $value = preg_replace('!\s+!', ' ', $value);
+
             return explode(' ', $value);
         }
+
         return [];
     }
 
@@ -146,7 +149,7 @@ class SearchFilter
 
     private function getStringFieldNames(ServiceEntityRepository $repository): array
     {
-        $fields   = [];
+        $fields = [];
         $metadata = $this->entityManager->getClassMetadata($repository->getClassName());
         foreach ($metadata->getFieldNames() as $fieldName) {
             $map = $metadata->getFieldMapping($fieldName);
@@ -154,6 +157,7 @@ class SearchFilter
                 $fields[] = $fieldName;
             }
         }
+
         return $fields;
     }
 

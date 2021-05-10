@@ -18,6 +18,7 @@ class EntitiesDataTransformer extends EntitiesToPropertyTransformer
 {
     /**
      * @param Image[] $entities
+     *
      * @return array
      */
     public function transform($entities)

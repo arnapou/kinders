@@ -58,7 +58,7 @@ class FormFactory
 
         $options += $this->detectOptions($type, $entity);
 
-        $form    = $this->container->get('form.factory')->create($type, $entity, $options);
+        $form = $this->container->get('form.factory')->create($type, $entity, $options);
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $form->handleRequest($request);
@@ -108,6 +108,7 @@ class FormFactory
 
             return new Response($content);
         }
+
         return null;
     }
 }

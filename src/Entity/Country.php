@@ -36,17 +36,11 @@ class Country extends BaseEntity
      */
     private $sorting = '';
 
-    /**
-     * @return string
-     */
     public function getAbbr(): string
     {
         return $this->abbr;
     }
 
-    /**
-     * @param string $abbr
-     */
     public function setAbbr(string $abbr): void
     {
         $this->abbr = $abbr;
@@ -60,6 +54,7 @@ class Country extends BaseEntity
     public function setSorting(string $sorting): self
     {
         $this->sorting = $sorting;
+
         return $this;
     }
 }

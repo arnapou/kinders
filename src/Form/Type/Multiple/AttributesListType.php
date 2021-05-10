@@ -21,16 +21,16 @@ class AttributesListType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class'       => Attribute::class,
-            'multiple'    => true,
-            'expanded'    => true,
-            'attr'        => ['class' => 'attributeslist'],
+            'class' => Attribute::class,
+            'multiple' => true,
+            'expanded' => true,
+            'attr' => ['class' => 'attributeslist'],
 //            'choice_attr' => function (Attribute $choice, $key, $value) {
 //                return [
 //                    'class' => 'attrtype.' . strtolower($choice->getType()),
 //                ];
 //            },
-            'group_by'    => function (Attribute $choice, $key, $value) {
+            'group_by' => function (Attribute $choice, $key, $value) {
                 return $choice->getType();
             },
         ]);
