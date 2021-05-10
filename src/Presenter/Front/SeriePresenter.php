@@ -21,7 +21,8 @@ use App\Presenter\ObjectPresenterWrapper;
  */
 class SeriePresenter extends ObjectPresenterWrapper
 {
-    public bool $complete = true;
+    public bool     $complete = true;
     public ?Country $country = null;
-    public ?Image $image = null;
+    public ?Image   $image = null;
+    public array    $statsCount = ['kinder' => 0, 'bpz' => 0, 'zba' => 0];
 }

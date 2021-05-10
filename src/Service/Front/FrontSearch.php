@@ -13,8 +13,6 @@ namespace App\Service\Front;
 
 use App\Entity\BPZ;
 use App\Entity\Collection;
-use App\Entity\Country;
-use App\Entity\Image;
 use App\Entity\Kinder;
 use App\Entity\MenuItem;
 use App\Entity\Serie;
@@ -26,6 +24,8 @@ use Symfony\Component\Security\Core\Security;
 
 class FrontSearch
 {
+    use FrontQueryToolTrait;
+
     public function __construct(
         private EntityManagerInterface $entityManager,
         private FrontCache $frontCache,
@@ -66,34 +66,6 @@ class FrontSearch
     }
 
     /**
-     * Définit la première image de la série.
-     */
-    private function populateImage(array $series, array $kinders)
-    {
-        $kinderIds = array_keys($kinders);
-        $images = $this->queryKinderImages($kinderIds);
-
-        foreach ($images as $kinder) {
-            if (null !== $series[$kinder->getSerie()->getId()]->image) {
-                continue;
-            }
-            $series[$kinder->getSerie()->getId()]->image = $kinder->getImage();
-        }
-    }
-
-    /**
-     * Défini un item country à la main pour économiser doctrine.
-     */
-    private function populateCountry(array $series)
-    {
-        $countries = $this->queryCountries();
-
-        foreach ($series as $serie) {
-            $serie->country = $countries[$serie->getCountry()->getId()];
-        }
-    }
-
-    /**
      * Une série est considérée complete si on n'a aucun champ lookingFor à TRUE pour aucun Kinder, BPZ ou ZBA de la série.
      *
      * @param SeriePresenter[] $series
@@ -117,40 +89,6 @@ class FrontSearch
             $kinder = $kinders[$zba->getKinder()->getId()];
             $series[$kinder->getSerie()->getId()]->complete &= !$zba->isLookingFor();
         }
-    }
-
-    /**
-     * @return Country[]
-     */
-    private function queryCountries(): array
-    {
-        return $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(Country::class, 'e', 'e.id')
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @return Kinder[]
-     */
-    private function queryKinderImages(array $kinderIds): array
-    {
-        if (!$kinderIds) {
-            return [];
-        }
-
-        $qb = $this->entityManager->createQueryBuilder()
-            ->select('e, i')
-            ->from(Kinder::class, 'e', 'e.id')
-            ->join('e.images', 'i')
-            ->where('e.id IN (:ids)');
-        foreach (Serie::KINDER_SORTING as $field => $order) {
-            $qb->addOrderBy("e.$field", $order);
-        }
-
-        return $qb
-            ->setParameter('ids', $kinderIds)
-            ->getQuery()->getResult();
     }
 
     /**
@@ -184,23 +122,6 @@ class FrontSearch
             ->from(BPZ::class, 'e', 'e.id')
             ->where('e.kinder IN (:ids)')
             ->setParameter('ids', $kinderIds)
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @return Kinder[]
-     */
-    private function queryKinders(array $serieIds): array
-    {
-        if (!$serieIds) {
-            return [];
-        }
-
-        return $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(Kinder::class, 'e', 'e.id')
-            ->where('e.serie IN (:ids)')
-            ->setParameter('ids', $serieIds)
             ->getQuery()->getResult();
     }
 

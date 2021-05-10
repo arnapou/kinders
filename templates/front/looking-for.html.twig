@@ -26,23 +26,22 @@
         </tr>
         </thead>
         <tbody>
-        {%- for item in series -%}
-            {%- set serie = item.serie %}
-            {%- set total_kinder = total_kinder + (item.kinders ?? 0) %}
-            {%- set total_bpzs = total_bpzs + (item.bpzs ?? 0) %}
-            {%- set total_zbas = total_zbas + (item.zbas ?? 0) -%}
+        {%- for serie in series -%}
+            {%- set total_kinder = total_kinder + (serie.statsCount.kinder ?? 0) %}
+            {%- set total_bpzs = total_bpzs + (serie.statsCount.bpz ?? 0) %}
+            {%- set total_zbas = total_zbas + (serie.statsCount.zba ?? 0) -%}
             <tr>
                 <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
                 <td>{{ serie.year }}</td>
                 <td class="imageserie">
-                    <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}">
+                    <a href="{{ path('front_serie', {id: serie.id, slug: serie.slug}) }}" class="{{ serie.complete ? '' : 'text-danger' }}">
                         {{- macro.imageserie(serie) -}}
                         {{- serie.name -}}
                     </a>
                 </td>
-                <td class="text-center">{% if item.kinders is defined %}{{ item.kinders }}{% endif %}</td>
-                <td class="text-center">{% if item.bpzs is defined %}{{ item.bpzs }}{% endif %}</td>
-                <td class="text-center">{% if item.zbas is defined %}{{ item.zbas }}{% endif %}</td>
+                <td class="text-center">{% if serie.statsCount.kinder %}{{ serie.statsCount.kinder }}{% endif %}</td>
+                <td class="text-center">{% if serie.statsCount.bpz %}{{ serie.statsCount.bpz }}{% endif %}</td>
+                <td class="text-center">{% if serie.statsCount.zba %}{{ serie.statsCount.zba }}{% endif %}</td>
                 {%- if is_granted('ROLE_ADMIN') -%}
                     <td>
                         <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="btn-sm btn-danger">
