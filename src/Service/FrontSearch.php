@@ -11,13 +11,16 @@
 
 namespace App\Service;
 
+use App\Entity\Collection;
 use App\Entity\MenuItem;
 use App\Entity\Serie;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FrontSearch
 {
-    public function __construct(private EntityManagerInterface $entityManager
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private FrontCache $frontCache
     ) {
     }
 
@@ -48,12 +51,23 @@ class FrontSearch
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Optimisation de requêtes doctrine.
+     */
+    private function getSeriesCount(Collection $collection): int
+    {
+        return $this->frontCache->from(
+            __FUNCTION__ . $collection->getId(),
+            fn () => $collection->getSeries()->count()
+        );
+    }
+
     public function getSeriesByCollection(MenuItem $menuItem): array
     {
         $collections = [];
         foreach ($this->getSeries($menuItem) as $serie) {
             $collection = $serie->getCollection();
-            if ($collection && $collection->getSeries()->count() > 1) {
+            if ($collection && $this->getSeriesCount($collection) > 1) {
                 $collections[$collection->getId()]['collection'] = $collection;
                 $collections[$collection->getId()]['series'][] = $serie;
             } else {
