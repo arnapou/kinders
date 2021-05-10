@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MenuItem extends BaseEntity
 {
+    public const ATTRIBUTES_SORTING = ['type' => 'ASC', 'name' => 'ASC'];
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\MenuCategory", inversedBy="items", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
@@ -77,7 +78,7 @@ class MenuItem extends BaseEntity
      */
     public function getAttributes(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::ATTRIBUTES_SORTING);
 
         return $this->attributes->matching($criteria);
     }

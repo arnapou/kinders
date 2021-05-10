@@ -22,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class BaseItem extends BaseEntity
 {
+    public const ATTRIBUTES_SORTING = ['type' => 'ASC', 'name' => 'ASC'];
     /**
      * @var int
      * @ORM\Column(type="integer")
@@ -231,7 +232,7 @@ abstract class BaseItem extends BaseEntity
      */
     public function getAttributes(array $types = []): Collection
     {
-        $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::ATTRIBUTES_SORTING);
 
         return $this->attributes->matching($criteria)->filter(
             fn (Attribute $attr) => $types ? \in_array($attr->getType(), $types) : true

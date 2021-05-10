@@ -34,6 +34,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Kinder extends BaseItem
 {
+    public const BPZS_SORTING = ['name' => 'ASC'];
+    public const ZBAS_SORTING = ['name' => 'ASC'];
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Entity\BPZ", mappedBy="kinder", orphanRemoval=true, fetch="EAGER")
@@ -78,7 +80,7 @@ class Kinder extends BaseItem
      */
     public function getBpzs(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::BPZS_SORTING);
 
         return $this->bpzs->matching($criteria);
     }
@@ -111,7 +113,7 @@ class Kinder extends BaseItem
      */
     public function getZbas(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::ZBAS_SORTING);
 
         return $this->zbas->matching($criteria);
     }

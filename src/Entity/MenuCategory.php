@@ -27,6 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MenuCategory extends BaseEntity
 {
+    public const ITEMS_SORTING = ['sorting' => 'ASC', 'minYear' => 'DESC', 'name' => 'ASC'];
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MenuItem", mappedBy="category", orphanRemoval=true)
      */
@@ -54,7 +55,7 @@ class MenuCategory extends BaseEntity
      */
     public function getItems(): Collection
     {
-        $criteria = Criteria::create()->orderBy(['sorting' => 'ASC', 'minYear' => 'DESC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::ITEMS_SORTING);
 
         return $this->items->matching($criteria);
     }

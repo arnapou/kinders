@@ -33,6 +33,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Serie extends BaseItem
 {
+    public const KINDER_SORTING = ['realsorting' => 'ASC', 'name' => 'ASC'];
+    public const PIECES_SORTING = ['realsorting' => 'ASC', 'name' => 'ASC'];
+    public const ITEMS_SORTING = ['realsorting' => 'ASC', 'name' => 'ASC'];
+
     /**
      * @var Country
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", fetch="EAGER")
@@ -108,7 +112,7 @@ class Serie extends BaseItem
      */
     public function getKinders(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::KINDER_SORTING);
 
         return $this->kinders->matching($criteria);
     }
@@ -141,7 +145,7 @@ class Serie extends BaseItem
      */
     public function getPieces(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::PIECES_SORTING);
 
         return $this->pieces->matching($criteria);
     }
@@ -174,7 +178,7 @@ class Serie extends BaseItem
      */
     public function getItems(): DoctrineCollection
     {
-        $criteria = Criteria::create()->orderBy(['realsorting' => 'ASC', 'name' => 'ASC']);
+        $criteria = Criteria::create()->orderBy(self::ITEMS_SORTING);
 
         return $this->items->matching($criteria);
     }
