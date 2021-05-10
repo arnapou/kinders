@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "mrclay/jsmin-php": "^2.4",
@@ -32,13 +32,17 @@
         "symfony/web-link": "4.4.*",
         "symfony/yaml": "4.4.*",
         "tetranz/select2entity-bundle": "^3.0",
-        "vich/uploader-bundle": "^1.13"
+        "vich/uploader-bundle": "^1.13",
+        "doctrine/doctrine-migrations-bundle": "^2.0"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/test-pack": "*",
+        "phpunit/phpunit": ">=5.0",
+        "vimeo/psalm": ">=1.0",
+        "friendsofphp/php-cs-fixer": "^2.18"
     },
     "config": {
         "preferred-install": {
