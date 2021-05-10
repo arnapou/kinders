@@ -22,23 +22,12 @@ use Psr\Log\LoggerInterface;
 
 class EntityListener
 {
-    /**
-     * @var ImageRepository
-     */
-    private $imageRepository;
-    /**
-     * @var Image[]
-     */
-    private $images = [];
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private array $images = [];
 
-    public function __construct(ImageRepository $imageRepository, LoggerInterface $logger)
-    {
-        $this->imageRepository = $imageRepository;
-        $this->logger = $logger;
+    public function __construct(
+    private ImageRepository $imageRepository,
+        private LoggerInterface $logger
+    ) {
     }
 
     public function onFlush(OnFlushEventArgs $args)

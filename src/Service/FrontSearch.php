@@ -17,14 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class FrontSearch
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(private EntityManagerInterface $entityManager
+    ) {
     }
 
     /**
@@ -67,15 +61,20 @@ class FrontSearch
             }
         }
 
-        usort($collections, function ($a, $b) {
-            if (!isset($a['collection'])) {
-                return -1;
-            } elseif (!isset($b['collection'])) {
-                return 1;
-            } else {
+        usort(
+            $collections,
+            static function ($a, $b) {
+                if (!isset($a['collection'])) {
+                    return -1;
+                }
+
+                if (!isset($b['collection'])) {
+                    return 1;
+                }
+
                 return $a['collection']->getName() <=> $b['collection']->getName();
             }
-        });
+        );
 
         return $collections;
     }

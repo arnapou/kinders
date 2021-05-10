@@ -17,12 +17,10 @@ class AttributeChoices
 {
     public const MAX_COLUMNS = 10;
     public const MIN_COLUMN_COUNT = 5;
-    /**
-     * @var array
-     */
-    private $numericTypes = ['poids'];
 
-    public function getChunks(FormView $formView)
+    private array $numericTypes = ['poids'];
+
+    public function getChunks(FormView $formView): array
     {
         $choiceTypes = $this->getSortedChoicesTypes($formView);
 
@@ -37,7 +35,7 @@ class AttributeChoices
         return $this->chunk($items);
     }
 
-    private function getSortedChoicesTypes(FormView $formView)
+    private function getSortedChoicesTypes(FormView $formView): array
     {
         $choiceTypes = [];
         foreach ($formView->vars['choices'] as $choices) {
@@ -58,7 +56,7 @@ class AttributeChoices
     private function findChild(FormView $formView, int $id)
     {
         foreach ($formView as $child) {
-            if ($child->vars['value'] == $id) {
+            if ((string) $child->vars['value'] === (string) $id) {
                 return $child;
             }
         }
@@ -71,9 +69,9 @@ class AttributeChoices
         if (\count($items) <= self::MIN_COLUMN_COUNT) {
             return [$items];
         }
-        $nbColumns = ceil(\count($items) / self::MIN_COLUMN_COUNT);
+        $nbColumns = (int) ceil(\count($items) / self::MIN_COLUMN_COUNT);
         $nbColumns = $nbColumns <= self::MAX_COLUMNS ? $nbColumns : self::MAX_COLUMNS;
-        $chunkSize = ceil(\count($items) / $nbColumns);
+        $chunkSize = (int) ceil(\count($items) / $nbColumns);
         $chunks = [];
         $chunk = [];
         $chunked = 0;
@@ -81,11 +79,11 @@ class AttributeChoices
             if (\count($chunks) < $nbColumns &&
                 (
                     // max size chunk atteint
-                    \count($chunk) == $chunkSize ||
+                    \count($chunk) === $chunkSize ||
                     // un title est le dernier element du chunk => on le passe a la colonne suivante
-                    \count($chunk) == $chunkSize - 1 && isset($item['title']) ||
+                    \count($chunk) === $chunkSize - 1 && isset($item['title']) ||
                     // un title dans l'avant derniere colonne avec suffisamment de place pour passer le reste dans la derniere colonne
-                    \count($chunks) == $nbColumns - 2 && isset($item['title']) && \count($items) - $chunked <= $chunkSize
+                    \count($chunks) === $nbColumns - 2 && isset($item['title']) && \count($items) - $chunked <= $chunkSize
                 )
             ) {
                 $chunks[] = $chunk;

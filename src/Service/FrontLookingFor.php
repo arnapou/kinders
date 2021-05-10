@@ -19,14 +19,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class FrontLookingFor
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function getSeries(): array

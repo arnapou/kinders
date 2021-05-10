@@ -17,17 +17,12 @@ use Symfony\Component\Routing\Route;
 class PublicRoutes
 {
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
      * @var Route[]
      */
-    private $routes = null;
+    private ?array $routes = null;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     public function names(): array
@@ -45,16 +40,19 @@ class PublicRoutes
         if (null === $this->routes) {
             $this->routes = [];
             foreach ($this->container->get('router')->getRouteCollection()->all() as $name => $route) {
-                if (0 === strpos($name, 'front')) {
-                    if ($variables = $route->compile()->getVariables()) {
-                        foreach ($variables as $variable) {
-                            if (!isset($route->getDefaults()[$variable])) {
-                                continue 2;
-                            }
+                if (!str_starts_with($name, 'front')) {
+                    continue;
+                }
+
+                if ($variables = $route->compile()->getVariables()) {
+                    foreach ($variables as $variable) {
+                        if (!isset($route->getDefaults()[$variable])) {
+                            continue 2;
                         }
                     }
-                    $this->routes[$name] = $route;
                 }
+
+                $this->routes[$name] = $route;
             }
         }
 

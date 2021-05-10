@@ -77,7 +77,7 @@ class FrontController extends AbstractController
         if ($collection->getSlug() && $collection->getSlug() !== $slug) {
             return $this->redirectToRoute('front_collection', ['id' => $collection->getId(), 'slug' => $collection->getSlug()]);
         }
-        if (1 == $collection->getSeries()->count()) {
+        if (1 === $collection->getSeries()->count()) {
             $serie = $collection->getSeries()->get(0);
 
             return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);

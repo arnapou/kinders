@@ -22,34 +22,19 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class ImageThumbnailController extends AbstractController
 {
-    /**
-     * @var int
-     */
-    private $tnSize;
-    /**
-     * @var int
-     */
-    private $tnExpire;
-    /**
-     * @var FilesystemAdapter
-     */
-    private $cache;
-    /**
-     * @var string
-     */
-    private $path;
-    /**
-     * @var array
-     */
-    private $mimeTypes = [
+    private int $tnSize;
+    private int $tnExpire;
+    private FilesystemAdapter $cache;
+    private string $path;
+    private array $mimeTypes = [
         'jpg' => 'image/jpeg',
         'png' => 'image/png',
     ];
 
     public function __construct(ContainerInterface $container, KernelInterface $kernel)
     {
-        $this->tnSize = $container->getParameter('thumbnail.size');
-        $this->tnExpire = $container->getParameter('thumbnail.expire');
+        $this->tnSize = (int) $container->getParameter('thumbnail.size');
+        $this->tnExpire = (int) $container->getParameter('thumbnail.expire');
         $this->path = $kernel->getProjectDir() . '/public/img';
         $this->cache = new FilesystemAdapter();
     }
@@ -100,9 +85,12 @@ class ImageThumbnailController extends AbstractController
     {
         if (class_exists('Imagick')) {
             return $this->imgResizeImagick($filename, $ext, $width, $height);
-        } elseif (\function_exists('imagecreatefromjpeg')) {
+        }
+
+        if (\function_exists('imagecreatefromjpeg')) {
             return $this->imgResizeGD($filename, $ext, $width, $height);
         }
+
         throw new \RuntimeException();
     }
 
@@ -147,9 +135,9 @@ class ImageThumbnailController extends AbstractController
     {
         if ($w1 / $h1 > $width / $height) {
             return [$width, floor($width * $h1 / $w1)];
-        } else {
-            return [floor($height * $w1 / $h1), $height];
         }
+
+        return [floor($height * $w1 / $h1), $height];
     }
 
     private function sanitizeWH(int &$w, int &$h)

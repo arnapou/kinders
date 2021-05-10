@@ -18,14 +18,8 @@ use Twig\TwigFilter;
 
 class TwigExtension extends AbstractExtension
 {
-    /**
-     * @var AttributeChoices
-     */
-    private $attributeChoices;
-
-    public function __construct(AttributeChoices $attributeChoices)
+    public function __construct(private AttributeChoices $attributeChoices)
     {
-        $this->attributeChoices = $attributeChoices;
     }
 
     public function getFilters()
@@ -62,7 +56,7 @@ class TwigExtension extends AbstractExtension
             $barWidth = 4;
             $width = $barWidth * \count($values);
         }
-        $svg = '<svg class="svgbar" height="' . $height . '" width="' . $width . '">';
+        $svg = '';
         $max = max($values) ?: 1;
         foreach (array_values($values) as $x => $value) {
             if ($y = round($height * $value / $max, 4)) {
@@ -75,9 +69,8 @@ class TwigExtension extends AbstractExtension
                     . '></rect>';
             }
         }
-        $svg .= '</svg>';
 
-        return $svg;
+        return '<svg class="svgbar" height="' . $height . '" width="' . $width . '">' . $svg . '</svg>';
     }
 
     public function attributechunks(FormView $formView)
@@ -90,13 +83,17 @@ class TwigExtension extends AbstractExtension
         $infos = pathinfo($filename);
         if ($w && $h) {
             return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}x${h}." . $infos['extension'];
-        } elseif ($w) {
-            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}." . $infos['extension'];
-        } elseif ($h) {
-            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.x${h}." . $infos['extension'];
-        } else {
-            return $infos['dirname'] . '/' . $infos['filename'] . '_tn.' . $infos['extension'];
         }
+
+        if ($w) {
+            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}." . $infos['extension'];
+        }
+
+        if ($h) {
+            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.x${h}." . $infos['extension'];
+        }
+
+        return $infos['dirname'] . '/' . $infos['filename'] . '_tn.' . $infos['extension'];
     }
 
     public function imagetype($object)

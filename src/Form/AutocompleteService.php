@@ -23,34 +23,12 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class AutocompleteService
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var ManagerRegistry
-     */
-    private $doctrine;
-    /**
-     * @var UploaderHelper
-     */
-    private $uploaderHelper;
-    /**
-     * @var SearchFilter
-     */
-    private $searchFilter;
-
     public function __construct(
-        FormFactoryInterface $formFactory,
-        ManagerRegistry $doctrine,
-        UploaderHelper $uploaderHelper,
-        SearchFilter $searchFilter
+        private FormFactoryInterface $formFactory,
+        private ManagerRegistry $doctrine,
+        private UploaderHelper $uploaderHelper,
+        private SearchFilter $searchFilter
     ) {
-        $this->formFactory = $formFactory;
-        $this->doctrine = $doctrine;
-        $this->uploaderHelper = $uploaderHelper;
-        $this->searchFilter = $searchFilter;
     }
 
     public function images(Request $request, $type)
@@ -97,13 +75,16 @@ class AutocompleteService
     private function mapImageToArray($paginationResults): array
     {
         return array_map(
-            function (Image $image) {
-                return [
-                        'id' => $image->getId(),
-                        'text' => \strval($image),
-                    ] +
-                    ($image->getFile() ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
-            },
+            fn (Image $image) => $image->getFile()
+                ? [
+                    'id' => $image->getId(),
+                    'text' => (string) $image,
+                    'file' => $this->uploaderHelper->asset($image, 'diskFile'),
+                ]
+                : [
+                    'id' => $image->getId(),
+                    'text' => (string) $image,
+                ],
             $paginationResults
         );
     }
@@ -139,19 +120,16 @@ class AutocompleteService
     private function mapToArray($paginationResults): array
     {
         return array_map(
-            function (BaseEntity $entity) {
-                $array = [
+            fn (BaseEntity $entity) => ($entity instanceof BaseItem && $entity->getImage()->getFile())
+                ? [
                     'id' => $entity->getId(),
-                    'text' => \strval($entity),
-                ];
-                if ($entity instanceof BaseItem) {
-                    $image = $entity->getImage();
-
-                    return $array + (($image && $image->getFile()) ? ['file' => $this->uploaderHelper->asset($image, 'diskFile')] : []);
-                }
-
-                return $array;
-            },
+                    'text' => (string) $entity,
+                    'file' => $this->uploaderHelper->asset($entity->getImage(), 'diskFile'),
+                ]
+                : [
+                    'id' => $entity->getId(),
+                    'text' => (string) $entity,
+                ],
             $paginationResults
         );
     }

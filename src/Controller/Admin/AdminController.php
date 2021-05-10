@@ -19,10 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
-    /**
-     * @var int
-     */
-    private $nbBars = 32;
+    private int $nbBars = 32;
 
     /**
      * @Route("/", name="admin")

@@ -27,14 +27,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MenuItemType extends AbstractType
 {
-    /**
-     * @var PublicRoutes
-     */
-    private $publicRoutes;
-
-    public function __construct(PublicRoutes $publicRoutes)
+    public function __construct(
+        private PublicRoutes $publicRoutes)
     {
-        $this->publicRoutes = $publicRoutes;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

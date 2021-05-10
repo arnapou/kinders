@@ -23,33 +23,33 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageType extends AbstractType
 {
-    /**
-     * @var ImageRepository
-     */
-    private $imageRepository;
-
-    public function __construct(ImageRepository $imageRepository)
-    {
-        $this->imageRepository = $imageRepository;
+    public function __construct(private ImageRepository $imageRepository
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('type', ChoiceType::class, [
-                'choices' => $this->imageRepository->getTypes(),
-                'empty_data' => $options['image_type'] ?? '',
-            ])
+            ->add(
+                'type',
+                ChoiceType::class,
+                [
+                    'choices' => $this->imageRepository->getTypes(),
+                    'empty_data' => $options['image_type'] ?? '',
+                ]
+            )
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => ''])
             ->add('diskFile', ImageUploadType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Image::class,
-            'image_type' => '',
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => Image::class,
+                'image_type' => '',
+            ]
+        );
     }
 }

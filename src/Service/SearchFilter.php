@@ -22,39 +22,20 @@ use App\Entity\Piece;
 use App\Entity\Serie;
 use App\Entity\ZBA;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SearchFilter
 {
-    /**
-     * @var array
-     */
-    private $cachedValues = [];
-    /**
-     * @var string
-     */
-    private $defaultRouteName = '';
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-    /**
-     * @var Pagination
-     */
-    private $pagination;
+    private array  $cachedValues = [];
+    private string $defaultRouteName = '';
 
-    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, Pagination $pagination)
-    {
-        $this->container = $container;
-        $this->pagination = $pagination;
-        $this->entityManager = $entityManager;
+    public function __construct(
+        private ContainerInterface $container,
+        private EntityManagerInterface $entityManager,
+        private Pagination $pagination
+    ) {
     }
 
     public function searchQueryBuilder(ServiceEntityRepository $repository, array $values): QueryBuilder
@@ -163,44 +144,58 @@ class SearchFilter
 
     private function addJoins(string $class, QueryBuilder $qb): QueryBuilder
     {
-        switch ($class) {
-            case Kinder::class:
-            case Piece::class:
-            case Item::class:
-                return $qb->join('e.serie', 's');
-            case ZBA::class:
-            case BPZ::class:
-                return $qb->join('e.kinder', 'k')->join('k.serie', 's');
-            case MenuItem::class:
-                return $qb->join('e.category', 'c');
-            default:
-                return $qb;
-        }
+        return match ($class) {
+            Kinder::class,
+            Piece::class,
+            Item::class => $qb
+                ->join('e.serie', 's'),
+            ZBA::class,
+            BPZ::class => $qb
+                ->join('e.kinder', 'k')
+                ->join('k.serie', 's'),
+            MenuItem::class => $qb
+                ->join('e.category', 'c'),
+            default => $qb,
+        };
     }
 
     private function addOrderBy(string $class, QueryBuilder $qb): QueryBuilder
     {
-        switch ($class) {
-            case Attribute::class:
-                return $qb->addOrderBy('e.type')->addOrderBy('e.name');
-            case Image::class:
-                return $qb->addOrderBy('e.linked')->addOrderBy('e.type')->addOrderBy('e.name');
-            case Serie::class:
-                return $qb->addOrderBy('e.year', 'DESC')->addOrderBy('e.name');
-            case Kinder::class:
-                return $qb->addOrderBy('s.name')->addOrderBy('e.year', 'DESC')->addOrderBy('e.name');
-            case Piece::class:
-            case Item::class:
-                return $qb->addOrderBy('s.year', 'DESC')->addOrderBy('s.name')->addOrderBy('e.name');
-            case ZBA::class:
-            case BPZ::class:
-                return $qb->addOrderBy('s.name')->addOrderBy('k.year', 'DESC')->addOrderBy('e.name');
-            case MenuCategory::class:
-                return $qb->addOrderBy('e.sorting')->addOrderBy('e.name');
-            case MenuItem::class:
-                return $qb->addOrderBy('c.sorting')->addOrderBy('e.sorting')->addOrderBy('e.minYear', 'DESC')->addOrderBy('e.name');
-            default:
-                return $qb->addOrderBy('e.name', 'ASC');
-        }
+        return match ($class) {
+            Attribute::class => $qb
+                ->addOrderBy('e.type')
+                ->addOrderBy('e.name'),
+            Image::class => $qb
+                ->addOrderBy('e.linked')
+                ->addOrderBy('e.type')
+                ->addOrderBy('e.name'),
+            Serie::class => $qb
+                ->addOrderBy('e.year', 'DESC')
+                ->addOrderBy('e.name'),
+            Kinder::class => $qb
+                ->addOrderBy('s.name')
+                ->addOrderBy('e.year', 'DESC')
+                ->addOrderBy('e.name'),
+            Piece::class,
+            Item::class => $qb
+                ->addOrderBy('s.year', 'DESC')
+                ->addOrderBy('s.name')
+                ->addOrderBy('e.name'),
+            ZBA::class,
+            BPZ::class => $qb
+                ->addOrderBy('s.name')
+                ->addOrderBy('k.year', 'DESC')
+                ->addOrderBy('e.name'),
+            MenuCategory::class => $qb
+                ->addOrderBy('e.sorting')
+                ->addOrderBy('e.name'),
+            MenuItem::class => $qb
+                ->addOrderBy('c.sorting')
+                ->addOrderBy('e.sorting')
+                ->addOrderBy('e.minYear', 'DESC')
+                ->addOrderBy('e.name'),
+            default => $qb
+                ->addOrderBy('e.name', 'ASC'),
+        };
     }
 }

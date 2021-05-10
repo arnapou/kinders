@@ -15,21 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
 {
-    /**
-     * @var array
-     */
-    private $items = [];
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private array $items = [];
 
     /**
      * Breadcrumb constructor.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     public function add(string $label, string $url): void
@@ -52,9 +44,10 @@ class Breadcrumb implements \IteratorAggregate, \Countable, \ArrayAccess
 
     public function __toString(): string
     {
-        return implode(' / ', array_map(function ($item) {
-            return $item['label'];
-        }, $this->items));
+        return implode(
+            ' / ',
+            array_map(static fn ($item) => $item['label'], $this->items)
+        );
     }
 
     public function offsetExists($offset)

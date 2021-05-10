@@ -168,9 +168,7 @@ abstract class BaseItem extends BaseEntity
     {
         $this->realsorting = preg_replace_callback(
             '!(\d+)!',
-            function ($matches) {
-                return sprintf('%04d', $matches[1]);
-            },
+            static fn ($matches) => sprintf('%04d', $matches[1]),
             $this->sorting . '#' . $this->reference
         );
 
@@ -235,9 +233,9 @@ abstract class BaseItem extends BaseEntity
     {
         $criteria = Criteria::create()->orderBy(['type' => 'ASC', 'name' => 'ASC']);
 
-        return $this->attributes->matching($criteria)->filter(function (Attribute $attr) use ($types) {
-            return $types ? \in_array($attr->getType(), $types) : true;
-        });
+        return $this->attributes->matching($criteria)->filter(
+            fn (Attribute $attr) => $types ? \in_array($attr->getType(), $types) : true
+        );
     }
 
     public function addAttribute(Attribute $attribute): self

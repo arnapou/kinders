@@ -17,24 +17,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FrontMenu
 {
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-    /**
-     * @var MenuCategoryRepository
-     */
-    private $repository;
-    /**
-     * @var PublicRoutes
-     */
-    private $publicRoutes;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, MenuCategoryRepository $repository, PublicRoutes $publicRoutes)
-    {
-        $this->repository = $repository;
-        $this->urlGenerator = $urlGenerator;
-        $this->publicRoutes = $publicRoutes;
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private MenuCategoryRepository $repository,
+        private PublicRoutes $publicRoutes
+    ) {
     }
 
     public function getCategories(bool $sidebar = true): array

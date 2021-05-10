@@ -22,16 +22,18 @@ use Twig\TwigFilter;
 
 class AssetBuilderListener extends AbstractExtension implements CacheWarmerInterface
 {
-    private array           $compiledFiles;
-    private array           $config;
-    private string          $env;
-    private string          $srcDir;
-    private string          $destDir;
-    private string          $configFile;
-    private string          $publicDir;
+    private array  $compiledFiles;
+    private array  $config;
+    private string $env;
+    private string $srcDir;
+    private string $destDir;
+    private string $configFile;
+    private string $publicDir;
 
-    public function __construct(ContainerInterface $container, KernelInterface $kernel)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        KernelInterface $kernel
+    ) {
         $this->config = $container->getParameter('assetbuilder');
         $this->env = $kernel->getEnvironment();
         $this->publicDir = $kernel->getProjectDir() . '/public';
