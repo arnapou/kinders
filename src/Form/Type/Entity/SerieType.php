@@ -41,7 +41,7 @@ class SerieType extends AbstractType
             ])
             ->add('collection', CollectionSelectType::class, ['remote_route' => 'admin_series_autocomplete'])
             ->add('attributes', AttributesListType::class)
-            ->add('images', ImageListType::class, ['remote_route' => 'admin_series_autocomplete'])
+            // ->add('images', ImageListType::class, ['remote_route' => 'admin_series_autocomplete'])
             ->add('description', TextareaType::class, ['required' => false, 'empty_data' => ''])
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }

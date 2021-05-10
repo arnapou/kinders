@@ -250,16 +250,23 @@ class Serie extends BaseItem
 
     public function getImage(int $num = 0): ?Image
     {
-        $image = parent::getImage($num);
-        if (0 === $num && null === $image) {
-            foreach ($this->getKinders() as $kinder) {
-                if ($image = $kinder->getImage()) {
-                    break;
-                }
+        foreach ($this->getKinders() as $kinder) {
+            if ($image = $kinder->getImage()) {
+                return $image;
             }
         }
 
-        return $image;
+        return null;
+        // $image = parent::getImage($num);
+        // if (0 === $num && null === $image) {
+        //     foreach ($this->getKinders() as $kinder) {
+        //         if ($image = $kinder->getImage()) {
+        //             break;
+        //         }
+        //     }
+        // }
+        //
+        // return $image;
     }
 
     public function isComplete(): bool
