@@ -1,7 +1,5 @@
 {% extends "base.html.twig" %}
 
-{% import "macros.html.twig" as macro %}
-{% import _self as self %}
 
 {% block title -%}
     {{ menuitem.name }}
@@ -26,7 +24,7 @@
                 </a>
             </h2>
         {%- endif %}
-        {{- self.table_series(item.series) -}}
+        {{- _self.table_series(item.series) -}}
     {% endfor %}
 
 {% endblock %}

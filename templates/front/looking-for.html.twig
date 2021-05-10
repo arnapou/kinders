@@ -1,13 +1,11 @@
 {% extends "base.html.twig" %}
 
-{% import "macros.html.twig" as macro %}
-{% import _self as self %}
-
 {% block title -%}
     Mes recherches
 {%- endblock %}
 
 {% block content %}
+    {% import "macros.html.twig" as macro %}
 
     {% set total_kinder = 0 %}
     {% set total_bpzs = 0 %}

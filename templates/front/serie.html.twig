@@ -1,8 +1,5 @@
 {% extends "base.html.twig" %}
 
-{% import "macros.html.twig" as macro %}
-{% import _self as macroserie %}
-
 {% block title -%}
     {{ serie.name }}{% if serie.year %} &ndash; {{ serie.year }}{% endif %}
 {%- endblock %}
@@ -29,6 +26,7 @@
 
 {% block serie_collection %}
     {% import "search.html.twig" as search %}
+
     {% if serie.collection and serie.collection.series|length > 1 %}
         <h2 class="mt-5">Autres séries liées</h2>
         {{ search.table_series(serie.collection.series, serie.id) }}
@@ -44,6 +42,8 @@
 {% endblock %}
 
 {% block serie_kinders %}
+    {% import "macros.html.twig" as macro %}
+
     <h2 class="mt-5">
         {%- if collection is defined -%}
             {{ macro.flag(serie.country) }} {{ serie.country }} : {{ serie.name }} &ndash; {{ serie.year }}
@@ -95,8 +95,8 @@
                         {{- macro.image(kinder) -}}
                         {{- macro.status(kinder) -}}
                     </td>
-                    {{- macroserie.td_images(kinder.bpzs, maxBpz) -}}
-                    {{- macroserie.td_images(kinder.zbas, maxZba) -}}
+                    {{- _self.td_images(kinder.bpzs, maxBpz) -}}
+                    {{- _self.td_images(kinder.zbas, maxZba) -}}
                 </tr>
             {%- endfor -%}
             </tbody>
@@ -105,6 +105,8 @@
 {% endblock %}
 
 {% block serie_puzzle %}
+    {% import "macros.html.twig" as macro %}
+
     {% if puzzle -%}
         <table class="puzzle mt-3 mb-3">
             <tbody>
@@ -130,6 +132,8 @@
 {% endblock %}
 
 {% block serie_pieces %}
+    {% import "macros.html.twig" as macro %}
+
     {% if serie.pieces|length %}
         {% set refs = serie|kinderRefs %}
         <h2 class="mt-5">
@@ -166,6 +170,8 @@
 {% endblock %}
 
 {% block serie_items %}
+    {% import "macros.html.twig" as macro %}
+
     {% if serie.items|length %}
         {% set refs = serie|kinderRefs %}
         <h2 class="mt-5">
@@ -202,6 +208,8 @@
 {% endblock %}
 
 {% block serie_attributes %}
+    {% import "macros.html.twig" as macro %}
+
     {% if serie.attributes|length -%}
         <p class="mt-5 kinder">
             Tags : {{ macro.attributes(serie) -}}
@@ -211,6 +219,7 @@
 
 {% macro td_images(images, max) -%}
     {% import "macros.html.twig" as macro %}
+
     {% if max %}
         {% for img in images -%}
             <td class="image">
