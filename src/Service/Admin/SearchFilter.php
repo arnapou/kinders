@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Service;
+namespace App\Service\Admin;
 
 use App\Entity\Attribute;
 use App\Entity\BPZ;

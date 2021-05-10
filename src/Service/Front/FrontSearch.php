@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Service;
+namespace App\Service\Front;
 
 use App\Entity\Collection;
 use App\Entity\MenuItem;

@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Service;
+namespace App\Service\Front;
 
 use App\Entity\MenuCategory;
 use App\Repository\MenuCategoryRepository;
+use App\Service\PublicRoutes;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FrontMenu

@@ -7,11 +7,11 @@ twig:
   paths:
     '%kernel.project_dir%/templates/admin': admin
   globals:
-    breadcrumb: '@App\Service\Breadcrumb'
-    searchfilter: '@App\Service\SearchFilter'
-    pagination: '@App\Service\Pagination'
+    breadcrumb: '@App\Service\Admin\Breadcrumb'
+    searchfilter: '@App\Service\Admin\SearchFilter'
+    pagination: '@App\Service\Admin\Pagination'
     blank_img: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
-    frontmenu: '@App\Service\FrontMenu'
+    frontmenu: '@App\Service\Front\FrontMenu'
   form_themes:
     - '@admin/form_bootstrap.html.twig'             # extends 'bootstrap_4_layout.html.twig'
     - '@admin/form_tetranzselect2entity.html.twig'  # extends '@TetranzSelect2Entity/Form/fields.html.twig'

@@ -15,7 +15,7 @@ use App\Entity\BaseEntity;
 use App\Entity\BaseItem;
 use App\Entity\Image;
 use App\Repository\ImageRepository;
-use App\Service\SearchFilter;
+use App\Service\Admin\SearchFilter;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
