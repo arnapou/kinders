@@ -1,5 +1,14 @@
 {% extends "base.html.twig" %}
 
+{% block h1_wrapper -%}
+    {{- parent() -}}
+    {%- if link_pdf -%}
+        <a href="{{ link_pdf }}" target="_blank" class="pdf-download">
+            <img src="{{ asset('icon-pdf.png') }}" alt="">Télécharger le PDF
+        </a>
+    {%- endif -%}
+{%- endblock %}
+
 {% block content %}
     {% import "macros.html.twig" as macro %}
 
@@ -23,9 +32,9 @@
         </thead>
         <tbody>
         {%- for serie in series -%}
-            {%- set total_kinder = total_kinder + (serie.statsCount.kinder ?? 0) %}
-            {%- set total_bpzs = total_bpzs + (serie.statsCount.bpz ?? 0) %}
-            {%- set total_zbas = total_zbas + (serie.statsCount.zba ?? 0) -%}
+            {%- set total_kinder = total_kinder + (serie.stats.kinder ?? 0) %}
+            {%- set total_bpzs = total_bpzs + (serie.stats.bpz ?? 0) %}
+            {%- set total_zbas = total_zbas + (serie.stats.zba ?? 0) -%}
             <tr>
                 <td class="country">{{ macro.flag(serie.country) }} {{ serie.country }}</td>
                 <td>{{ serie.year }}</td>
@@ -35,9 +44,9 @@
                         {{- serie.name -}}
                     </a>
                 </td>
-                <td class="text-center">{% if serie.statsCount.kinder %}{{ serie.statsCount.kinder }}{% endif %}</td>
-                <td class="text-center">{% if serie.statsCount.bpz %}{{ serie.statsCount.bpz }}{% endif %}</td>
-                <td class="text-center">{% if serie.statsCount.zba %}{{ serie.statsCount.zba }}{% endif %}</td>
+                <td class="text-center">{% if serie.stats.kinder %}{{ serie.stats.kinder }}{% endif %}</td>
+                <td class="text-center">{% if serie.stats.bpz %}{{ serie.stats.bpz }}{% endif %}</td>
+                <td class="text-center">{% if serie.stats.zba %}{{ serie.stats.zba }}{% endif %}</td>
                 {%- if is_granted('ROLE_ADMIN') -%}
                     <td>
                         <a href="{{ path('admin_series_view', {id: serie.id}) }}" class="btn-sm btn-danger">

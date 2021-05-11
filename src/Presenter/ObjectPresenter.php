@@ -13,7 +13,11 @@ namespace App\Presenter;
 
 use App\Entity\BaseEntity;
 
-class ObjectPresenterWrapper
+/**
+ * @method int    getId()
+ * @method string getName()
+ */
+class ObjectPresenter
 {
     private ?BaseEntity $object;
 
@@ -47,5 +51,10 @@ class ObjectPresenterWrapper
     public function __toString(): string
     {
         return (string) ($this->object ?: '');
+    }
+
+    public function realObject(): ?object
+    {
+        return $this->object;
     }
 }

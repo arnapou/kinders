@@ -14,8 +14,7 @@ namespace App\Service\Front;
 use App\Entity\Collection;
 use App\Entity\MenuItem;
 use App\Entity\Serie;
-use App\Presenter\Front\CollectionPresenter;
-use App\Presenter\Front\SeriePresenter;
+use App\Presenter\CollectionPresenter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
@@ -30,7 +29,7 @@ class PageSearch
 
     public function getSeriesByCollection(?MenuItem $menuItem): array
     {
-        $series = array_map(static fn (Serie $s) => new SeriePresenter($s), $this->querySeries($menuItem));
+        $series = array_map(static fn (Serie $s) => new \App\Presenter\SeriePresenter($s), $this->querySeries($menuItem));
         $collections = [];
         foreach ($series as $serie) {
             $collection = $serie->getCollection();
@@ -43,7 +42,7 @@ class PageSearch
             $collections[$id]->series[] = $serie;
         }
 
-        $kinders = $this->tool->queryKinders(array_keys($series));
+        $kinders = $this->tool->queryAllKinders(array_keys($series));
 
         $this->tool->populateCountry($series);
         $this->tool->populateImage($series, $kinders);

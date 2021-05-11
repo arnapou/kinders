@@ -17,47 +17,49 @@ use App\Entity\ZBA;
 
 class PageDoubles extends PageLookingFor
 {
+    protected function increment(Kinder $kinder): int
+    {
+        return $kinder->getQuantityDouble();
+    }
+
     /**
      * @return Kinder[]
      */
-    protected function queryStatsKinders(): array
+    protected function queryKinders(): array
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('SUM(k.quantityDouble) as nb, s.id')
+            ->select('k')
             ->from(Kinder::class, 'k')
             ->join('k.serie', 's')
             ->andWhere('k.quantityDouble > 0')
-            ->groupBy('k.serie')
             ->getQuery()->getResult();
     }
 
     /**
      * @return BPZ[]
      */
-    protected function queryStatsBpzs(): array
+    protected function queryBpzs(): array
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('SUM(k.quantityDouble) as nb, s.id')
+            ->select('e, k')
             ->from(BPZ::class, 'e')
             ->join('e.kinder', 'k')
             ->join('k.serie', 's')
-            ->andWhere('k.quantityDouble > 0')
-            ->groupBy('k.serie')
+            ->andWhere('e.quantityDouble > 0')
             ->getQuery()->getResult();
     }
 
     /**
      * @return ZBA[]
      */
-    protected function queryStatsZbas(): array
+    protected function queryZbas(): array
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('SUM(k.quantityDouble) as nb, s.id')
+            ->select('e, k')
             ->from(ZBA::class, 'e')
             ->join('e.kinder', 'k')
             ->join('k.serie', 's')
-            ->andWhere('k.quantityDouble > 0')
-            ->groupBy('k.serie')
+            ->andWhere('e.quantityDouble > 0')
             ->getQuery()->getResult();
     }
 }

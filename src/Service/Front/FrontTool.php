@@ -16,7 +16,7 @@ use App\Entity\Country;
 use App\Entity\Kinder;
 use App\Entity\Serie;
 use App\Entity\ZBA;
-use App\Presenter\Front\SeriePresenter;
+use App\Presenter\KinderPresenter;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -50,7 +50,7 @@ class FrontTool
     /**
      * Défini un item country à la main pour économiser doctrine.
      *
-     * @param array<int, SeriePresenter> $series
+     * @param array<int, \App\Presenter\SeriePresenter> $series
      */
     public function populateCountry(array $series): void
     {
@@ -64,8 +64,8 @@ class FrontTool
     /**
      * Définit la première image de la série.
      *
-     * @param array<int, SeriePresenter> $series
-     * @param array<int, Kinder>         $kinders
+     * @param array<int, \App\Presenter\SeriePresenter> $series
+     * @param array<int, Kinder>                        $kinders
      */
     public function populateImage(array $series, array $kinders): void
     {
@@ -84,8 +84,8 @@ class FrontTool
     /**
      * Une série est considérée complete si on n'a aucun champ lookingFor à TRUE pour aucun Kinder, BPZ ou ZBA de la série.
      *
-     * @param array<int, SeriePresenter> $series
-     * @param array<int, Kinder>         $kinders
+     * @param array<int, \App\Presenter\SeriePresenter> $series
+     * @param array<int, Kinder>                        $kinders
      */
     public function populateComplete(array $series, array $kinders): void
     {
@@ -105,6 +105,39 @@ class FrontTool
         foreach ($zbas as $zba) {
             $kinder = $kinders[$zba->getKinder()->getId()];
             $series[$kinder->getSerie()->getId()]->complete &= !$zba->isLookingFor();
+        }
+    }
+
+    /**
+     * Remplace les kinders par la liste réelle en direct pour économiser des requêtes.
+     *
+     * @param array<int, \App\Presenter\SeriePresenter> $series
+     * @param array<int, Kinder|KinderPresenter>        $kinders
+     */
+    public function populateKinders(array $series, array $kinders): void
+    {
+        foreach ($kinders as $id => $kinder) {
+            $serieId = $kinder->getSerie()->getId();
+            if (!isset($series[$serieId])) {
+                continue;
+            }
+            $series[$serieId]->kinders[$id] = $kinder;
+        }
+
+        $sortKinders = static function (KinderPresenter $a, KinderPresenter $b) {
+            foreach (Serie::KINDER_SORTING as $field => $order) {
+                $asc = 'ASC' === strtoupper($order);
+                $res = $a->$field() <=> $b->$field();
+                if (0 !== $res) {
+                    return $asc ? $res : -$res;
+                }
+            }
+
+            return 0;
+        };
+
+        foreach ($series as $serie) {
+            uasort($serie->kinders, $sortKinders);
         }
     }
 
@@ -134,15 +167,14 @@ class FrontTool
             ->select('e, i')
             ->from(Kinder::class, 'e', 'e.id')
             ->join('e.images', 'i')
-            ->where('e.id IN (:ids)');
+            ->where('e.id IN (:ids)')
+            ->setParameter('ids', $kinderIds);
 
         foreach (Serie::KINDER_SORTING as $field => $order) {
             $qb->addOrderBy("e.$field", $order);
         }
 
-        return $qb
-            ->setParameter('ids', $kinderIds)
-            ->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -150,18 +182,23 @@ class FrontTool
      *
      * @return array<int, Kinder>
      */
-    public function queryKinders(array $serieIds): array
+    public function queryAllKinders(array $serieIds): array
     {
         if (!$serieIds) {
             return [];
         }
 
-        return $this->entityManager->createQueryBuilder()
+        $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
             ->from(Kinder::class, 'e', 'e.id')
             ->where('e.serie IN (:ids)')
-            ->setParameter('ids', $serieIds)
-            ->getQuery()->getResult();
+            ->setParameter('ids', $serieIds);
+
+        foreach (Serie::KINDER_SORTING as $field => $order) {
+            $qb->addOrderBy("e.$field", $order);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

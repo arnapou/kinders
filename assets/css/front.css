@@ -110,6 +110,17 @@ h1 {
     margin-right: .2rem;
 }
 
+.pdf-download {
+    float: right;
+    font-size: 75%;
+}
+
+.pdf-download img {
+    max-height: 1.2em;
+    vertical-align: middle;
+    margin-right: .4em;
+}
+
 /* TABLE KINDER */
 
 table.kinders {

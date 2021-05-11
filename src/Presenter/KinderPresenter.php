@@ -9,18 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Presenter\Front;
+namespace App\Presenter;
 
-use App\Presenter\ObjectPresenterWrapper;
+use App\Entity\Kinder;
 
 /**
- * @method getId()
- * @method getName()
+ * @method Kinder realObject()
  */
-class CollectionPresenter extends ObjectPresenterWrapper
+class KinderPresenter extends ObjectPresenter
 {
-    /**
-     * @var SeriePresenter[]
-     */
-    public array $series = [];
+    public array    $flag = ['kinder' => false, 'bpz' => false, 'zba' => false];
 }

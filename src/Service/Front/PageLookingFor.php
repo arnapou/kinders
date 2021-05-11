@@ -15,7 +15,8 @@ use App\Entity\BPZ;
 use App\Entity\Kinder;
 use App\Entity\Serie;
 use App\Entity\ZBA;
-use App\Presenter\Front\SeriePresenter;
+use App\Presenter\KinderPresenter;
+use App\Presenter\SeriePresenter;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PageLookingFor
@@ -28,7 +29,11 @@ class PageLookingFor
 
     public function getSeries(): array
     {
-        $stats = $this->queryStats();
+        $stats = $this->queryStats(
+            $realKinders = $this->queryKinders(),
+            $realBpzs = $this->queryBpzs(),
+            $realZbas = $this->queryZbas(),
+        );
 
         $qb = $this->entityManager->createQueryBuilder()
             ->select('s')
@@ -42,83 +47,125 @@ class PageLookingFor
             ->addOrderBy('s.name', 'ASC');
 
         $series = array_map(static fn (Serie $s) => new SeriePresenter($s), $qb->getQuery()->getResult());
-        $kinders = $this->tool->queryKinders(array_keys($series));
+        $kinders = $this->tool->queryAllKinders(array_keys($series));
 
         $this->tool->populateCountry($series);
         $this->tool->populateImage($series, $kinders);
+        $this->tool->populateKinders($series, $this->getKindersPresenter($realKinders, $realBpzs, $realZbas));
 
         foreach ($series as $serie) {
-            $serie->statsCount['kinder'] += $stats[$serie->getId()]['kinder'] ?? 0;
-            $serie->statsCount['bpz'] += $stats[$serie->getId()]['bpz'] ?? 0;
-            $serie->statsCount['zba'] += $stats[$serie->getId()]['zba'] ?? 0;
+            $serie->stats['kinder'] += $stats[$serie->getId()]['kinder'] ?? 0;
+            $serie->stats['bpz'] += $stats[$serie->getId()]['bpz'] ?? 0;
+            $serie->stats['zba'] += $stats[$serie->getId()]['zba'] ?? 0;
         }
 
         return $series;
     }
 
     /**
+     * @param array<Kinder> $kinders
+     * @param array<BPZ>    $bpzs
+     * @param array<ZBA>    $zbas
+     *
+     * @return array<int, KinderPresenter}>
+     */
+    private function getKindersPresenter(array $kinders, array $bpzs, array $zbas): array
+    {
+        $items = [];
+
+        foreach ($kinders as $item) {
+            $id = $item->getId();
+            $items[$id] ??= new KinderPresenter($item);
+            $items[$id]->flag['kinder'] = true;
+        }
+
+        foreach ($bpzs as $item) {
+            $id = $item->getKinder()->getId();
+            $items[$id] ??= new \App\Presenter\KinderPresenter($item->getKinder());
+            $items[$id]->flag['bpz'] = true;
+        }
+
+        foreach ($zbas as $item) {
+            $id = $item->getKinder()->getId();
+            $items[$id] ??= new \App\Presenter\KinderPresenter($item->getKinder());
+            $items[$id]->flag['zba'] = true;
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param array<Kinder> $kinders
+     * @param array<BPZ>    $bpzs
+     * @param array<ZBA>    $zbas
+     *
      * @return array<int, array{kinder: count, zba: count, bpz: count}>
      */
-    private function queryStats(): array
+    private function queryStats(array $kinders, array $bpzs, array $zbas): array
     {
         $stats = [];
 
-        foreach ($this->queryStatsKinders() as $item) {
-            $stats[$item['id']]['kinder'] = ($stats[$item['id']]['kinder'] ?? 0) + $item['nb'];
+        foreach ($kinders as $item) {
+            $id = $item->getSerie()->getId();
+            $stats[$id]['kinder'] = ($stats[$id]['kinder'] ?? 0) + $this->increment($item);
         }
 
-        foreach ($this->queryStatsBpzs() as $item) {
-            $stats[$item['id']]['bpz'] = ($stats[$item['id']]['bpz'] ?? 0) + $item['nb'];
+        foreach ($bpzs as $item) {
+            $id = $item->getKinder()->getSerie()->getId();
+            $stats[$id]['bpz'] = ($stats[$id]['bpz'] ?? 0) + $this->increment($item->getKinder());
         }
 
-        foreach ($this->queryStatsZbas() as $item) {
-            $stats[$item['id']]['zba'] = ($stats[$item['id']]['zba'] ?? 0) + $item['nb'];
+        foreach ($zbas as $item) {
+            $id = $item->getKinder()->getSerie()->getId();
+            $stats[$id]['zba'] = ($stats[$id]['zba'] ?? 0) + $this->increment($item->getKinder());
         }
 
         return $stats;
     }
 
+    protected function increment(Kinder $kinder): int
+    {
+        return 1;
+    }
+
     /**
-     * @return array{nb: int, id: int}
+     * @return array<int, Kinder>
      */
-    protected function queryStatsKinders(): array
+    protected function queryKinders(): array
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('COUNT(k) as nb, s.id')
+            ->select('k')
             ->from(Kinder::class, 'k')
             ->join('k.serie', 's')
             ->andWhere('k.lookingFor = true')
-            ->groupBy('k.serie')
             ->getQuery()->getResult();
     }
 
     /**
-     * @return array{nb: int, id: int}
+     * @return array<int, BPZ>
      */
-    protected function queryStatsBpzs(): array
+    protected function queryBpzs(): array
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('COUNT(e) as nb, s.id')
+            ->select('e, k')
             ->from(BPZ::class, 'e')
             ->join('e.kinder', 'k')
             ->join('k.serie', 's')
             ->andWhere('e.lookingFor = true')
-            ->groupBy('k.serie')
             ->getQuery()->getResult();
     }
 
     /**
-     * @return array{nb: int, id: int}
+     * @return array<int, ZBA>
      */
-    protected function queryStatsZbas(): array
+    protected function queryZbas(): array
     {
         return $this->entityManager->createQueryBuilder()
-            ->select('COUNT(e) as nb, s.id')
+            ->select('e, k')
             ->from(ZBA::class, 'e')
             ->join('e.kinder', 'k')
             ->join('k.serie', 's')
             ->andWhere('e.lookingFor = true')
-            ->groupBy('k.serie')
             ->getQuery()->getResult();
     }
 }
