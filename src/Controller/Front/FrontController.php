@@ -15,9 +15,11 @@ use App\Repository\CollectionRepository;
 use App\Repository\MenuItemRepository;
 use App\Repository\SerieRepository;
 use App\Service\Front\PageDoubles;
+use App\Service\Front\PageLastModified;
 use App\Service\Front\PageLookingFor;
 use App\Service\Front\PageSearch;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -36,25 +38,27 @@ class FrontController extends AbstractController
     /**
      * @Route("/looking-for", name="front_lookingfor")
      */
-    public function recherches(PageLookingFor $lookingFor)
+    public function mesRecherches(PageLookingFor $pageLookingFor, MenuItemRepository $repository, Request $request)
     {
         $context = [
-            'series' => $lookingFor->getSeries(),
+            'menuitem' => $repository->findOneByRouteName($request->get('_route')),
+            'series' => $pageLookingFor->getSeries(),
         ];
 
-        return $this->render('looking-for.html.twig', $context);
+        return $this->render('listing.html.twig', $context);
     }
 
     /**
      * @Route("/doubles", name="front_doubles")
      */
-    public function doubles(PageDoubles $frontDoubles)
+    public function mesDoubles(PageDoubles $pageDoubles, MenuItemRepository $repository, Request $request)
     {
         $context = [
-            'series' => $frontDoubles->getSeries(),
+            'menuitem' => $repository->findOneByRouteName($request->get('_route')),
+            'series' => $pageDoubles->getSeries(),
         ];
 
-        return $this->render('doubles.html.twig', $context);
+        return $this->render('listing.html.twig', $context);
     }
 
     /**
@@ -71,9 +75,7 @@ class FrontController extends AbstractController
             return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
         }
 
-        $context = [
-            'serie' => $serie,
-        ];
+        $context = ['serie' => $serie];
 
         return $this->render('serie.html.twig', $context);
     }
@@ -96,11 +98,22 @@ class FrontController extends AbstractController
             return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
         }
 
-        $context = [
-            'collection' => $collection,
-        ];
+        $context = ['collection' => $collection];
 
         return $this->render('collection.html.twig', $context);
+    }
+
+    /**
+     * @Route("/last-modified", name="front_last_modified")
+     */
+    public function lastModified(PageLastModified $pageLastModified, MenuItemRepository $repository, Request $request)
+    {
+        $context = [
+            'menuitem' => $repository->findOneByRouteName($request->get('_route')),
+            'collections' => $pageLastModified->getSeriesByCollection(null),
+        ];
+
+        return $this->render('search.html.twig', $context);
     }
 
     /**

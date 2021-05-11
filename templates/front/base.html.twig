@@ -41,7 +41,11 @@
 <div id="content">
     <h1>
         {%- block h1_wrapper -%}
-            {%- block title -%}{%- endblock -%}
+            {%- block title -%}
+                {%- if menuitem is not empty -%}
+                    {{- menuitem.name -}}
+                {%- endif -%}
+            {%- endblock -%}
         {%- endblock -%}
     </h1>
     {%- block content -%}

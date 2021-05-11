@@ -18,6 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method MenuItem|null find($id, $lockMode = null, $lockVersion = null)
  * @method MenuItem|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MenuItem|null findOneByRouteName(string $routeName)
  * @method MenuItem[]    findAll()
  */
 class MenuItemRepository extends ServiceEntityRepository
