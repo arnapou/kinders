@@ -30,9 +30,16 @@
         {%- for categ in frontmenu.categories -%}
             {{- categ.name -}}
             <ul>
-                {%- for item in categ.items -%}
+                {% set limit=10 %}
+                {%- for item in categ.items|slice(0, limit) -%}
                     <li><a href="{{ item.url }}">{{ item.name }}</a></li>
                 {%- endfor -%}
+                {% if categ.items|length > limit %}
+                    <li><a href="#" class="more_menu_items">... voir plus ...</a></li>
+                    {%- for item in categ.items|slice(limit+1) -%}
+                        <li style="display: none"><a href="{{ item.url }}">{{ item.name }}</a></li>
+                    {%- endfor -%}
+                {% endif %}
             </ul>
         {% endfor %}
     {% endblock %}
