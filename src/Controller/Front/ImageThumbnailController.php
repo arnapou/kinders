@@ -16,17 +16,18 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\ItemInterface;
 
 class ImageThumbnailController extends AbstractController
 {
-    private int $tnSize;
-    private int $tnExpire;
+    private int               $tnSize;
+    private int               $tnExpire;
     private FilesystemAdapter $cache;
-    private string $path;
-    private array $mimeTypes = [
+    private string            $path;
+    private array             $mimeTypes = [
         'jpg' => 'image/jpeg',
         'png' => 'image/png',
     ];
@@ -63,19 +64,22 @@ class ImageThumbnailController extends AbstractController
 
             return $this->fileResponse($content, $ext, $filemtime);
         }
+        throw new NotFoundHttpException('Not Found');
     }
 
     private function fileResponse($content, $ext, $filemtime): Response
     {
         $response = new Response($content);
         $response->headers->set('Content-Type', $this->mimeTypes[$ext]);
-        $response->setCache([
-            'etag' => base64_encode(hash('sha256', $content, true)),
-            'last_modified' => \DateTime::createFromFormat('U', $filemtime),
-            'max_age' => 864000,
-            's_maxage' => 864000,
-            'public' => true,
-        ]);
+        $response->setCache(
+            [
+                'etag' => base64_encode(hash('sha256', $content, true)),
+                'last_modified' => \DateTime::createFromFormat('U', $filemtime),
+                'max_age' => 864000,
+                's_maxage' => 864000,
+                'public' => true,
+            ]
+        );
         $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
 
         return $response;
@@ -116,19 +120,19 @@ class ImageThumbnailController extends AbstractController
 
             return $dst;
         };
-        switch ($ext) {
-            case 'jpg':
-                ob_start();
-                imagejpeg($resize(imagecreatefromjpeg($filename)), null, 95);
 
-                return ob_get_clean();
-            case 'png':
-                ob_start();
-                imagepng($resize(imagecreatefrompng($filename)), null, 9);
+        $catch = static function (callable $process): string {
+            ob_start();
+            $process();
 
-                return ob_get_clean();
-        }
-        throw new \RuntimeException();
+            return ob_get_clean();
+        };
+
+        return match ($ext) {
+            'jpg' => $catch(fn () => imagejpeg($resize(imagecreatefromjpeg($filename)), null, 95)),
+            'png' => $catch(fn () => imagepng($resize(imagecreatefrompng($filename)), null, 9)),
+            default => throw new \RuntimeException()
+        };
     }
 
     private function newSize(float $w1, float $h1, float $width, float $height): array
@@ -140,7 +144,7 @@ class ImageThumbnailController extends AbstractController
         return [floor($height * $w1 / $h1), $height];
     }
 
-    private function sanitizeWH(int &$w, int &$h)
+    private function sanitizeWH(int &$w, int &$h): void
     {
         if (0 === $w && 0 === $h) {
             $w = $h = $this->tnSize;
