@@ -11,32 +11,26 @@
 
 namespace App\Service\Front;
 
-use App\Entity\BPZ;
 use App\Entity\Collection;
-use App\Entity\Kinder;
 use App\Entity\MenuItem;
 use App\Entity\Serie;
-use App\Entity\ZBA;
 use App\Presenter\Front\CollectionPresenter;
 use App\Presenter\Front\SeriePresenter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
-class FrontSearch
+class PageSearch
 {
-    use FrontQueryToolTrait;
-
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private FrontCache $frontCache,
+        private FrontTool $tool,
         private Security $security
     ) {
     }
 
     public function getSeriesByCollection(MenuItem $menuItem): array
     {
-        $series = $this->querySeries($menuItem);
-        $seriesP = [];
+        $series = array_map(static fn (Serie $s) => new SeriePresenter($s), $this->querySeries($menuItem));
         $collections = [];
         foreach ($series as $serie) {
             $collection = $serie->getCollection();
@@ -46,18 +40,16 @@ class FrontSearch
                 : 0;
 
             $collections[$id] ??= new CollectionPresenter($collection);
-            $presenter = new SeriePresenter($serie);
-            $collections[$id]->series[] = $presenter;
-            $seriesP[$serie->getId()] = $presenter;
+            $collections[$id]->series[] = $serie;
         }
 
-        $kinders = $this->queryKinders(array_keys($series));
+        $kinders = $this->tool->queryKinders(array_keys($series));
 
-        $this->populateCountry($seriesP);
-        $this->populateImage($seriesP, $kinders);
+        $this->tool->populateCountry($series);
+        $this->tool->populateImage($series, $kinders);
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
-            $this->populateComplete($seriesP, $kinders);
+            $this->tool->populateComplete($series, $kinders);
         }
 
         $this->sortCollections($collections);
@@ -66,67 +58,7 @@ class FrontSearch
     }
 
     /**
-     * Une série est considérée complete si on n'a aucun champ lookingFor à TRUE pour aucun Kinder, BPZ ou ZBA de la série.
-     *
-     * @param SeriePresenter[] $series
-     */
-    private function populateComplete(array $series, array $kinders): void
-    {
-        $kinderIds = array_keys($kinders);
-        $bpzs = $this->queryBpzs($kinderIds);
-        $zbas = $this->queryZbas($kinderIds);
-
-        foreach ($kinders as $kinder) {
-            $series[$kinder->getSerie()->getId()]->complete &= !$kinder->isLookingFor();
-        }
-
-        foreach ($bpzs as $bpz) {
-            $kinder = $kinders[$bpz->getKinder()->getId()];
-            $series[$kinder->getSerie()->getId()]->complete &= !$bpz->isLookingFor();
-        }
-
-        foreach ($zbas as $zba) {
-            $kinder = $kinders[$zba->getKinder()->getId()];
-            $series[$kinder->getSerie()->getId()]->complete &= !$zba->isLookingFor();
-        }
-    }
-
-    /**
-     * @return ZBA[]
-     */
-    private function queryZbas(array $kinderIds): array
-    {
-        if (!$kinderIds) {
-            return [];
-        }
-
-        return $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(ZBA::class, 'e', 'e.id')
-            ->where('e.kinder IN (:ids)')
-            ->setParameter('ids', $kinderIds)
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @return BPZ[]
-     */
-    private function queryBpzs(array $kinderIds): array
-    {
-        if (!$kinderIds) {
-            return [];
-        }
-
-        return $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(BPZ::class, 'e', 'e.id')
-            ->where('e.kinder IN (:ids)')
-            ->setParameter('ids', $kinderIds)
-            ->getQuery()->getResult();
-    }
-
-    /**
-     * @return Serie[]
+     * @return array<int, Serie>
      */
     private function querySeries(MenuItem $menuItem): array
     {
@@ -157,7 +89,7 @@ class FrontSearch
      */
     private function getSeriesCount(Collection $collection): int
     {
-        return $this->frontCache->from(
+        return $this->tool->cached(
             'CollectionSeriesCount_' . $collection->getId(),
             fn () => $collection->getSeries()->count()
         );

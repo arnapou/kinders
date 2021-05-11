@@ -18,12 +18,12 @@ use App\Entity\ZBA;
 use App\Presenter\Front\SeriePresenter;
 use Doctrine\ORM\EntityManagerInterface;
 
-class FrontLookingFor
+class PageLookingFor
 {
-    use FrontQueryToolTrait;
-
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected FrontTool $tool
+    ) {
     }
 
     public function getSeries(): array
@@ -41,19 +41,19 @@ class FrontLookingFor
             ->addOrderBy('c.name', 'ASC')
             ->addOrderBy('s.name', 'ASC');
 
-        $seriesP = array_map(static fn (Serie $s) => new SeriePresenter($s), $qb->getQuery()->getResult());
-        $kinders = $this->queryKinders(array_keys($seriesP));
+        $series = array_map(static fn (Serie $s) => new SeriePresenter($s), $qb->getQuery()->getResult());
+        $kinders = $this->tool->queryKinders(array_keys($series));
 
-        $this->populateCountry($seriesP);
-        $this->populateImage($seriesP, $kinders);
+        $this->tool->populateCountry($series);
+        $this->tool->populateImage($series, $kinders);
 
-        foreach ($seriesP as $serie) {
+        foreach ($series as $serie) {
             $serie->statsCount['kinder'] += $stats[$serie->getId()]['kinder'] ?? 0;
             $serie->statsCount['bpz'] += $stats[$serie->getId()]['bpz'] ?? 0;
             $serie->statsCount['zba'] += $stats[$serie->getId()]['zba'] ?? 0;
         }
 
-        return $seriesP;
+        return $series;
     }
 
     /**
@@ -79,9 +79,9 @@ class FrontLookingFor
     }
 
     /**
-     * @return Kinder[]
+     * @return array{nb: int, id: int}
      */
-    private function queryStatsKinders(): array
+    protected function queryStatsKinders(): array
     {
         return $this->entityManager->createQueryBuilder()
             ->select('COUNT(k) as nb, s.id')
@@ -93,9 +93,9 @@ class FrontLookingFor
     }
 
     /**
-     * @return BPZ[]
+     * @return array{nb: int, id: int}
      */
-    private function queryStatsBpzs(): array
+    protected function queryStatsBpzs(): array
     {
         return $this->entityManager->createQueryBuilder()
             ->select('COUNT(e) as nb, s.id')
@@ -108,9 +108,9 @@ class FrontLookingFor
     }
 
     /**
-     * @return ZBA[]
+     * @return array{nb: int, id: int}
      */
-    private function queryStatsZbas(): array
+    protected function queryStatsZbas(): array
     {
         return $this->entityManager->createQueryBuilder()
             ->select('COUNT(e) as nb, s.id')

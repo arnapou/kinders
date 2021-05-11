@@ -14,8 +14,9 @@ namespace App\Controller\Front;
 use App\Repository\CollectionRepository;
 use App\Repository\MenuItemRepository;
 use App\Repository\SerieRepository;
-use App\Service\Front\FrontLookingFor;
-use App\Service\Front\FrontSearch;
+use App\Service\Front\PageDoubles;
+use App\Service\Front\PageLookingFor;
+use App\Service\Front\PageSearch;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -35,13 +36,25 @@ class FrontController extends AbstractController
     /**
      * @Route("/looking-for", name="front_lookingfor")
      */
-    public function recherches(FrontLookingFor $lookingFor)
+    public function recherches(PageLookingFor $lookingFor)
     {
         $context = [
             'series' => $lookingFor->getSeries(),
         ];
 
         return $this->render('looking-for.html.twig', $context);
+    }
+
+    /**
+     * @Route("/doubles", name="front_doubles")
+     */
+    public function doubles(PageDoubles $frontDoubles)
+    {
+        $context = [
+            'series' => $frontDoubles->getSeries(),
+        ];
+
+        return $this->render('doubles.html.twig', $context);
     }
 
     /**
@@ -93,7 +106,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/search/{id}-{slug}", name="front_search", requirements={"id": "\d+"})
      */
-    public function search(FrontSearch $frontSearch, MenuItemRepository $repository, int $id, string $slug = '')
+    public function search(PageSearch $frontSearch, MenuItemRepository $repository, int $id, string $slug = '')
     {
         $menuItem = $repository->find($id);
         if (!$menuItem) {
