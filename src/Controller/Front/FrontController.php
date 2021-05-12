@@ -17,11 +17,13 @@ use App\Repository\SerieRepository;
 use App\Service\Front\PageDoubles;
 use App\Service\Front\PageLastModified;
 use App\Service\Front\PageLookingFor;
+use App\Service\Front\PageRandom;
 use App\Service\Front\PageSearch;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -36,6 +38,20 @@ class FrontController extends AbstractController
         $context = [];
 
         return $this->render('index.html.twig', $context);
+    }
+
+    /**
+     * @Route("/random-serie", name="front_random_serie")
+     */
+    public function randomSerie(PageRandom $pageRandom)
+    {
+        $serie = $pageRandom->getRandomSerie();
+
+        if (empty($serie)) {
+            throw new NotFoundHttpException('Not Found');
+        }
+
+        return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
     }
 
     /**
