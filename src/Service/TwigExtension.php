@@ -11,11 +11,18 @@
 
 namespace App\Service;
 
+use App\Entity\Image;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class TwigExtension extends AbstractExtension
 {
+    public function __construct(
+        private ImageHelper $helper
+    ) {
+    }
+
     public function getFilters()
     {
         return [
@@ -23,21 +30,23 @@ class TwigExtension extends AbstractExtension
         ];
     }
 
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('vich_uploader_asset', [$this, 'vich_uploader_asset']),
+        ];
+    }
+
     public function thumbnail($filename, int $w = 0, int $h = 0)
     {
-        $infos = pathinfo($filename);
-        if ($w && $h) {
-            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}x${h}." . $infos['extension'];
-        }
+        return $this->helper->thumbnail($filename, $w, $h);
+    }
 
-        if ($w) {
-            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.${w}." . $infos['extension'];
-        }
-
-        if ($h) {
-            return $infos['dirname'] . '/' . $infos['filename'] . "_tn.x${h}." . $infos['extension'];
-        }
-
-        return $infos['dirname'] . '/' . $infos['filename'] . '_tn.' . $infos['extension'];
+    /**
+     * @param Image $object
+     */
+    public function vich_uploader_asset($object): ?string
+    {
+        return $this->helper->asset($object);
     }
 }

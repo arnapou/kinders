@@ -12,6 +12,7 @@ twig:
     pagination: '@App\Service\Admin\Pagination'
     blank_img: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
     frontmenu: '@App\Service\Front\FrontMenu'
+    vich_field: '%vich.field%'
   form_themes:
     - '@admin/form_bootstrap.html.twig'             # extends 'bootstrap_4_layout.html.twig'
     - '@admin/form_tetranzselect2entity.html.twig'  # extends '@TetranzSelect2Entity/Form/fields.html.twig'

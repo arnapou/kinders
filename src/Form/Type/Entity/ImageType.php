@@ -40,7 +40,7 @@ class ImageType extends AbstractType
                 ]
             )
             ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => ''])
-            ->add('diskFile', ImageUploadType::class);
+            ->add(Image::VICH_FIELD, ImageUploadType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

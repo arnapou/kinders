@@ -11,13 +11,14 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Image;
+use App\Service\ImageHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -26,17 +27,17 @@ class ImageThumbnailController extends AbstractController
     private int               $tnSize;
     private int               $tnExpire;
     private FilesystemAdapter $cache;
-    private string            $path;
     private array             $mimeTypes = [
         'jpg' => 'image/jpeg',
         'png' => 'image/png',
     ];
 
-    public function __construct(ContainerInterface $container, KernelInterface $kernel)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        private ImageHelper $helper
+    ) {
         $this->tnSize = (int) $container->getParameter('thumbnail.size');
         $this->tnExpire = (int) $container->getParameter('thumbnail.expire');
-        $this->path = $kernel->getProjectDir() . '/public/img';
         $this->cache = new FilesystemAdapter();
     }
 
@@ -49,7 +50,7 @@ class ImageThumbnailController extends AbstractController
     public function thumbnailAction(string $path, string $ext, int $w = 0, int $h = 0)
     {
         $this->sanitizeWH($w, $h);
-        $filename = $this->path . "/$path.$ext";
+        $filename = $this->helper->getUploadDestination() . "/$path.$ext";
         if (is_file($filename)) {
             $filemtime = filemtime($filename);
             $filesize = filesize($filename);

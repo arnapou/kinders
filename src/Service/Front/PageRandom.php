@@ -42,6 +42,22 @@ class PageRandom
             ->getOneOrNullResult();
     }
 
+    public function getRandomKinderImage(): ?Image
+    {
+        $imageId = $this->getRandomImageId();
+        if (!$imageId) {
+            return null;
+        }
+
+        return $this->entityManager->createQueryBuilder()
+            ->select('e')
+            ->from(Image::class, 'e')
+            ->where('e.id = :id')
+            ->setParameter(':id', $imageId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     protected function getRandomImageId(): ?int
     {
         $ids = $this->entityManager->createQueryBuilder()

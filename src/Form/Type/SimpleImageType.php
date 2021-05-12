@@ -24,7 +24,7 @@ class SimpleImageType extends AbstractType
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
             ->add('comment', TextType::class, ['required' => false, 'empty_data' => ''])
-            ->add('diskFile', ImageUploadType::class);
+            ->add(Image::VICH_FIELD, ImageUploadType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

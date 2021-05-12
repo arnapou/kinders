@@ -35,7 +35,7 @@
                 {{ form_widget(form['image'~n].children.comment, {'attr': {'placeholder': 'comment '~n} }) }}
             </div>
             <div class="col-3">
-                {{ form_widget(form['image'~n].children.diskFile) }}
+                {{ form_widget(form['image'~n].children[vich_field]) }}
             </div>
         </div>
     {% endfor %}

@@ -16,17 +16,17 @@ use App\Entity\BaseItem;
 use App\Entity\Image;
 use App\Repository\ImageRepository;
 use App\Service\Admin\SearchFilter;
+use App\Service\ImageHelper;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class AutocompleteService
 {
     public function __construct(
         private FormFactoryInterface $formFactory,
         private ManagerRegistry $doctrine,
-        private UploaderHelper $uploaderHelper,
+        private ImageHelper $imageHelper,
         private SearchFilter $searchFilter
     ) {
     }
@@ -79,7 +79,7 @@ class AutocompleteService
                 ? [
                     'id' => $image->getId(),
                     'text' => (string) $image,
-                    'file' => $this->uploaderHelper->asset($image, 'diskFile'),
+                    'file' => $this->imageHelper->asset($image),
                 ]
                 : [
                     'id' => $image->getId(),
@@ -124,7 +124,7 @@ class AutocompleteService
                 ? [
                     'id' => $entity->getId(),
                     'text' => (string) $entity,
-                    'file' => $this->uploaderHelper->asset($entity->getImage(), 'diskFile'),
+                    'file' => $this->imageHelper->asset($entity->getImage()),
                 ]
                 : [
                     'id' => $entity->getId(),

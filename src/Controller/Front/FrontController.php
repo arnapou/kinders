@@ -11,6 +11,7 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Image;
 use App\Repository\CollectionRepository;
 use App\Repository\MenuItemRepository;
 use App\Repository\SerieRepository;
@@ -19,6 +20,7 @@ use App\Service\Front\PageLastModified;
 use App\Service\Front\PageLookingFor;
 use App\Service\Front\PageRandom;
 use App\Service\Front\PageSearch;
+use App\Service\ImageHelper;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,6 +54,20 @@ class FrontController extends AbstractController
         }
 
         return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
+    }
+
+    /**
+     * @Route("/random-kinder-image", name="random_kinder_image")
+     */
+    public function randomKinderImage(PageRandom $pageRandom, ImageHelper $helper, int $size = 250)
+    {
+        $image = $pageRandom->getRandomKinderImage();
+        $parameters = $helper->thumbnailRouteParameters($image);
+        if (empty($parameters)) {
+            return $this->redirect('/en-construction.png');
+        }
+
+        return $this->redirectToRoute('image_thumbnail_wh', $parameters + ['w' => $size, 'h' => $size]);
     }
 
     /**

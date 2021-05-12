@@ -30,6 +30,16 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Image extends BaseEntity
 {
+    public const EXTENSIONS = ['jpg', 'png'];
+    /**
+     * Sert à centraliser la valeur du fieldName vich utilisé partout.
+     */
+    public const VICH_FIELD = 'diskFile';
+    /**
+     * Config du dossier public utilisé (doit commencer par /).
+     */
+    public const PUBLIC_DIR = '/img';
+
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      *
