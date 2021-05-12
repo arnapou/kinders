@@ -25,7 +25,6 @@ use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -47,13 +46,9 @@ class FrontController extends AbstractController
      */
     public function randomSerie(PageRandom $pageRandom)
     {
-        $serie = $pageRandom->getRandomSerie();
+        $serie = $pageRandom->getRandomSerie() ?? throw new ResourceNotFoundException();
 
-        if (empty($serie)) {
-            throw new NotFoundHttpException('Not Found');
-        }
-
-        return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
+        return $this->redirectToRoute('front_serie', $serie->routeParameters());
     }
 
     /**
@@ -114,12 +109,10 @@ class FrontController extends AbstractController
      */
     public function serie(SerieRepository $repository, int $id, string $slug = '')
     {
-        $serie = $repository->find($id);
-        if (!$serie) {
-            throw new ResourceNotFoundException();
-        }
+        $serie = $repository->find($id) ?? throw new ResourceNotFoundException();
+
         if ($serie->getSlug() && $serie->getSlug() !== $slug) {
-            return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
+            return $this->redirectToRoute('front_serie', $serie->routeParameters());
         }
 
         $context = ['serie' => $serie];
@@ -132,17 +125,16 @@ class FrontController extends AbstractController
      */
     public function collection(CollectionRepository $repository, int $id, string $slug = '')
     {
-        $collection = $repository->find($id);
-        if (!$collection) {
-            throw new ResourceNotFoundException();
-        }
+        $collection = $repository->find($id) ?? throw new ResourceNotFoundException();
+
         if ($collection->getSlug() && $collection->getSlug() !== $slug) {
-            return $this->redirectToRoute('front_collection', ['id' => $collection->getId(), 'slug' => $collection->getSlug()]);
+            return $this->redirectToRoute('front_collection', $collection->routeParameters());
         }
+
         if (1 === $collection->getSeries()->count()) {
             $serie = $collection->getSeries()->get(0);
 
-            return $this->redirectToRoute('front_serie', ['id' => $serie->getId(), 'slug' => $serie->getSlug()]);
+            return $this->redirectToRoute('front_serie', $serie->routeParameters());
         }
 
         $context = ['collection' => $collection];
@@ -168,12 +160,10 @@ class FrontController extends AbstractController
      */
     public function search(PageSearch $frontSearch, MenuItemRepository $repository, int $id, string $slug = '')
     {
-        $menuItem = $repository->find($id);
-        if (!$menuItem) {
-            throw new ResourceNotFoundException();
-        }
+        $menuItem = $repository->find($id) ?? throw new ResourceNotFoundException();
+
         if ($menuItem->getSlug() && $menuItem->getSlug() !== $slug) {
-            return $this->redirectToRoute('front_search', ['id' => $menuItem->getId(), 'slug' => $menuItem->getSlug()]);
+            return $this->redirectToRoute('front_search', $menuItem->routeParameters());
         }
 
         $context = [

@@ -49,7 +49,7 @@ class FrontMenu
                 }
                 $url = $this->urlGenerator->generate($item->getRouteName());
             } else {
-                $url = $this->urlGenerator->generate('front_search', ['id' => $item->getId(), 'slug' => $item->getSlug()]);
+                $url = $this->urlGenerator->generate('front_search', $item->routeParameters());
             }
             $items[] = [
                 'name' => $item->getName(),

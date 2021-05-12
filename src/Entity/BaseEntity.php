@@ -152,6 +152,17 @@ abstract class BaseEntity
         return $this;
     }
 
+    /**
+     * @return array{id: int, slug: string}
+     */
+    public function routeParameters(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'slug' => $this->getSlug(),
+        ];
+    }
+
     public function __toString(): string
     {
         return $this->getName();

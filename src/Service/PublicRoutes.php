@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Route;
 class PublicRoutes
 {
     /**
-     * @var Route[]
+     * @var array<string, Route>
      */
     private ?array $routes = null;
 
@@ -25,6 +25,9 @@ class PublicRoutes
     {
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function names(): array
     {
         $keys = array_keys($this->routes());
@@ -33,7 +36,7 @@ class PublicRoutes
     }
 
     /**
-     * @return Route[]
+     * @return array<string, Route>
      */
     public function routes(): array
     {
