@@ -10,21 +10,74 @@ Le code est ouvert, vous pouvez l'utiliser comme vous voulez, mais je ne support
 pas les éventuels problèmes que vous auriez.
 
 En bref, il s'agit d'un site de gestion de collection de kinders surprise, collection
-que fait mon épouse. Il y a un admin et un front.
+que fait mon épouse.
 
-### Changelog technique
+### Changelog versions techniques
 
-**v3.x** (current master)
+| Date       | Branche | Symfony | Php | 
+|------------|---------|---------|-----|
+| 10/05/2021 | master  | 4.4     | 8.0 |
+| 09/05/2020 | v2.x    | 4.4     | 7.4 |
+| 14/04/2019 | v1.x    | 4.2     | 7.2 |
 
-* symfony 4.4
-* php 8.0
+### Schema basique des liaisons des entités
 
-**v2.x**
+```
+                                         ╭──╮
+                                         │  ▼      ╭──── BPZ ◀────╮
+Collection ◀─────╮                ╭──── Kinder ◀───┤              │
+                 ├───── Serie ◀───┤         ▲      ╰──── ZBA ◀────┤
+Country ◀────────╯                │         │                     │   
+                                  │         ╰─────────────────────┤   ╭───▶ Attribute
+MenuCategory ◀────── MenuItem     │                               ├───┤
+                                  ├───────────────────────────────┤   ╰───▶ Image 
+AdminUser                         │                               │     
+                                  ├──── Item ◀────────────────────┤
+SiteConfig                        │                               │
+                                  ╰──── Piece ◀───────────────────╯
+```
 
-* symfony 4.4
-* php 7.4
+### Hiérarchie des entités
 
-**v1.x**
+```
+AdminUser
+BaseEntity
+ ├─ Attribute
+ ├─ BaseItem
+ │  ├─ BPZ
+ │  ├─ Item
+ │  ├─ Kinder
+ │  ├─ Piece
+ │  ├─ Serie
+ │  └─ ZBA
+ │
+ ├─ Collection
+ ├─ Country
+ ├─ Image
+ ├─ MenuCategory
+ ├─ MenuItem
+ └─ SiteConfig
+```
 
-* symfony 4.2
-* php 7.2
+Champs communs de `BaseEntity` :
+
+    int       id
+    datetime  createdAt
+    datetime  updatedAt
+    string    name
+    string    slug
+    string    comment
+    string    description
+
+Champs communs de `BaseItem` :
+
+    int       quantityOwned
+    int       quantityDouble
+    int       year
+    bool      lookingFor
+    string    reference
+    string    sorting
+    string    realsorting
+    string    variante
+    {}        images          ManyToMany(App\Entity\Image)   
+    {}        attributes      ManyToMany(App\Entity\Attribute)

@@ -12,7 +12,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
@@ -31,13 +30,6 @@ class Attribute extends BaseEntity
      * @ORM\Column(type="string", length=100)
      */
     private $type = '';
-
-    /**
-     * @var string
-     * @Gedmo\Slug(fields={"type", "name"}, updatable=true)
-     * @ORM\Column(type="string", length=150)
-     */
-    protected $slug;
 
     public function getType(): string
     {
