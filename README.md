@@ -79,5 +79,5 @@ Champs communs de `BaseItem` :
     string    sorting
     string    realsorting
     string    variante
-    {}        images          ManyToMany(App\Entity\Image)   
-    {}        attributes      ManyToMany(App\Entity\Attribute)
+    ◀─▶       images          App\Entity\Image   
+    ◀─▶       attributes      App\Entity\Attribute
