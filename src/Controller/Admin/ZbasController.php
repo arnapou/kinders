@@ -49,7 +49,7 @@ class ZbasController extends AbstractController
         $breadcrumb->add('ZBAs', $this->generateUrl('admin_zbas'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_zbas_add'));
 
-        $entity = (new ZBA())->setKinder($kinderRepository->find(\intval($id)));
+        $entity = (new ZBA())->setKinder($kinderRepository->find((int) $id));
 
         return $formFactory->renderAdd('@admin/zbas/form.html.twig', $entity)
             ?: $this->redirect($breadcrumb->previous());

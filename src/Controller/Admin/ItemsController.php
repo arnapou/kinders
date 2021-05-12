@@ -49,7 +49,7 @@ class ItemsController extends AbstractController
         $breadcrumb->add('Items', $this->generateUrl('admin_items'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_items_add'));
 
-        $entity = (new Item())->setSerie($serieRepository->find(\intval($id)));
+        $entity = (new Item())->setSerie($serieRepository->find((int) $id));
 
         return $formFactory->renderAdd('@admin/items/form.html.twig', $entity)
             ?: $this->redirect($breadcrumb->previous());

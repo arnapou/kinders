@@ -8,21 +8,10 @@
 
     <div class="row ">
         <div class="col">
-            <p>
-                Je collectionne les kinders depuis 2004, j'ai énormément de doubles et d'objets à mettre sur ce site.<br/>
-                Par conséquent, il s'étoffe de jour en jour : n'hésitez pas à y revenir régulièrement 😉
-            </p>
-            <p>
-                Ce site est là pour faire des échanges également.<br/>
-                Vous pouvez m'envoyer un email avec le lien en bas de page.
-            </p>
-            <p>
-                Pour parcourir le site, vous pouvez cliquer sur un des liens à gauche ou les catégories qui suivent.<br/>
-                Bonne visite ! 🙂
-            </p>
+            {{ frontmenu.confighome.description|raw }}
         </div>
         <div class="col-3 text-right">
-            <img src="{{ path('random_kinder_image') }}" class="img-thumbnail">
+            <img src="{{ path('random_kinder_image') }}" alt="" class="img-thumbnail">
         </div>
     </div>
 

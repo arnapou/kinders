@@ -49,7 +49,7 @@ class BpzsController extends AbstractController
         $breadcrumb->add('BPZs', $this->generateUrl('admin_bpzs'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_bpzs_add'));
 
-        $entity = (new BPZ())->setKinder($kinderRepository->find(\intval($id)));
+        $entity = (new BPZ())->setKinder($kinderRepository->find((int) $id));
 
         return $formFactory->renderAdd('@admin/bpzs/form.html.twig', $entity)
             ?: $this->redirect($breadcrumb->previous());

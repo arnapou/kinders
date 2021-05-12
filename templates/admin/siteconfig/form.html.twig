@@ -1,0 +1,22 @@
+{% extends "@admin/base.html.twig" %}
+
+{% import "@admin/macros.html.twig" as macro %}
+
+{% block body %}
+    {{ macro.breadcrumb() }}
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.description, { 'attr':{'style': 'min-height: 25em' } }) }}
+
+    {{ form_widget(form) }}
+
+    <div class="form-group">
+        <button type="submit" class="btn-primary btn">{{ action }}</button>
+        <a href="{{ breadcrumb.previous }}" class="btn-light btn">Annuler</a>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

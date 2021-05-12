@@ -12,7 +12,9 @@
 namespace App\Service\Front;
 
 use App\Entity\MenuCategory;
+use App\Entity\SiteConfig;
 use App\Repository\MenuCategoryRepository;
+use App\Repository\SiteConfigRepository;
 use App\Service\PublicRoutes;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -20,7 +22,8 @@ class FrontMenu
 {
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
-        private MenuCategoryRepository $repository,
+        private MenuCategoryRepository $menuCategoryRepository,
+        private SiteConfigRepository $siteConfigRepository,
         private PublicRoutes $publicRoutes
     ) {
     }
@@ -28,7 +31,7 @@ class FrontMenu
     public function getCategories(bool $sidebar = true): array
     {
         $categories = [];
-        foreach ($this->repository->findBy(['sidebar' => $sidebar]) as $category) {
+        foreach ($this->menuCategoryRepository->findBy(['sidebar' => $sidebar]) as $category) {
             $array = $this->getCategory($category);
             if (!empty($array['items'])) {
                 $categories[] = $array;
@@ -61,5 +64,10 @@ class FrontMenu
             'name' => $category->getName(),
             'items' => $items,
         ];
+    }
+
+    public function getConfigHome(): ?SiteConfig
+    {
+        return $this->siteConfigRepository->find(SiteConfig::ID_HOME);
     }
 }

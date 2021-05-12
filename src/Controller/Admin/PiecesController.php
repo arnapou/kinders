@@ -49,7 +49,7 @@ class PiecesController extends AbstractController
         $breadcrumb->add('Pièces', $this->generateUrl('admin_pieces'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_pieces_add'));
 
-        $entity = (new Piece())->setSerie($serieRepository->find(\intval($id)));
+        $entity = (new Piece())->setSerie($serieRepository->find((int) $id));
 
         return $formFactory->renderAdd('@admin/pieces/form.html.twig', $entity)
             ?: $this->redirect($breadcrumb->previous());

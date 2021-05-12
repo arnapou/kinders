@@ -50,7 +50,7 @@ class KindersController extends AbstractController
         $breadcrumb->add('Kinders', $this->generateUrl('admin_kinders'));
         $breadcrumb->add('Ajouter', $this->generateUrl('admin_kinders_add'));
 
-        $entity = (new Kinder())->setSerie($serieRepository->find(\intval($id)));
+        $entity = (new Kinder())->setSerie($serieRepository->find((int) $id));
 
         return $formFactory->renderAdd('@admin/kinders/form.html.twig', $entity)
             ?: $this->redirect($breadcrumb->previous());
