@@ -280,8 +280,8 @@
         <p class="card-text mb-1">
             <span class="text-muted">Images : </span>
             {% for img in item.images %}
-                <a href="{{ vich_uploader_asset(img) }}" target="_blank" class="admin-image"
-                   style="background-image: url('{{ vich_uploader_asset(img)|tn }}');">
+                <a href="{{ img|href }}" target="_blank" class="admin-image"
+                   style="background-image: url('{{ img|tn }}');">
                 </a>
             {% endfor %}
             {#        <a href="{{ path('admin_images_add_type', {'type': item|imagetype }) }}" class="btn-sm btn-light">#}

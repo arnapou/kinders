@@ -15,8 +15,8 @@
 {% macro image(item) -%}
     {%- apply spaceless %}
         {% if item and item.file is defined and item.file %}
-            <a href="{{ vich_uploader_asset(item) }}" target="_blank" class="admin-image tn"
-               style="background-image: url('{{ vich_uploader_asset(item)|tn }}');">
+            <a href="{{ item|href }}" target="_blank" class="admin-image tn"
+               style="background-image: url('{{ item|tn }}');">
             </a>
         {% else %}
             <span class="admin-image blank"></span>

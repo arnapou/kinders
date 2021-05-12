@@ -27,6 +27,7 @@ class TwigExtension extends AbstractExtension
     {
         return [
             new TwigFilter('tn', [$this, 'thumbnail']),
+            new TwigFilter('href', [$this, 'href']),
         ];
     }
 
@@ -37,6 +38,15 @@ class TwigExtension extends AbstractExtension
         ];
     }
 
+    public function href($object)
+    {
+        if ($object instanceof Image) {
+            return $this->helper->asset($object);
+        }
+
+        return (string) $object;
+    }
+
     public function thumbnail($filename, int $w = 0, int $h = 0)
     {
         return $this->helper->thumbnail($filename, $w, $h);
@@ -44,6 +54,8 @@ class TwigExtension extends AbstractExtension
 
     /**
      * @param Image $object
+     *
+     * @deprecated présent que pour comaptibilité avec l'extension native
      */
     public function vich_uploader_asset($object): ?string
     {

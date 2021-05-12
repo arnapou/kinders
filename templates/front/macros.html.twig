@@ -2,8 +2,8 @@
     {% set num = (num ?? 0) ?: 0 %}
     {% set image = item.image(num) %}
     {% if image and image.file is defined and image.file %}
-        <a href="{{ vich_uploader_asset(image) }}" target="_blank" class="image tn">
-            <img src="{{ vich_uploader_asset(image)|tn(0,200) }}">
+        <a href="{{ image|href }}" target="_blank" class="image tn">
+            <img src="{{ image|tn(0,200) }}">
         </a>
     {% elseif item.lookingFor %}
         <span class="image none lookingfor">
@@ -20,7 +20,7 @@
     {% set image = item.image %}
     {%- if image and image.file is defined and image.file -%}
         <span class="img-wrapper"
-              style="background-image: url({{ vich_uploader_asset(image)|tn(32, 32) }});">
+              style="background-image: url({{ image|tn(32, 32) }});">
         </span>
     {%- else -%}
         <span class="none">

@@ -2,8 +2,8 @@
 
 {% block tetranz_select2entity_widget_select_option %}
     <option value="{{ id }}" selected="selected"
-            {% if label.file is defined %} data-file="{{ vich_uploader_asset(label) }}"
-            {% elseif label.image is defined and label.image.file is defined %} data-file="{{ vich_uploader_asset(label.image) }}"
+            {% if label.file is defined %} data-file="{{ label|href }}"
+            {% elseif label.image is defined and label.image.file is defined %} data-file="{{ label.image|href }}"
             {% endif %}
     >
         {{ label }}

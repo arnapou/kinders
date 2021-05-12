@@ -41,20 +41,32 @@ class ImageHelper extends \Vich\UploaderBundle\Templating\Helper\UploaderHelper
             ->getUploadDestination();
     }
 
+    /**
+     * @param Image|string|null $filename
+     */
     public function thumbnail($filename, int $w = 0, int $h = 0): ?string
     {
+        if ($filename instanceof Image) {
+            $filename = $this->asset($filename);
+        }
+
+        if (empty($filename) || !\is_string($filename)) {
+            return null;
+        }
+
         $infos = pathinfo($filename);
         if (empty($infos['extension'])) {
             return null;
         }
 
-        $resize = '_tn.';
         if ($w && $h) {
             $resize = ".${w}x${h}";
         } elseif ($w) {
             $resize = ".${w}";
         } elseif ($h) {
             $resize = ".x${h}";
+        } else {
+            $resize = '';
         }
 
         return $infos['dirname'] . '/' . $infos['filename'] . '_tn' . $resize . '.' . $infos['extension'];
