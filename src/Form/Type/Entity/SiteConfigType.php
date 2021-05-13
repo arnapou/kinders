@@ -24,7 +24,8 @@ class SiteConfigType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('description', TextareaType::class, ['required' => false, 'empty_data' => '']);
+            ->add('description', TextareaType::class, ['required' => false, 'empty_data' => ''])
+            ->add('comment', TextareaType::class, ['required' => false, 'empty_data' => '']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

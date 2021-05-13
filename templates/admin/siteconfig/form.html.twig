@@ -7,8 +7,15 @@
 
     {{ form_start(form) }}
 
-    {{ form_row(form.name) }}
-    {{ form_row(form.description, { 'attr':{'style': 'min-height: 25em' } }) }}
+    <div class="row">
+        <div class="col">{{ form_row(form.name) }}</div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row">
+        <div class="col">{{ form_row(form.description, { 'attr':{'style': 'min-height: 25em' } }) }}</div>
+        <div class="col">{{ form_row(form.comment, { 'attr':{'style': 'min-height: 25em' } }) }}</div>
+    </div>
 
     {{ form_widget(form) }}
 
