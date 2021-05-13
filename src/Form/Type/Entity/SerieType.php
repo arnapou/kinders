@@ -35,7 +35,9 @@ class SerieType extends AbstractType
             ->add('country', EntityType::class, [
                 'class' => Country::class,
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')->orderBy('u.name', 'ASC');
+                    return $er->createQueryBuilder('u')
+                        ->addOrderBy('u.sorting', 'ASC')
+                        ->addOrderBy('u.name', 'ASC');
                 },
                 'choice_label' => 'name',
             ])
