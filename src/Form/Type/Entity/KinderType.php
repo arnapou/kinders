@@ -18,8 +18,8 @@ use App\Form\Type\Multiple\ImageListType;
 use App\Form\Type\QuantityType;
 use App\Form\Type\Select\KinderSelectType;
 use App\Form\Type\Select\SerieSelectType;
+use App\Form\Type\YearType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,7 +36,7 @@ class KinderType extends AbstractType
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('lookingFor', BooleanType::class)
-            ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('year', YearType::class)
             ->add('serie', SerieSelectType::class, ['remote_route' => 'admin_kinders_autocomplete', 'empty_data' => $options['serie'] ?? null])
             ->add('attributes', AttributesListType::class)
             ->add('images', ImageListType::class, ['remote_route' => 'admin_kinders_autocomplete'])

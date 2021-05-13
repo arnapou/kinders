@@ -16,10 +16,10 @@ use App\Entity\Serie;
 use App\Form\Type\Multiple\AttributesListType;
 use App\Form\Type\Multiple\ImageListType;
 use App\Form\Type\Select\CollectionSelectType;
+use App\Form\Type\YearType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +31,7 @@ class SerieType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('year', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('year', YearType::class)
             ->add('country', EntityType::class, [
                 'class' => Country::class,
                 'query_builder' => function (EntityRepository $er) {
