@@ -120,7 +120,7 @@ class AutocompleteService
     private function mapToArray($paginationResults): array
     {
         return array_map(
-            fn (BaseEntity $entity) => ($entity instanceof BaseItem && $entity->getImage()->getFile())
+            fn (BaseEntity $entity) => ($entity instanceof BaseItem && $entity->getImage())
                 ? [
                     'id' => $entity->getId(),
                     'text' => (string) $entity,
