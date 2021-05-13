@@ -163,7 +163,8 @@ class FrontTool
             return [];
         }
 
-        $qb = $this->entityManager->createQueryBuilder()
+        // Kinders en direct indexés par ID
+        $qb1 = $this->entityManager->createQueryBuilder()
             ->select('e, i')
             ->from(Kinder::class, 'e', 'e.id')
             ->join('e.images', 'i')
@@ -171,10 +172,24 @@ class FrontTool
             ->setParameter('ids', $kinderIds);
 
         foreach (Serie::KINDER_SORTING as $field => $order) {
-            $qb->addOrderBy("e.$field", $order);
+            $qb1->addOrderBy("e.$field", $order);
         }
 
-        return $qb->getQuery()->getResult();
+        // Kinders originaux (non-virtuels) indexés par ID
+        $qb2 = $this->entityManager->createQueryBuilder()
+            ->select('e, o, i')
+            ->from(Kinder::class, 'e', 'e.id')
+            ->join('e.original', 'o')
+            ->join('o.images', 'i')
+            ->where('e.id IN (:ids)')
+            ->setParameter('ids', $kinderIds);
+
+        foreach (Serie::KINDER_SORTING as $field => $order) {
+            $qb2->addOrderBy("e.$field", $order);
+        }
+
+        // le + est voulu -> ajoute les id manquants
+        return $qb1->getQuery()->getResult() + $qb2->getQuery()->getResult();
     }
 
     /**
