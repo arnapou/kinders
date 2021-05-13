@@ -150,3 +150,8 @@ span.attribute span {
 .vich-image .custom-file-input ~ .custom-file-label::after {
     content: "Image";
 }
+
+/* restire bootstrap input[type="number"] avec up-down bloqués sous FF */
+input[type="number"].form-control {
+    padding-right: 0;
+}

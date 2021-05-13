@@ -15,6 +15,7 @@ use App\Entity\BPZ;
 use App\Form\Type\BooleanType;
 use App\Form\Type\Multiple\AttributesListType;
 use App\Form\Type\Multiple\ImageListType;
+use App\Form\Type\QuantityType;
 use App\Form\Type\Select\KinderSelectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -29,8 +30,8 @@ class BPZType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['attr' => ['autofocus' => true]])
-            ->add('quantityOwned', IntegerType::class, ['required' => false, 'empty_data' => 0])
-            ->add('quantityDouble', IntegerType::class, ['required' => false, 'empty_data' => 0])
+            ->add('quantityOwned', QuantityType::class)
+            ->add('quantityDouble', QuantityType::class)
             ->add('reference', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('sorting', TextType::class, ['required' => false, 'empty_data' => ''])
             ->add('lookingFor', BooleanType::class)
