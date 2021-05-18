@@ -36,7 +36,7 @@
                 {%- endfor -%}
                 {% if categ.items|length > limit %}
                     <li><a href="#" class="more_menu_items">... voir plus ...</a></li>
-                    {%- for item in categ.items|slice(limit+1) -%}
+                    {%- for item in categ.items|slice(limit) -%}
                         <li style="display: none"><a href="{{ item.url }}">{{ item.name }}</a></li>
                     {%- endfor -%}
                 {% endif %}
