@@ -34,3 +34,13 @@ RewriteRule . index.php [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L,QSA]
+
+# redirections vieux forum
+RedirectMatch 301 "forum-([0-9]+).*\.html"        "/"
+RedirectMatch 301 "thread-([0-9]+).*\.html"       "/"
+RedirectMatch 301 "post-([0-9]+).*\.html"         "/"
+RedirectMatch 301 "announcement-([0-9]+).*\.html" "/"
+RedirectMatch 301 "user-([0-9]+).*\.html"         "/"
+RedirectMatch 301 "calendar-([0-9]+).*\.html"     "/"
+RedirectMatch 301 "event-([0-9]+).*\.html"        "/"
+
