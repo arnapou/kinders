@@ -9,33 +9,30 @@ parameters:
     thumbnail.expire: 8640000
     
     assetbuilder:
-        assetsDir: assets
-        publicDir: assets
-        files:
-            front.css:
-                - vendor/bootstrap-4.3.1/css/bootstrap.min.css
-                - vendor/flag-icon-css-3.3.0/css/flag-icon.min.css
-                - vendor/Font-Awesome-5.8.1/css/all.min.css
-                - css/front.css
-            front.js:
-                - vendor/jquery-3.4.0/dist/jquery.min.js
-                - vendor/bootstrap-4.3.1/js/bootstrap.min.js
-                - js/front.js
-            admin.css:
-                - vendor/bootstrap-4.3.1/css/bootstrap.min.css
-                - vendor/flag-icon-css-3.3.0/css/flag-icon.min.css
-                - vendor/Font-Awesome-5.8.1/css/all.min.css
-                - vendor/select2-4.0.5/dist/css/select2.min.css
-                - vendor/select2-bootstrap-theme-0.1.0-beta.10/dist/select2-bootstrap.min.css
-                - css/admin.css
-            admin.js:
-                - vendor/jquery-3.4.0/dist/jquery.min.js
-                - vendor/bootstrap-4.3.1/js/bootstrap.min.js
-                - vendor/bootbox-5.1.2/bootbox.all.min.js
-                - vendor/popper-core-1.15.0/dist/umd/popper.min.js
-                - vendor/select2-4.0.5/dist/js/select2.full.min.js
-                - ../public/bundles/tetranzselect2entity/js/select2entity.js
-                - js/admin.js
+        front.css:
+            - vendor/bootstrap-4.3.1/css/bootstrap.min.css
+            - vendor/flag-icon-css-3.3.0/css/flag-icon.min.css
+            - vendor/Font-Awesome-5.8.1/css/all.min.css
+            - css/front.css
+        front.js:
+            - vendor/jquery-3.4.0/dist/jquery.min.js
+            - vendor/bootstrap-4.3.1/js/bootstrap.min.js
+            - js/front.js
+        admin.css:
+            - vendor/bootstrap-4.3.1/css/bootstrap.min.css
+            - vendor/flag-icon-css-3.3.0/css/flag-icon.min.css
+            - vendor/Font-Awesome-5.8.1/css/all.min.css
+            - vendor/select2-4.0.5/dist/css/select2.min.css
+            - vendor/select2-bootstrap-theme-0.1.0-beta.10/dist/select2-bootstrap.min.css
+            - css/admin.css
+        admin.js:
+            - vendor/jquery-3.4.0/dist/jquery.min.js
+            - vendor/bootstrap-4.3.1/js/bootstrap.min.js
+            - vendor/bootbox-5.1.2/bootbox.all.min.js
+            - vendor/popper-core-1.15.0/dist/umd/popper.min.js
+            - vendor/select2-4.0.5/dist/js/select2.full.min.js
+            - ../public/bundles/tetranzselect2entity/js/select2entity.js
+            - js/admin.js
 
 services:
     # default configuration for services in *this* file

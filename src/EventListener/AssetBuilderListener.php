@@ -13,7 +13,7 @@ namespace App\EventListener;
 
 use JSMin\JSMin;
 use SplFileInfo;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -22,25 +22,39 @@ use Twig\TwigFilter;
 
 class AssetBuilderListener extends AbstractExtension implements CacheWarmerInterface
 {
+    private const PUBLIC_DIR = 'assets';
+
     private array  $compiledFiles;
-    private array  $config;
+    private array  $files;
     private string $env;
-    private string $srcDir;
-    private string $destDir;
+    private string $dirSource;
+    private string $dirDestination;
     private string $configFile;
-    private string $publicDir;
+    private string $dirPublic;
 
     public function __construct(
-        ContainerInterface $container,
+        ParameterBagInterface $parameterBag,
         KernelInterface $kernel
     ) {
-        $this->config = $container->getParameter('assetbuilder');
+        $this->files = $parameterBag->get('assetbuilder');
         $this->env = $kernel->getEnvironment();
-        $this->publicDir = $kernel->getProjectDir() . '/public';
-        $this->destDir = $kernel->getProjectDir() . '/public/' . $this->config['publicDir'];
-        $this->srcDir = $kernel->getProjectDir() . '/' . $this->config['assetsDir'];
-        $this->configFile = $kernel->getProjectDir() . '/config/assetbuilder.php';
-        $this->compiledFiles = ASSETBUILDER;
+        $this->configFile = __DIR__ . '/../../config/assetbuilder.php';
+        $this->dirPublic = __DIR__ . '/../../public';
+        $this->dirSource = __DIR__ . '/../../assets';
+        $this->dirDestination = $this->dirPublic . '/' . self::PUBLIC_DIR;
+
+        if (is_file($this->configFile)) {
+            $this->compiledFiles = include $this->configFile;
+        } else {
+            $this->compiledFiles = [];
+        }
+    }
+
+    public function getFilters()
+    {
+        return [
+            new TwigFilter('assetbuilder', [$this, 'getCompiledFilename']),
+        ];
     }
 
     public function warmUp($cacheDir)
@@ -55,143 +69,198 @@ class AssetBuilderListener extends AbstractExtension implements CacheWarmerInter
 
     public function onKernelController(ControllerEvent $event): void
     {
-        if ('prod' === $this->env) {
-            return;
-        }
-
-        foreach ($this->config['files'] as $name => $sources) {
-            $compiled = $this->getCompiledFile($name);
-            if (!$compiled || !is_file("$this->publicDir/$compiled")) {
-                $this->build();
-                break;
-            }
-            $sources = array_map(fn ($file) => "$this->srcDir/$file", $sources);
-            if (filemtime("$this->publicDir/$compiled") < $this->moreRecentTimestamp($sources)) {
-                $this->build();
-                break;
-            }
-            $hashList = $this->hashList($sources);
-            $extension = pathinfo($name, PATHINFO_EXTENSION);
-            if (substr($compiled, -\strlen($extension) - 1 - \strlen($hashList)) !== "$hashList.$extension") {
-                $this->build();
-                break;
-            }
+        if ('prod' !== $this->env && $this->shouldTheAssetsBeBuilt()) {
+            $this->build();
         }
     }
 
-    public function getFilters()
+    /**
+     * Tells whether we should build all the asset files.
+     */
+    private function shouldTheAssetsBeBuilt(): bool
     {
-        return [
-            new TwigFilter('assetbuilder', [$this, 'getCompiledFile']),
-        ];
+        foreach ($this->files as $name => $sources) {
+            // the file does exists
+            $compiled = $this->getCompiledFilename($name);
+            if (!$compiled || !is_file("$this->dirPublic/$compiled")) {
+                return true;
+            }
+
+            // timestamp too old -> we need to update the files
+            $sources = $this->getFullSourcePath($sources);
+            if (filemtime("$this->dirPublic/$compiled") < $this->getMostRecentTimestampOfFiles($sources)) {
+                return true;
+            }
+
+            // the file list has changed
+            $hashList = $this->getHashOfSourceFileList($sources);
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+            if (!str_ends_with($compiled, ".$hashList.$extension")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private function hashList(array $sources): string
+    private function getHashOfSourceFileList(array $sources): string
     {
         return substr(hash('md5', serialize($sources)), 0, 4);
     }
 
     private function build(): void
     {
-        $this->cleanup();
+        $this->emptyBuildDirectory();
+
         $compiledFiles = [];
-        foreach ($this->config['files'] as $name => $sources) {
-            $sources = array_map(fn ($file) => "$this->srcDir/$file", $sources);
-            $hashList = $this->hashList($sources);
-            $extension = pathinfo($name, PATHINFO_EXTENSION);
-            $content = $this->compileContent($extension, $sources, $dependancies);
-            $hash = substr(hash('md5', $content), 0, 8);
-            $asset = substr($name, 0, -\strlen($extension)) . "$hash.$hashList.$extension";
-            if (!is_dir(\dirname("$this->destDir/$asset"))) {
-                mkdir(\dirname("$this->destDir/$asset"), 0755, true);
+        foreach ($this->files as $name => $sources) {
+            $dependencies = [];
+            [$asset, $content] = $this->getAssetContent($name, $sources, $dependencies);
+
+            $this->writeFile("$this->dirDestination/$asset", $content);
+            foreach ($dependencies as $from => $to) {
+                $this->writeFile($to, file_get_contents($from));
             }
-            if (!is_dir("$this->destDir/files")) {
-                mkdir("$this->destDir/files", 0755, true);
-            }
-            file_put_contents("$this->destDir/$asset", $content, LOCK_EX);
-            foreach ($dependancies as $from => $to) {
-                copy($from, $to);
-            }
-            $compiledFiles[$name] = $this->config['publicDir'] . "/$asset";
+
+            $compiledFiles[$name] = self::PUBLIC_DIR . "/$asset";
         }
-        $configContent = "<?php \ndefine('ASSETBUILDER', " . var_export($compiledFiles, true) . ");\n";
-        $configContent .= '// ' . date('Y-m-d H:i:s') . "\n";
-        file_put_contents($this->configFile, $configContent, LOCK_EX);
+
+        $this->writeConfigFile($compiledFiles);
         $this->compiledFiles = $compiledFiles;
     }
 
-    private function compileContent(string $extension, array $filenames, ?array &$deps): string
+    /**
+     * @return array{string, string}
+     */
+    private function getAssetContent(string $name, array $sources, array &$dependencies): array
     {
-        $deps = [];
+        $sources = $this->getFullSourcePath($sources);
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
+        $content = $this->getCompiledContent($extension, $sources, $dependencies);
+
+        $hash = substr(hash('md5', $content), 0, 8);
+        $hashList = $this->getHashOfSourceFileList($sources);
+        $asset = substr($name, 0, -\strlen($extension)) . "$hash.$hashList.$extension";
+
+        return [$asset, $content];
+    }
+
+    private function getCompiledContent(string $extension, array $filenames, array &$dependencies): string
+    {
         $compiled = '';
+
         foreach ($filenames as $filename) {
-            $content = file_get_contents($filename);
-            if ('css' === $extension) {
-                $this->compileCssSingleContent($filename, $content, $deps);
-            } elseif ('js' === $extension) {
-                $this->compileJsSingleContent($filename, $content, $deps);
-            }
-            $compiled .= trim($content) . "\n";
+            $chunk = match ($extension) {
+                'js' => $this->getCompiledContentJS($filename),
+                'css' => $this->getCompiledContentCss($filename, $dependencies),
+                default => ''
+            };
+            $compiled .= $chunk ? trim($chunk) . "\n" : '';
         }
 
         return $compiled;
     }
 
-    private function compileJsSingleContent(string $filename, string &$content, array &$deps): void
+    private function getCompiledContentJS(string $filename): string
     {
+        $content = file_get_contents($filename);
         if ('.min.js' !== substr($filename, -7)) {
-            $content = JSMin::minify($content);
+            return JSMin::minify($content);
         }
+
+        return $content;
     }
 
-    private function compileCssSingleContent(string $filename, string &$content, array &$deps): void
+    private function getCompiledContentCss(string $filename, array &$dependencies): string
     {
+        $content = file_get_contents($filename);
+
         if ('.min.css' !== substr($filename, -8)) {
             $content = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!s', '', $content);
             $content = str_replace(["\r", "\t"], '', $content);
             $content = preg_replace('!\s*\n\s*!', '', $content);
         }
 
-        if (preg_match_all('!url\((.+?)\)!s', $content, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                $cssurl = $match[0];
-                $file = trim(trim($match[1], '"'), "'");
-                if (0 === strpos($file, '/') || 0 === strpos($file, 'data:') || 0 === strpos($file, 'https:') || 0 === strpos($file, 'http:')) {
-                    continue;
-                }
-                if (is_file($path = \dirname($filename) . "/$file")) {
-                    $ext = pathinfo($path, PATHINFO_EXTENSION);
-                    $hash = substr(hash_file('md5', $path), 0, 8);
-                    $name = basename($path, ".$ext");
-                    $deps[$path] = "$this->destDir/files/$name.$hash.$ext";
-                    $content = str_replace($cssurl, "url(files/$name.$hash.$ext)", $content);
-                }
+        $this->detectAndReplaceCssDependencies($content, \dirname($filename), $dependencies);
+
+        return $content;
+    }
+
+    private function detectAndReplaceCssDependencies(string &$content, string $baseDir, array &$dependencies): void
+    {
+        if (!preg_match_all('!url\((.+?)\)!s', $content, $matches, PREG_SET_ORDER)) {
+            return;
+        }
+
+        foreach ($matches as $match) {
+            $cssurl = $match[0];
+            $depFile = trim(trim($match[1], '"'), "'");
+
+            if (str_starts_with($depFile, '/') || str_starts_with($depFile, 'data:') || str_starts_with($depFile, 'https:') || str_starts_with($depFile, 'http:')) {
+                continue;
+            }
+
+            if (is_file($path = "$baseDir/$depFile")) {
+                $hashedFilename = $this->getHashedDependencyFilename($path);
+                $dependencies[$path] = "$this->dirDestination/files/$hashedFilename";
+                $content = str_replace($cssurl, "url(files/$hashedFilename)", $content);
             }
         }
     }
 
-    private function cleanup(): void
+    /**
+     * Sert aussi pour l'extension twig avec le filtre "assetbuilder".
+     */
+    public function getCompiledFilename(string $name): string
     {
-        if (!is_dir($this->destDir)) {
+        return $this->compiledFiles[basename($name)] ?? '';
+    }
+
+    /**
+     * Pour garantir l'unicité du fichier on ajoute un hash dans son nom.
+     */
+    private function getHashedDependencyFilename(string $path): string
+    {
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $hash = substr(hash_file('md5', $path), 0, 8);
+        $name = basename($path, ".$ext");
+
+        return "$name.$hash.$ext";
+    }
+
+    /**
+     * Vide totalement le dossier des assets buildés.
+     */
+    private function emptyBuildDirectory(): void
+    {
+        if (!is_dir($this->dirDestination)) {
             return;
         }
-        $flags = \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::CURRENT_AS_FILEINFO;
-        $folders = new \RecursiveDirectoryIterator($this->destDir, $flags);
-        $flags = \RecursiveIteratorIterator::LEAVES_ONLY;
-        $files = new \RecursiveIteratorIterator($folders, $flags);
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(
+                $this->dirDestination,
+                \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::CURRENT_AS_FILEINFO
+            ), \RecursiveIteratorIterator::LEAVES_ONLY
+        );
 
         foreach ($files as /* @var $file SplFileInfo */ $file) {
             @unlink($file->getPathname());
         }
     }
 
-    private function moreRecentTimestamp(array $filenames): int
+    /**
+     * Récupère le timestamp le plus récent de la liste de fichiers.
+     */
+    private function getMostRecentTimestampOfFiles(array $filenames): int
     {
         $time = 0;
+
         foreach ($filenames as $filename) {
             if (!is_file($filename)) {
                 throw new \OutOfBoundsException("File not found $filename");
             }
+
             if (($mtime = filemtime($filename)) > $time) {
                 $time = $mtime;
             }
@@ -200,8 +269,37 @@ class AssetBuilderListener extends AbstractExtension implements CacheWarmerInter
         return $time;
     }
 
-    public function getCompiledFile(string $name): string
+    /**
+     * Construit le chemin absolu des sources à partir de la liste de chemins relatifs de la config YAML.
+     *
+     * @return string[]
+     */
+    private function getFullSourcePath(array $sources): array
     {
-        return $this->compiledFiles[basename($name)] ?? '';
+        return array_map(fn ($file) => "$this->dirSource/$file", $sources);
+    }
+
+    /**
+     * @param array<string, string> $compiledFiles
+     */
+    private function writeConfigFile(array $compiledFiles): void
+    {
+        $content = '<?php // ' . date('Y-m-d H:i:s') . "\n"
+            . 'return ' . var_export($compiledFiles, true) . ";\n";
+
+        file_put_contents($this->configFile, $content, LOCK_EX);
+    }
+
+    private function writeFile(string $filename, string $content): void
+    {
+        $this->mkdir(\dirname($filename));
+        file_put_contents($filename, $content, LOCK_EX);
+    }
+
+    private function mkdir(string $path): void
+    {
+        if (!is_dir($path) && !mkdir($path, 0755, true) && !is_dir($path)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+        }
     }
 }
